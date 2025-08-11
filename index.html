@@ -310,19 +310,21 @@
             }
           }, LOAD_TIMEOUT);
 
+          // Fetch precomputed waveform JSON, normalize data and load peaks
           const waveformJSONUrl = BASE_URL + tracks[index].file.replace(/\.mp3$/, '.json');
           try {
             const response = await fetch(waveformJSONUrl);
             if (!response.ok) throw new Error('Waveform JSON not found');
             const waveformData = await response.json();
 
-            // Flatten if nested, else use as is
-            const rawData = Array.isArray(waveformData.data[0])
-              ? waveformData.data.flat()
-              : waveformData.data;
+            if (!Array.isArray(waveformData.data)) {
+              throw new Error('Waveform JSON data is not an array');
+            }
 
-            // Normalize from 0-255 to 0-1 floats
-            const peaks = rawData.map(v => v / 255);
+            const peaks = waveformData.data.map(v => v / 255);
+
+            // Log peaks to help debug
+            console.log('Waveform peaks sample:', peaks.slice(0, 20));
 
             globalWavesurfer.once('ready', () => {
               didLoad = true;
@@ -349,13 +351,10 @@
               loadingProgressBar.style.width = percent + '%';
             });
 
-            // Load the audio normally
-            globalWavesurfer.load(BASE_URL + tracks[index].file);
-
-            // Set peaks after ready
-            globalWavesurfer.backend.setPeaks(peaks);
+            globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
 
           } catch (err) {
+            console.error('Error loading waveform JSON:', err);
             retryLoad();
           }
         });
