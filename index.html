@@ -315,16 +315,25 @@
           try {
             const response = await fetch(waveformJSONUrl);
             if (!response.ok) throw new Error('Waveform JSON not found');
+
             const waveformData = await response.json();
 
-            if (!Array.isArray(waveformData.data)) {
-              throw new Error('Waveform JSON data is not an array');
+            console.log('Waveform JSON loaded:', waveformData);
+            console.log('Type of waveformData.data:', typeof waveformData.data);
+            console.log('Is waveformData.data Array?', Array.isArray(waveformData.data));
+            console.log('waveformData.data length:', waveformData.data.length);
+            console.log('Sample data (first 20 points):', waveformData.data.slice(0, 20));
+
+            // Create a Float32Array explicitly, normalized 0-1
+            const peaks = new Float32Array(waveformData.data.length);
+            for (let i = 0; i < waveformData.data.length; i++) {
+              peaks[i] = waveformData.data[i] / 255;
             }
+            console.log('Peaks (Float32Array) length:', peaks.length);
 
-            const peaks = waveformData.data.map(v => v / 255);
-
-            // Log peaks to help debug
-            console.log('Waveform peaks sample:', peaks.slice(0, 20));
+            if (!peaks || peaks.length === 0) {
+              throw new Error('Peaks array empty or invalid');
+            }
 
             globalWavesurfer.once('ready', () => {
               didLoad = true;
@@ -351,10 +360,11 @@
               loadingProgressBar.style.width = percent + '%';
             });
 
+            // Load the audio AND pass precomputed peaks
             globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
 
           } catch (err) {
-            console.error('Error loading waveform JSON:', err);
+            console.error('Waveform load error:', err);
             retryLoad();
           }
         });
