@@ -315,21 +315,12 @@
           try {
             const response = await fetch(waveformJSONUrl);
             if (!response.ok) throw new Error('Waveform JSON not found');
-
             const waveformData = await response.json();
 
-            console.log('Waveform JSON loaded:', waveformData);
-            console.log('Type of waveformData.data:', typeof waveformData.data);
-            console.log('Is waveformData.data Array?', Array.isArray(waveformData.data));
-            console.log('waveformData.data length:', waveformData.data.length);
-            console.log('Sample data (first 20 points):', waveformData.data.slice(0, 20));
-
-            // Create a Float32Array explicitly, normalized 0-1
-            const peaks = new Float32Array(waveformData.data.length);
-            for (let i = 0; i < waveformData.data.length; i++) {
-              peaks[i] = waveformData.data[i] / 255;
-            }
-            console.log('Peaks (Float32Array) length:', peaks.length);
+            // Defensive fix: flatten and normalize peaks data
+            const rawData = waveformData.data;
+            const flatData = Array.isArray(rawData) ? rawData.flat(Infinity) : [];
+            const peaks = flatData.map(v => v / 255);
 
             if (!peaks || peaks.length === 0) {
               throw new Error('Peaks array empty or invalid');
@@ -364,7 +355,6 @@
             globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
 
           } catch (err) {
-            console.error('Waveform load error:', err);
             retryLoad();
           }
         });
