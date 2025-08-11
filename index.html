@@ -122,11 +122,12 @@
   </div>
 
   <script>
-    const BASE_URL = 'https://uous-audio-player.s3.eu-west-1.amazonaws.com/';
+    const BASE_URL = 'https://uous-audio-player.s3.eu-west-1.amazonaws.com/'; // <-- YOUR S3 BUCKET URL HERE, with trailing slash
 
-    let globalWavesurfer = null;
+    let globalWavesurfer = null;  // GLOBAL instance reference
 
     async function loadFiles() {
+      // Changed fetch from relative to full S3 URL:
       const res = await fetch(BASE_URL + 'files.json', {cache: 'no-cache'});
       return res.json();
     }
@@ -310,22 +311,7 @@
             }
           }, LOAD_TIMEOUT);
 
-          // Fetch precomputed waveform JSON, normalize data and load peaks
-          const waveformJSONUrl = BASE_URL + tracks[index].file.replace(/\.mp3$/, '.json');
-          try {
-            const response = await fetch(waveformJSONUrl);
-            if (!response.ok) throw new Error('Waveform JSON not found');
-            const waveformData = await response.json();
-
-            // Defensive fix: flatten and normalize peaks data
-            const rawData = waveformData.data;
-            const flatData = Array.isArray(rawData) ? rawData.flat(Infinity) : [];
-            const peaks = flatData.map(v => v / 255);
-
-            if (!peaks || peaks.length === 0) {
-              throw new Error('Peaks array empty or invalid');
-            }
-
+          return new Promise((resolve) => {
             globalWavesurfer.once('ready', () => {
               didLoad = true;
               clearTimeout(currentLoadTimeout);
@@ -339,24 +325,23 @@
                 updateActiveTrack();
                 removeSpinnerFromTrack(index);
                 setErrorMessage('');
+                resolve();
               }, 200);
             });
 
             globalWavesurfer.once('error', () => {
               clearTimeout(currentLoadTimeout);
               retryLoad();
+              resolve();
             });
 
             globalWavesurfer.on('loading', (percent) => {
               loadingProgressBar.style.width = percent + '%';
             });
 
-            // Load the audio AND pass precomputed peaks
-            globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
-
-          } catch (err) {
-            retryLoad();
-          }
+            // ** IMPORTANT CHANGE HERE: prepend BASE_URL to file path and encode URI **
+            globalWavesurfer.load(encodeURI(BASE_URL + tracks[index].file));
+          });
         });
       }
 
@@ -397,7 +382,8 @@
         durationSpan.textContent = '--:--';
         listItem.appendChild(durationSpan);
 
-        const audio = new Audio(BASE_URL + track.file);
+        // ** IMPORTANT CHANGE HERE: encode the URL for the Audio object too **
+        const audio = new Audio(encodeURI(BASE_URL + track.file));
         audio.addEventListener('loadedmetadata', () => {
           durationSpan.textContent = formatTime(audio.duration);
         });
