@@ -320,7 +320,10 @@
             // Normalize the data array from 0-255 to 0-1 floats
             const peaks = waveformData.data.map(v => v / 255);
 
+            globalWavesurfer.load(BASE_URL + tracks[index].file);
+
             globalWavesurfer.once('ready', () => {
+              globalWavesurfer.backend.setPeaks(peaks);
               didLoad = true;
               clearTimeout(currentLoadTimeout);
               loadingProgressBar.style.width = '100%';
@@ -344,9 +347,6 @@
             globalWavesurfer.on('loading', (percent) => {
               loadingProgressBar.style.width = percent + '%';
             });
-
-            // Load the audio AND pass precomputed peaks
-            globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
 
           } catch (err) {
             retryLoad();
