@@ -144,6 +144,19 @@
         : `<svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>`;
     }
 
+    async function loadWaveformData(jsonUrl) {
+      try {
+        const res = await fetch(jsonUrl);
+        const json = await res.json();
+        if (json && json.data && Array.isArray(json.data)) {
+          return json.data;
+        }
+      } catch (e) {
+        console.error("Error loading waveform JSON:", e);
+      }
+      return null;
+    }
+
     function createPlaylist(name, tracks) {
       if (globalWavesurfer) {
         try {
@@ -293,6 +306,10 @@
             backend: 'MediaElement'
           });
 
+          // Load waveform JSON peaks
+          const waveformJsonUrl = BASE_URL + tracks[index].file.replace(/\.mp3$/, '.json');
+          let peaks = await loadWaveformData(waveformJsonUrl);
+
           function retryLoad() {
             if (currentAttempt < MAX_RETRIES) {
               currentAttempt++;
@@ -310,21 +327,6 @@
               retryLoad();
             }
           }, LOAD_TIMEOUT);
-
-          const audioUrl = BASE_URL + tracks[index].file;
-          const jsonWaveformUrl = audioUrl.replace(/\.mp3$/, '.json');
-
-          try {
-            const response = await fetch(jsonWaveformUrl);
-            if (!response.ok) throw new Error('JSON waveform not found');
-
-            const waveformData = await response.json();
-
-            globalWavesurfer.load(audioUrl, waveformData);
-
-          } catch (err) {
-            globalWavesurfer.load(audioUrl);
-          }
 
           return new Promise((resolve) => {
             globalWavesurfer.once('ready', () => {
@@ -353,6 +355,14 @@
             globalWavesurfer.on('loading', (percent) => {
               loadingProgressBar.style.width = percent + '%';
             });
+
+            if (peaks) {
+              // Normalize peaks (0-255) to 0-1 floats for wavesurfer
+              const normalizedPeaks = peaks.map(p => p / 255);
+              globalWavesurfer.load(BASE_URL + tracks[index].file, normalizedPeaks);
+            } else {
+              globalWavesurfer.load(BASE_URL + tracks[index].file);
+            }
           });
         });
       }
