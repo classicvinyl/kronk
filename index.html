@@ -127,7 +127,6 @@
     let globalWavesurfer = null;  // GLOBAL instance reference
 
     async function loadFiles() {
-      // Changed fetch from relative to full S3 URL:
       const res = await fetch(BASE_URL + 'files.json', {cache: 'no-cache'});
       return res.json();
     }
@@ -144,12 +143,20 @@
         : `<svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>`;
     }
 
+    function createSpinner() {
+      const spinner = document.createElement('div');
+      spinner.className = 'loading-spinner';
+      return spinner;
+    }
+
     async function loadWaveformData(jsonUrl) {
       try {
         const res = await fetch(jsonUrl);
+        if (!res.ok) return null;
         const json = await res.json();
-        if (json && json.data && Array.isArray(json.data)) {
-          return json.data;
+        if (json && Array.isArray(json.data)) {
+          // Normalize 0-255 integers to 0-1 floats for wavesurfer peaks
+          return json.data.map(v => v / 255);
         }
       } catch (e) {
         console.error("Error loading waveform JSON:", e);
@@ -157,7 +164,7 @@
       return null;
     }
 
-    function createPlaylist(name, tracks) {
+    function clearWavesurfer() {
       if (globalWavesurfer) {
         try {
           globalWavesurfer.stop();
@@ -166,6 +173,150 @@
         } catch {}
         globalWavesurfer = null;
       }
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function removeSpinnerFromTrack(index) {
+      const li = trackList.children[index];
+      if (!li) return;
+      const spinner = li.querySelector('.loading-spinner');
+      if (spinner) spinner.remove();
+    }
+
+    function addSpinnerToTrack(index) {
+      const li = trackList.children[index];
+      if (!li) return;
+      if (li.querySelector('.loading-spinner')) return;
+      const spinner = createSpinner();
+      li.insertBefore(spinner, li.querySelector('.duration'));
+    }
+
+    function setErrorMessage(text) {
+      errorMessage.textContent = text;
+      errorMessage.style.display = text ? 'block' : 'none';
+    }
+
+    async function loadTrack(index) {
+      if (index < 0 || index >= tracks.length) return;
+
+      loadingPromise = loadingPromise.then(async () => {
+        if (currentLoadTimeout) {
+          clearTimeout(currentLoadTimeout);
+          currentLoadTimeout = null;
+        }
+
+        if (globalWavesurfer) {
+          clearWavesurfer();
+          await delay(150);
+        }
+
+        currentTrackIndex = index;
+        currentAttempt = 1;
+        let didLoad = false;
+
+        loadingProgressBar.style.width = '0%';
+        loadingProgressBar.style.display = 'block';
+        waveformContainer.style.opacity = '0.3';
+
+        tracks.forEach((_, i) => removeSpinnerFromTrack(i));
+        addSpinnerToTrack(index);
+
+        globalWavesurfer = WaveSurfer.create({
+          container: waveformContainer,
+          waveColor: 'white',
+          progressColor: 'orange',
+          height: 130,
+          responsive: true,
+          backend: 'MediaElement'
+        });
+
+        function retryLoad() {
+          if (currentAttempt < MAX_RETRIES) {
+            currentAttempt++;
+            loadTrack(index);
+          } else {
+            loadingProgressBar.style.display = 'none';
+            waveformContainer.style.opacity = '1';
+            removeSpinnerFromTrack(index);
+            setErrorMessage('Error: Unable to load track after multiple attempts.');
+          }
+        }
+
+        currentLoadTimeout = setTimeout(() => {
+          if (!didLoad) {
+            retryLoad();
+          }
+        }, LOAD_TIMEOUT);
+
+        const waveformJsonUrl = BASE_URL + tracks[index].file.replace(/\.mp3$/, '.json');
+        const peaks = await loadWaveformData(waveformJsonUrl);
+
+        return new Promise((resolve) => {
+          globalWavesurfer.once('ready', () => {
+            didLoad = true;
+            clearTimeout(currentLoadTimeout);
+            loadingProgressBar.style.width = '100%';
+            setTimeout(() => {
+              loadingProgressBar.style.display = 'none';
+              waveformContainer.style.opacity = '1';
+              globalWavesurfer.play();
+              isPlaying = true;
+              updatePlayPauseButton();
+              updateActiveTrack();
+              removeSpinnerFromTrack(index);
+              setErrorMessage('');
+              resolve();
+            }, 200);
+          });
+
+          globalWavesurfer.once('error', () => {
+            clearTimeout(currentLoadTimeout);
+            retryLoad();
+            resolve();
+          });
+
+          globalWavesurfer.on('loading', (percent) => {
+            loadingProgressBar.style.width = percent + '%';
+          });
+
+          if (peaks) {
+            globalWavesurfer.load(BASE_URL + tracks[index].file, peaks);
+          } else {
+            globalWavesurfer.load(BASE_URL + tracks[index].file);
+          }
+        });
+      });
+    }
+
+    // --- VARIABLES OUTSIDE createPlaylist ---
+    let tracks = [];
+    let trackList = null;
+    let loadingPromise = Promise.resolve();
+    let currentLoadTimeout = null;
+    let currentTrackIndex = -1;
+    let isPlaying = false;
+    const MAX_RETRIES = 5;
+    const LOAD_TIMEOUT = 20000; // 20 seconds
+
+    function updateActiveTrack() {
+      trackList.querySelectorAll('li').forEach((el, i) => {
+        el.classList.toggle('active', i === currentTrackIndex);
+      });
+    }
+
+    function updatePlayPauseButton() {
+      playPauseButton.innerHTML = createPlayPauseSVG(isPlaying);
+    }
+
+    function createPlaylist(name, playlistTracks) {
+      if (globalWavesurfer) {
+        clearWavesurfer();
+      }
+
+      tracks = playlistTracks;
 
       const container = document.createElement('div');
       container.className = 'playlist-container';
@@ -198,7 +349,7 @@
       title.textContent = name;
       header.appendChild(title);
 
-      const playPauseButton = document.createElement('div');
+      playPauseButton = document.createElement('div');
       playPauseButton.className = 'play-pause-button ml-auto';
       playPauseButton.innerHTML = createPlayPauseSVG(false);
       header.appendChild(playPauseButton);
@@ -209,173 +360,18 @@
       waveformContainer.className = 'waveform-container';
       container.appendChild(waveformContainer);
 
-      const loadingProgressBar = document.createElement('div');
+      loadingProgressBar = document.createElement('div');
       loadingProgressBar.className = 'loading-progress-bar';
       waveformContainer.appendChild(loadingProgressBar);
 
-      const errorMessage = document.createElement('div');
+      errorMessage = document.createElement('div');
       errorMessage.className = 'error-message';
       errorMessage.style.display = 'none';
       container.appendChild(errorMessage);
 
-      const trackList = document.createElement('ul');
+      trackList = document.createElement('ul');
       trackList.className = 'space-y-2';
       container.appendChild(trackList);
-
-      let currentTrackIndex = -1;
-      let isPlaying = false;
-      let currentLoadTimeout = null;
-      let currentAttempt = 0;
-      const MAX_RETRIES = 5;
-      const LOAD_TIMEOUT = 20000; // 20 seconds
-
-      let loadingPromise = Promise.resolve();
-
-      function createSpinner() {
-        const spinner = document.createElement('div');
-        spinner.className = 'loading-spinner';
-        return spinner;
-      }
-
-      function clearWavesurfer() {
-        if (globalWavesurfer) {
-          try {
-            globalWavesurfer.stop();
-            globalWavesurfer.unAll();
-            globalWavesurfer.destroy();
-          } catch {}
-          globalWavesurfer = null;
-        }
-      }
-
-      function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      function removeSpinnerFromTrack(index) {
-        const li = trackList.children[index];
-        if (!li) return;
-        const spinner = li.querySelector('.loading-spinner');
-        if (spinner) spinner.remove();
-      }
-
-      function addSpinnerToTrack(index) {
-        const li = trackList.children[index];
-        if (!li) return;
-        if (li.querySelector('.loading-spinner')) return;
-        const spinner = createSpinner();
-        li.insertBefore(spinner, li.querySelector('.duration'));
-      }
-
-      function setErrorMessage(text) {
-        errorMessage.textContent = text;
-        errorMessage.style.display = text ? 'block' : 'none';
-      }
-
-      async function loadTrack(index) {
-        if (index < 0 || index >= tracks.length) return;
-
-        loadingPromise = loadingPromise.then(async () => {
-          if (currentLoadTimeout) {
-            clearTimeout(currentLoadTimeout);
-            currentLoadTimeout = null;
-          }
-
-          if (globalWavesurfer) {
-            clearWavesurfer();
-            await delay(150);
-          }
-
-          currentTrackIndex = index;
-          currentAttempt = 1;
-          let didLoad = false;
-
-          loadingProgressBar.style.width = '0%';
-          loadingProgressBar.style.display = 'block';
-          waveformContainer.style.opacity = '0.3';
-
-          tracks.forEach((_, i) => removeSpinnerFromTrack(i));
-          addSpinnerToTrack(index);
-
-          globalWavesurfer = WaveSurfer.create({
-            container: waveformContainer,
-            waveColor: 'white',
-            progressColor: 'orange',
-            height: 130,
-            responsive: true,
-            backend: 'MediaElement'
-          });
-
-          // Load waveform JSON peaks
-          const waveformJsonUrl = BASE_URL + tracks[index].file.replace(/\.mp3$/, '.json');
-          let peaks = await loadWaveformData(waveformJsonUrl);
-
-          function retryLoad() {
-            if (currentAttempt < MAX_RETRIES) {
-              currentAttempt++;
-              loadTrack(index);
-            } else {
-              loadingProgressBar.style.display = 'none';
-              waveformContainer.style.opacity = '1';
-              removeSpinnerFromTrack(index);
-              setErrorMessage('Error: Unable to load track after multiple attempts.');
-            }
-          }
-
-          currentLoadTimeout = setTimeout(() => {
-            if (!didLoad) {
-              retryLoad();
-            }
-          }, LOAD_TIMEOUT);
-
-          return new Promise((resolve) => {
-            globalWavesurfer.once('ready', () => {
-              didLoad = true;
-              clearTimeout(currentLoadTimeout);
-              loadingProgressBar.style.width = '100%';
-              setTimeout(() => {
-                loadingProgressBar.style.display = 'none';
-                waveformContainer.style.opacity = '1';
-                globalWavesurfer.play();
-                isPlaying = true;
-                updatePlayPauseButton();
-                updateActiveTrack();
-                removeSpinnerFromTrack(index);
-                setErrorMessage('');
-                resolve();
-              }, 200);
-            });
-
-            globalWavesurfer.once('error', () => {
-              clearTimeout(currentLoadTimeout);
-              retryLoad();
-              resolve();
-            });
-
-            globalWavesurfer.on('loading', (percent) => {
-              loadingProgressBar.style.width = percent + '%';
-            });
-
-            if (peaks) {
-              // Normalize peaks (0-255) to 0-1 floats for wavesurfer
-              const normalizedPeaks = peaks.map(p => p / 255);
-              globalWavesurfer.load(BASE_URL + tracks[index].file, normalizedPeaks);
-            } else {
-              globalWavesurfer.load(BASE_URL + tracks[index].file);
-            }
-          });
-        });
-      }
-
-      function updateActiveTrack() {
-        trackList.querySelectorAll('li').forEach((el, i) => {
-          el.classList.toggle('active', i === currentTrackIndex);
-        });
-      }
-
-      function updatePlayPauseButton() {
-        playPauseButton.innerHTML = createPlayPauseSVG(isPlaying);
-      }
 
       playPauseButton.addEventListener('click', () => {
         if (!globalWavesurfer) return;
