@@ -92,25 +92,22 @@
   </div>
 
   <!-- Hydra Library -->
+  
 <script>
 const canvas = document.getElementById("hydra-canvas");
 
-// Function to resize Hydra canvas for high-DPI
-function resizeHydraCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  const width = canvas.clientWidth * dpr;
-  const height = canvas.clientHeight * dpr;
-  canvas.width = width;
-  canvas.height = height;
-  hydra.resize();
-}
+// Detect device pixel ratio
+const dpr = window.devicePixelRatio || 1;
 
 const hydra = new Hydra({
   detectAudio: false,
-  canvas: canvas
+  canvas: canvas,
+  width: canvas.clientWidth * dpr,
+  height: canvas.clientHeight * dpr,
+  pixelRatio: dpr   // crucial for high-res rendering
 });
 
-// Load your example_11 code
+// Example_11 code
 osc(10, 0.9, 300)
   .color(0.9, 0.7, 0.8)
   .diff(
@@ -131,14 +128,18 @@ osc(10, 0.9, 300)
   .scale(2)
   .out();
 
-// Resize on window resize
-window.addEventListener('resize', () => {
-  resizeHydraCanvas();
-});
+// Resize function
+function resizeHydraCanvas() {
+  const w = canvas.clientWidth * dpr;
+  const h = canvas.clientHeight * dpr;
+  canvas.width = w;
+  canvas.height = h;
+  hydra.resize();
+}
 
-// Initial resize
+window.addEventListener('resize', resizeHydraCanvas);
 resizeHydraCanvas();
 </script>
-
+  
 </body>
 </html>
