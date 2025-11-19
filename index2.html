@@ -92,39 +92,53 @@
   </div>
 
   <!-- Hydra Library -->
-  <script src="https://cdn.jsdelivr.net/npm/hydra-synth/dist/hydra-synth.js"></script>
-  <script>
-    const hydra = new Hydra({
-      detectAudio: false,
-      canvas: document.getElementById("hydra-canvas")
-    });
+<script>
+const canvas = document.getElementById("hydra-canvas");
 
-    // --- Example_11 Hydra code ---
-    osc(10, 0.9, 300)
-      .color(0.9, 0.7, 0.8)
-      .diff(
-        osc(45, 0.3, 100)
-          .color(0.9, 0.9, 0.9)
-          .rotate(0.18)
-          .pixelate(12)
-          .kaleid()
-      )
-      .scrollX(10)
-      .colorama()
-      .luma()
-      .repeatX(4)
-      .repeatY(4)
-      .modulate(
-        osc(1, -0.9, 300)
-      )
-      .scale(2)
-      .out();
+// Function to resize Hydra canvas for high-DPI
+function resizeHydraCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const width = canvas.clientWidth * dpr;
+  const height = canvas.clientHeight * dpr;
+  canvas.width = width;
+  canvas.height = height;
+  hydra.resize();
+}
 
-    // Make Hydra canvas responsive
-    window.addEventListener('resize', () => {
-      hydra.resize();
-    });
-  </script>
+const hydra = new Hydra({
+  detectAudio: false,
+  canvas: canvas
+});
+
+// Load your example_11 code
+osc(10, 0.9, 300)
+  .color(0.9, 0.7, 0.8)
+  .diff(
+    osc(45, 0.3, 100)
+      .color(0.9, 0.9, 0.9)
+      .rotate(0.18)
+      .pixelate(12)
+      .kaleid()
+  )
+  .scrollX(10)
+  .colorama()
+  .luma()
+  .repeatX(4)
+  .repeatY(4)
+  .modulate(
+    osc(1, -0.9, 300)
+  )
+  .scale(2)
+  .out();
+
+// Resize on window resize
+window.addEventListener('resize', () => {
+  resizeHydraCanvas();
+});
+
+// Initial resize
+resizeHydraCanvas();
+</script>
 
 </body>
 </html>
