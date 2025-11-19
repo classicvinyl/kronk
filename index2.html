@@ -58,7 +58,6 @@
   /* --- Right column content --- */
   .right h2 { margin-bottom: 0.5em; }
   .right p { font-size: 0.9em; line-height: 1.3em; }
-
 </style>
 </head>
 <body>
@@ -83,63 +82,57 @@
   <!-- RIGHT COLUMN -->
   <div class="column right">
     <h2>Info</h2>
-    <p>
-      Music + visuals inspired by MusicForProgramming.net and Hydra.
-    </p>
-    <p>
-      Hydra sketch <em>example_11</em> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color:#eee;">CC BY-NC-SA 4.0</a>.
-    </p>
+    <p>Music + visuals inspired by MusicForProgramming.net and Hydra.</p>
+    <p>Hydra sketch <em>example_11</em> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color:#eee;">CC BY-NC-SA 4.0</a>.</p>
   </div>
 
   <!-- Hydra Library -->
-  
-<script>
-const canvas = document.getElementById("hydra-canvas");
+  <script src="https://cdn.jsdelivr.net/npm/hydra-synth/dist/hydra-synth.js"></script>
+  <script>
+    const canvas = document.getElementById("hydra-canvas");
+    const dpr = window.devicePixelRatio || 1;
 
-// Detect device pixel ratio
-const dpr = window.devicePixelRatio || 1;
+    // Initialize Hydra
+    const hydra = new Hydra({
+      detectAudio: false,
+      canvas: canvas
+    });
 
-const hydra = new Hydra({
-  detectAudio: false,
-  canvas: canvas,
-  width: canvas.clientWidth * dpr,
-  height: canvas.clientHeight * dpr,
-  pixelRatio: dpr   // crucial for high-res rendering
-});
+    // Function to resize canvas and increase internal resolution
+    function resizeHydraCanvas() {
+      const w = canvas.clientWidth * dpr;
+      const h = canvas.clientHeight * dpr;
+      canvas.width = w;
+      canvas.height = h;
+      // Increase internal WebGL buffer resolution
+      hydra._renderer.setSize(w, h, false);
+      hydra.resize();
+    }
 
-// Example_11 code
-osc(10, 0.9, 300)
-  .color(0.9, 0.7, 0.8)
-  .diff(
-    osc(45, 0.3, 100)
-      .color(0.9, 0.9, 0.9)
-      .rotate(0.18)
-      .pixelate(12)
-      .kaleid()
-  )
-  .scrollX(10)
-  .colorama()
-  .luma()
-  .repeatX(4)
-  .repeatY(4)
-  .modulate(
-    osc(1, -0.9, 300)
-  )
-  .scale(2)
-  .out();
+    // Run initial resize
+    resizeHydraCanvas();
+    window.addEventListener('resize', resizeHydraCanvas);
 
-// Resize function
-function resizeHydraCanvas() {
-  const w = canvas.clientWidth * dpr;
-  const h = canvas.clientHeight * dpr;
-  canvas.width = w;
-  canvas.height = h;
-  hydra.resize();
-}
-
-window.addEventListener('resize', resizeHydraCanvas);
-resizeHydraCanvas();
-</script>
-  
+    // --- Example_11 Hydra code ---
+    osc(10, 0.9, 300)
+      .color(0.9, 0.7, 0.8)
+      .diff(
+        osc(45, 0.3, 100)
+          .color(0.9, 0.9, 0.9)
+          .rotate(0.18)
+          .pixelate(12)
+          .kaleid()
+      )
+      .scrollX(10)
+      .colorama()
+      .luma()
+      .repeatX(4)
+      .repeatY(4)
+      .modulate(
+        osc(1, -0.9, 300)
+      )
+      .scale(2)
+      .out();
+  </script>
 </body>
 </html>
