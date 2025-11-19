@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Music + Hydra Visuals (Local)</title>
+<title>Music + Hydra Visuals</title>
 <style>
   /* --- Global Reset --- */
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -47,12 +47,10 @@
   a { color: #eee; text-decoration: none; }
   a:hover { text-decoration: underline; }
 
-  /* --- Hydra canvas --- */
-  #hydra-canvas {
+  /* --- Hydra iframe --- */
+  .hydra-frame {
     flex: 1;
-    display: block;
-    width: 100%;
-    height: 100%;
+    border: none;
   }
 
   /* --- Optional right column content --- */
@@ -77,7 +75,12 @@
 
   <!-- CENTER COLUMN -->
   <div class="column center">
-    <canvas id="hydra-canvas"></canvas>
+    <!-- Hydra Visual -->
+    <iframe
+      class="hydra-frame"
+      src="https://hydra.ojack.xyz/?sketch_id=example_11&showCode=false"
+      allow="fullscreen"
+    ></iframe>
   </div>
 
   <!-- RIGHT COLUMN -->
@@ -90,31 +93,6 @@
       Hydra sketch <em>example_11</em> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color:#eee;">CC BY-NC-SA 4.0</a>.
     </p>
   </div>
-
-  <!-- Hydra Library -->
-  <script src="https://cdn.jsdelivr.net/npm/hydra-synth/dist/hydra-synth.js"></script>
-  <script>
-    // --- Initialize Hydra ---
-    const hydra = new Hydra({
-      detectAudio: false,
-      canvas: document.getElementById("hydra-canvas")
-    });
-
-    // --- Example_11 placeholder code ---
-    // Replace this with the actual example_11 code if you have it
-    // This is a visually similar "replica"
-    osc(10,0.1,1.2)
-      .modulate(noise(3),0.3)
-      .color(1.0,0.3,0.8)
-      .rotate(Math.PI/4)
-      .kaleid(4)
-      .out();
-
-    // --- You can add more layers or modify ---
-    // For example:
-    // osc(5,0.2,0.5).rotate(0.1).add(o0).out(o1);
-    // o1.render(); 
-  </script>
 
 </body>
 </html>
