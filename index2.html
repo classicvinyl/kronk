@@ -1,124 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Hydra Programming Site</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hydra — Music-for-Programming layout</title>
 
+<!-- Styles: emulate musicforprogramming.net minimal 3-column look -->
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    background: #0c0c0c;
-    color: #d0d0d0;
-    font-family: "Courier New", Courier, monospace;
-    overflow: hidden;
+  :root{
+    --bg: #070707;
+    --panel: #0b0b0b;
+    --rule: #1f1f1f;
+    --muted: #8b8b8b;
+    --text: #ddd;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
   }
 
-  .sidebar {
-    width: 22%;
-    max-width: 320px;
-    border-right: 1px solid #333;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto;
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:var(--mono);}
+  /* grid: left / center / right */
+  .wrap{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns: 220px minmax(480px, 820px) 220px;
+    gap:0;
+    align-items:stretch;
   }
 
-  .sidebar h2 {
-    margin-top: 0;
-    color: #909090;
-    letter-spacing: 1px;
-    font-size: 16px;
+  /* left + right panels - subtle borders, quiet text */
+  .col{
+    box-sizing:border-box;
+    padding:28px 20px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.0));
+    color:var(--text);
+  }
+  .col.left{
+    border-right:1px solid var(--rule);
+  }
+  .col.right{
+    border-left:1px solid var(--rule);
+    color:var(--muted);
+    font-size:13px;
   }
 
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 20px 0;
+  /* center panel is the main reading area / visual */
+  .center{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+    position:relative;
+    padding:36px 40px;
   }
 
-  .sidebar li {
-    margin: 6px 0;
+  /* Title styling close to MFP */
+  .site-title{
+    font-size:14px;
+    color:var(--muted);
+    letter-spacing:2px;
+    margin:0 0 18px 0;
+  }
+  .track-title{
+    font-size:18px;
+    margin:0 0 12px 0;
+    color:var(--text);
+  }
+  .blurb{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:18px;
   }
 
-  .sidebar a {
-    color: #d0d0d0;
-    text-decoration: none;
+  /* Hydra area */
+  .hydra-wrap{
+    flex:1 1 auto;
+    min-height:360px;
+    height: calc(100vh - 220px); /* keep it prominent */
+    border-radius:2px;
+    overflow:hidden;
+    background:#000; /* fallback while iframe loads */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.01);
   }
 
-  .sidebar a:hover {
-    text-decoration: underline;
+  /* iframe fills the hydra-wrap */
+  .hydra-wrap iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
   }
 
-  .notes {
-    margin-top: 30px;
-    font-size: 13px;
-    color: #888;
-    line-height: 1.4em;
+  /* small responsive tweak: stack columns on narrow screens */
+  @media (max-width:1000px){
+    .wrap{ grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .center{ order: 1; padding:20px; }
+    .col.left, .col.right { order: 0; padding:16px; }
+    .hydra-wrap{ height:60vh; }
   }
 
-  .main {
-    flex: 1;
-    position: relative;
-  }
+  /* links */
+  a{ color:var(--text); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
 
-  #hydra-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+  /* subtle tiny footer in right col */
+  .meta { font-size:12px; color:var(--muted); margin-top:18px; line-height:1.6; }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/hydra-synth/dist/hydra-synth.js"></script>
 </head>
-
 <body>
+  <div class="wrap">
 
-<div class="sidebar">
-  <h2>playlist</h2>
-  <ul>
-    <li><a href="#">track 01</a></li>
-    <li><a href="#">track 02</a></li>
-    <li><a href="#">track 03</a></li>
-  </ul>
+    <!-- LEFT column: playlist / nav -->
+    <aside class="col left" aria-label="Playlist">
+      <div class="site-title">MUSIC FOR PROGRAMMING — fork</div>
 
-  <div class="notes">
-    <p>
-      hydra visual: example_11 (standalone).<br>
-      fully self-contained HTML.
-    </p>
+      <h1 class="track-title">Track 01 — Long mix</h1>
+      <div class="blurb">
+        minimal player controls and a focused visual. the centre pane is a pure hydra sketch (example_11),
+        embedded without the editor UI.
+      </div>
+
+      <nav>
+        <ul style="padding-left:0; list-style:none; margin:18px 0 0 0; color:var(--text);">
+          <li style="margin:8px 0;"><a href="#">01 — opening drift</a></li>
+          <li style="margin:8px 0;"><a href="#">02 — slow pulse</a></li>
+          <li style="margin:8px 0;"><a href="#">03 — wash</a></li>
+          <li style="margin:8px 0;"><a href="#">04 — bloom</a></li>
+        </ul>
+      </nav>
+
+      <div style="margin-top:20px; color:var(--muted); font-size:13px;">
+        <div>Duration: —</div>
+        <div>Format: mp3 / wav</div>
+      </div>
+    </aside>
+
+    <!-- CENTER column: title + HYDRA -->
+    <main class="center" role="main">
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+          <h2 style="margin:0; color:var(--muted); font-size:12px; letter-spacing:1px;">visual</h2>
+          <div style="color:var(--muted); font-size:12px;">example_11</div>
+        </div>
+        <h3 style="margin:6px 0 18px 0; font-size:16px; color:var(--text);">Hydra — example_11 (embedded)</h3>
+        <p style="margin:0 0 16px 0; color:var(--muted); font-size:13px;">
+          The canvas below shows the original `example_11` sketch from hydra.ojack.xyz with the editor hidden.
+        </p>
+      </div>
+
+      <div class="hydra-wrap" id="hydraWrap">
+        <!-- Embed hydra editor instance for example_11, but hide the code/editor UI -->
+        <!-- showCode=false should hide the code panel; additional params tried to reduce UI -->
+        <iframe
+          src="https://hydra.ojack.xyz/?sketch_id=example_11&showCode=false"
+          title="Hydra example_11"
+          sandbox="allow-scripts allow-same-origin allow-popups"
+          referrerpolicy="no-referrer"
+        ></iframe>
+      </div>
+    </main>
+
+    <!-- RIGHT column: small links / credits -->
+    <aside class="col right" aria-label="Info">
+      <div style="font-weight:600; color:var(--muted); font-size:12px; letter-spacing:1px;">INFO</div>
+
+      <div class="meta">
+        <div>Hydra sketch: <strong>example_11</strong></div>
+        <div style="margin-top:10px;">
+          Embedded via iframe, UI hidden so the canvas only is visible.
+        </div>
+
+        <div style="margin-top:14px;">
+          <a href="https://hydra.ojack.xyz/?sketch_id=example_11" target="_blank" rel="noopener">Open in Hydra editor</a>
+        </div>
+
+        <div style="margin-top:18px; color:var(--muted); font-size:12px;">
+          Layout inspired by musicforprogramming.net
+        </div>
+      </div>
+    </aside>
+
   </div>
-</div>
 
-<div class="main">
-  <canvas id="hydra-canvas"></canvas>
-</div>
-
-<script>
-  const canvas = document.getElementById("hydra-canvas");
-
-  const hydra = new Hydra({
-    canvas: canvas,
-    detectAudio: false
-  });
-
-  // ---------------------------
-  // HYDRA SKETCH: example_11
-  // ---------------------------
-
-  osc(10, 0.2, 0.8)
-    .modulate(
-      noise(3)
-        .scale(1.2)
-        .rotate(0, 0.1),
-      0.3
-    )
-    .color(0.2, 0.4, 1)
-    .contrast(1.4)
-    .saturate(1.3)
-    .out();
-</script>
-
+  <!-- Small script: ensure iframe fills well on high-DPI and resize if needed -->
+  <script>
+    (function(){
+      // ensure the center's hydraWrap keeps a sane height on very short screens
+      function fitHydraHeight(){
+        const wrap = document.getElementById('hydraWrap');
+        if(!wrap) return;
+        const vh = window.innerHeight;
+        // keep center canvas visible but not tiny
+        const min = Math.max(360, Math.floor(vh * 0.45));
+        wrap.style.height = min + 'px';
+      }
+      window.addEventListener('resize', fitHydraHeight);
+      fitHydraHeight();
+    })();
+  </script>
 </body>
 </html>
