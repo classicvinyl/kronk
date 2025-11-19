@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <title>Music + Hydra Visuals</title>
 <style>
+  /* --- Global Reset --- */
   * { margin:0; padding:0; box-sizing:border-box; }
- 
+
   body {
     font-family: monospace;
     background-color: #0f0f0f;
@@ -15,6 +16,7 @@
     overflow: hidden;
   }
 
+  /* --- Three-column layout --- */
   .column {
     padding: 1em;
     overflow-y: auto;
@@ -38,73 +40,66 @@
     width: 20%;
   }
 
+  /* --- Sidebar track list --- */
   h2 { margin-bottom: 0.5em; }
   ul { list-style: none; }
   li { margin-bottom: 0.3em; }
   a { color: #eee; text-decoration: none; }
   a:hover { text-decoration: underline; }
 
+  /* --- Hydra canvas --- */
   #hydra-canvas {
     flex: 1;
+    display: block;
     width: 100%;
     height: 100%;
-    display: block;
   }
 
-  .right p {
-    font-size: 0.9em;
-    line-height: 1.3em;
-  }
+  /* --- Right column content --- */
+  .right h2 { margin-bottom: 0.5em; }
+  .right p { font-size: 0.9em; line-height: 1.3em; }
+
 </style>
 </head>
 <body>
 
+  <!-- LEFT COLUMN -->
   <div class="column left">
     <h2>Tracks</h2>
     <ul>
       <li><a href="#">Track 1</a></li>
       <li><a href="#">Track 2</a></li>
       <li><a href="#">Track 3</a></li>
+      <li><a href="#">Track 4</a></li>
+      <li><a href="#">Track 5</a></li>
     </ul>
   </div>
 
+  <!-- CENTER COLUMN -->
   <div class="column center">
     <canvas id="hydra-canvas"></canvas>
   </div>
 
+  <!-- RIGHT COLUMN -->
   <div class="column right">
     <h2>Info</h2>
-    <p>Music + visuals inspired by MusicForProgramming.net and Hydra.</p>
-    <p>Hydra sketch example_11 licensed under CC BY-NC-SA 4.0.</p>
+    <p>
+      Music + visuals inspired by MusicForProgramming.net and Hydra.
+    </p>
+    <p>
+      Hydra sketch <em>example_11</em> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color:#eee;">CC BY-NC-SA 4.0</a>.
+    </p>
   </div>
 
-  <!-- ✔️ Correct Hydra CDN -->
-  <script src="https://unpkg.com/hydra-synth/dist/hydra-synth.js"></script>
-
+  <!-- Hydra Library -->
+  <script src="https://cdn.jsdelivr.net/npm/hydra-synth/dist/hydra-synth.js"></script>
   <script>
-    const canvas = document.getElementById("hydra-canvas");
-    const dpr = window.devicePixelRatio || 1;
-
     const hydra = new Hydra({
       detectAudio: false,
-      canvas: canvas,
+      canvas: document.getElementById("hydra-canvas")
     });
 
-    function resizeHydraCanvas() {
-      const w = canvas.clientWidth * dpr;
-      const h = canvas.clientHeight * dpr;
-
-      canvas.width = w;
-      canvas.height = h;
-
-      hydra._renderer.setSize(w, h, false);
-      hydra.resize();
-    }
-
-    resizeHydraCanvas();
-    window.addEventListener("resize", resizeHydraCanvas);
-
-    /* ----- example_11 code ----- */
+    // --- Example_11 Hydra code ---
     osc(10, 0.9, 300)
       .color(0.9, 0.7, 0.8)
       .diff(
@@ -124,6 +119,11 @@
       )
       .scale(2)
       .out();
+
+    // Make Hydra canvas responsive
+    window.addEventListener('resize', () => {
+      hydra.resize();
+    });
   </script>
 
 </body>
