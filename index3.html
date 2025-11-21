@@ -181,5 +181,77 @@ window.addEventListener('load', () => {
   <div class="info-line"><span class="yellow hover">[random]</span></div>
 </nav>
 
+<audio id="audio-player"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
+<script>
+  // --- CONFIG ---
+  const mp3Folder = "mp3/"; // your MP3 folder
+  const mp3Files = [
+    "AmbientLoop01.mp3",
+    "DroneA.mp3",
+    "Beat01.mp3"
+  ];
+
+  const hydraSnippets = [
+    `osc(10,0.9,300)
+      .color(0.9,0.7,0.8)
+      .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
+      .scrollX(10)
+      .colorama()
+      .luma()
+      .repeatX(4)
+      .repeatY(4)
+      .modulate( osc(1,-0.9,300) )
+      .scale(2)
+      .out();`,
+    `osc(5,0.8,200)
+      .color(0.5,0.7,0.9)
+      .modulate(osc(10,0.1,300))
+      .rotate(0.1)
+      .pixelate(8)
+      .out();`,
+    `voronoi(20,0.8,0.5)
+      .color(1.0,0.6,0.4)
+      .blend(o0,0.5)
+      .out();`
+  ];
+
+  const audio = document.getElementById("audio-player");
+  const infoGrey = document.querySelector("#info-panel .grey");
+
+  function stripExtension(filename) {
+    return filename.replace(/\.mp3$/i, "");
+  }
+
+  function playRandomMP3() {
+    const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+    audio.src = mp3Folder + file;
+    audio.play();
+    infoGrey.textContent = stripExtension(file);
+  }
+
+  function runRandomHydra() {
+    const snippet = hydraSnippets[Math.floor(Math.random() * hydraSnippets.length)];
+    eval(snippet);
+  }
+
+  function randomizeAll() {
+    playRandomMP3();
+    runRandomHydra();
+  }
+
+  // Play random MP3 on page load
+  playRandomMP3();
+
+  // Hook up random button
+  const randomButton = document.getElementById("random-button");
+  if (randomButton) randomButton.addEventListener("click", randomizeAll);
+</script>
+
+
+
+
+  
 </body>
 </html>
