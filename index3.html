@@ -45,17 +45,20 @@ body { font-size:3.97vw; }
   position:fixed;
   top:0;
   right:0;
-  width:25vw; /* narrower width */
-  max-width:25vw;
+  width:25vw !important;
+  max-width:25vw !important;
   height:100vh;
   overflow-y:scroll;
   background:rgba(26,26,26,0.85);
   padding:var(--line);
   z-index:2;
   scrollbar-width:none;
-  font-size:1em; /* same size as body scaling */
+  font-size:1em;
   line-height:1.3em;
+  white-space:normal !important;
+  word-break:break-word;
 }
+#links-panel::-webkit-scrollbar{display:none;}
 #links-panel::-webkit-scrollbar{display:none;}
 #links-panel::-webkit-scrollbar{display:none;}
 
