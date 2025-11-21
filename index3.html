@@ -13,7 +13,18 @@
   --line:2.5ch;
   --font:'IBM', monospace;
 }
-html,body{margin:0;background:var(--c-black);color:var(--c-white);height:100%;font-family:var(--font);line-height:var(--line);} 
+html,body{
+  margin:0;
+  background:var(--c-black);
+  color:var(--c-white);
+  height:100%;
+  font-family:var(--font);
+  line-height:var(--line);
+}
+
+body { font-size:3.97vw; }
+@media (min-width: 768px) { body { font-size:2vw; } }
+@media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
 
 /* ---------- HYDRA FULLSCREEN BACKGROUND ---------- */
 #hydra-bg {
@@ -151,4 +162,3 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
