@@ -43,15 +43,20 @@ body { font-size:3.97vw; }
 /* ---------- OVERLAY PANELS ---------- */
 #links-panel {
   position:fixed;
-  top:0; right:0;
-  width:28vw;
+  top:0;
+  right:0;
+  width:25vw; /* narrower width */
+  max-width:25vw;
   height:100vh;
   overflow-y:scroll;
   background:rgba(26,26,26,0.85);
   padding:var(--line);
   z-index:2;
   scrollbar-width:none;
+  font-size:1em; /* same size as body scaling */
+  line-height:1.3em;
 }
+#links-panel::-webkit-scrollbar{display:none;}
 #links-panel::-webkit-scrollbar{display:none;}
 
 #info-panel {
