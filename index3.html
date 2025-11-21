@@ -186,6 +186,11 @@ window.addEventListener('load', () => {
 
 
 
+
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
   // --- CONFIG ---
@@ -206,30 +211,6 @@ window.addEventListener('load', () => {
     "whirling hall of knives - greywash.mp3"
   ];
 
-  const hydraSnippets = [
-    `osc(10,0.9,300)
-      .color(0.9,0.7,0.8)
-      .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
-      .scrollX(10)
-      .colorama()
-      .luma()
-      .repeatX(4)
-      .repeatY(4)
-      .modulate( osc(1,-0.9,300) )
-      .scale(2)
-      .out();`,
-    `osc(5,0.8,200)
-      .color(0.5,0.7,0.9)
-      .modulate(osc(10,0.1,300))
-      .rotate(0.1)
-      .pixelate(8)
-      .out();`,
-    `voronoi(20,0.8,0.5)
-      .color(1.0,0.6,0.4)
-      .blend(o0,0.5)
-      .out();`
-  ];
-
   // --- ELEMENTS ---
   const audio = document.getElementById("audio-player");
   const infoGrey = document.querySelector("#info-panel .grey");
@@ -244,14 +225,39 @@ window.addEventListener('load', () => {
     const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
     audio.src = mp3Folder + file;
     audio.play().catch(err => {
-      // Autoplay may be blocked until user interacts
       console.log("Audio playback blocked until user interacts", err);
     });
     infoGrey.textContent = stripExtension(file);
   }
 
+  function randomHydraSnippet() {
+    const freq = Math.random() * 20 + 2;
+    const speed = Math.random() * 1.2 + 0.2;
+    const amp = Math.random() * 0.8 + 0.2;
+    const kaleid = Math.floor(Math.random() * 12 + 2);
+    const scroll = Math.floor(Math.random() * 20);
+
+    return `
+      osc(${freq}, ${amp}, ${scroll})
+        .color(${Math.random()}, ${Math.random()}, ${Math.random()})
+        .diff( osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
+          .color(${Math.random()},${Math.random()},${Math.random()})
+          .rotate(${Math.random()*0.5-0.25})
+          .pixelate(${Math.floor(Math.random()*16)+2})
+          .kaleid(${kaleid}) )
+        .scrollX(${scroll})
+        .colorama()
+        .luma()
+        .repeatX(${Math.floor(Math.random()*6)+1})
+        .repeatY(${Math.floor(Math.random()*6)+1})
+        .modulate( osc(${Math.random()*3}, ${Math.random()*2-1}, ${Math.random()*300}) )
+        .scale(${Math.random()*3+1})
+        .out();
+    `;
+  }
+
   function runRandomHydra() {
-    const snippet = hydraSnippets[Math.floor(Math.random() * hydraSnippets.length)];
+    const snippet = randomHydraSnippet();
     eval(snippet);
   }
 
@@ -265,21 +271,20 @@ window.addEventListener('load', () => {
     const randomSpan = document.querySelector(".info-line .yellow.hover");
     if (!randomSpan) return;
 
-    // Initial text for first click
+    // Initial text
     randomSpan.textContent = "[sound on]";
     randomSpan.style.cursor = "pointer";
 
     // Click handler
     randomSpan.addEventListener("click", () => {
-      // On first click, switch text to [random]
       if (randomSpan.textContent === "[sound on]") {
         randomSpan.textContent = "[random]";
       }
-      // Play random MP3 + Hydra
       randomizeAll();
     });
   });
 </script>
+
 
 
 
