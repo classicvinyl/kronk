@@ -64,7 +64,7 @@ window.addEventListener('load', () => {
 
   const hydra = new Hydra({ canvas, detectAudio:false, makeGlobal:true });
 
-  // Default initial visual
+  // Default visual
   osc(10,0.9,300)
     .color(0.9,0.7,0.8)
     .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
@@ -88,10 +88,19 @@ window.addEventListener('load', () => {
 <!-- ---------- LINKS PANEL ---------- -->
 <aside id="links-panel" style="width:25vw; max-width:25vw; font-size:1.3em; line-height:1.35em;">
   <div class="green x-multi-column">
-    <!-- Full link list -->
+    <!-- Keep ALL your existing links exactly as they are -->
     <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
     <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
-    <!-- (more links here, truncated for brevity) -->
+    <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
+    <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
+    <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
+    <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
+    <a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-iii" target="_blank">WHOK Lab Emissions Vol III</a><br>
+    <a href="https://cruelnaturerecordings.bandcamp.com/album/scrawled" target="_blank">Scrawled</a><br>
+    <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-1-2" target="_blank">Ecstatic Edits #1</a><br>
+    <a href="https://soundbreakingsky.bandcamp.com/album/sbs-22" target="_blank">SBS 22</a><br>
+    <a href="https://www.junodownload.com/products/kronk-i-preferred-when-things-sounded-a-bit/7241433-02/" target="_blank">I Preferred When Things Sounded A Bit Shit</a><br>
+    <!-- (keep hundreds of other links here exactly as before) -->
   </div>
 </aside>
 
@@ -105,83 +114,76 @@ window.addEventListener('load', () => {
 
 <audio id="audio-player"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
+<!-- ---------- RANDOM MP3 + HYDRA SCRIPT ---------- -->
 <script>
-  // --- CONFIG ---
-  const mp3Folder = "mp3/";
-  const mp3Files = [
-    "magnetize - hardcopy.mp3",
-    "nwyvre - exotnotics.mp3",
-    "nwyvre - harmonic4.mp3",
-    "nwyvre - red light.mp3",
-    "nwyvre - solar bones.mp3",
-    "soundbreaking sky - noble bull kell.mp3",
-    "soundbreaking sky - sbs 19-1.mp3",
-    "soundbreaking sky - sbs 2.3.mp3",
-    "soundbreaking sky - sbs 22.2.mp3",
-    "uous - abort.mp3",
-    "uous - still feeling it.mp3",
-    "whirling hall of knives - blown vestige.mp3",
-    "whirling hall of knives - greywash.mp3"
-  ];
+const audio = document.getElementById("audio-player");
+const playingLine = document.getElementById("playing-line");
+const infoGrey = playingLine.querySelector(".grey");
+const randomSpan = document.querySelector(".info-line .yellow.hover");
 
-  const audio = document.getElementById("audio-player");
+const mp3Folder = "mp3/";
+const mp3Files = [
+  "magnetize - hardcopy.mp3",
+  "nwyvre - exotnotics.mp3",
+  "nwyvre - harmonic4.mp3",
+  "nwyvre - red light.mp3",
+  "nwyvre - solar bones.mp3",
+  "soundbreaking sky - noble bull kell.mp3",
+  "soundbreaking sky - sbs 19-1.mp3",
+  "soundbreaking sky - sbs 2.3.mp3",
+  "soundbreaking sky - sbs 22.2.mp3",
+  "uous - abort.mp3",
+  "uous - still feeling it.mp3",
+  "whirling hall of knives - blown vestige.mp3",
+  "whirling hall of knives - greywash.mp3"
+];
 
-  function stripExtension(filename) { return filename.replace(/\.mp3$/i, ""); }
+function stripExtension(filename){ return filename.replace(/\.mp3$/i,""); }
+function playRandomMP3(){ 
+  const file = mp3Files[Math.floor(Math.random()*mp3Files.length)];
+  audio.src = mp3Folder + file;
+  audio.play().catch(err=>console.log("Audio blocked until user interacts",err));
+  infoGrey.textContent = stripExtension(file);
+}
+function randomHydraSnippet(){
+  const freq=Math.random()*20+2;
+  const amp=Math.random()*0.8+0.2;
+  const kaleid=Math.floor(Math.random()*12+2);
+  const scroll=Math.floor(Math.random()*20);
+  return `
+    osc(${freq}, ${amp}, ${scroll})
+      .color(${Math.random()},${Math.random()},${Math.random()})
+      .diff(osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
+        .color(${Math.random()},${Math.random()},${Math.random()})
+        .rotate(${Math.random()*0.5-0.25})
+        .pixelate(${Math.floor(Math.random()*16)+2})
+        .kaleid(${kaleid}))
+      .scrollX(${scroll})
+      .colorama()
+      .luma()
+      .repeatX(${Math.floor(Math.random()*6)+1})
+      .repeatY(${Math.floor(Math.random()*6)+1})
+      .modulate(osc(${Math.random()*3},${Math.random()*2-1},${Math.random()*300}))
+      .scale(${Math.random()*3+1})
+      .out();
+  `;
+}
+function runRandomHydra(){ eval(randomHydraSnippet()); }
+function randomizeAll(){ playRandomMP3(); runRandomHydra(); }
 
-  function playRandomMP3(infoGrey) {
-    if(mp3Files.length === 0) return;
-    const file = mp3Files[Math.floor(Math.random()*mp3Files.length)];
-    audio.src = mp3Folder + file;
-    audio.play().catch(err=>console.log("Audio blocked until user interacts",err));
-    if(infoGrey) infoGrey.textContent = stripExtension(file);
-  }
+document.addEventListener("DOMContentLoaded",()=>{
+  if(!randomSpan) return;
+  randomSpan.textContent="[sound on]";
+  randomSpan.style.cursor="pointer";
 
-  function randomHydraSnippet() {
-    const freq = Math.random()*20+2;
-    const amp = Math.random()*0.8+0.2;
-    const kaleid = Math.floor(Math.random()*12+2);
-    const scroll = Math.floor(Math.random()*20);
-    return `
-      osc(${freq}, ${amp}, ${scroll})
-        .color(${Math.random()}, ${Math.random()}, ${Math.random()})
-        .diff( osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
-          .color(${Math.random()},${Math.random()},${Math.random()})
-          .rotate(${Math.random()*0.5-0.25})
-          .pixelate(${Math.floor(Math.random()*16)+2})
-          .kaleid(${kaleid}) )
-        .scrollX(${scroll})
-        .colorama()
-        .luma()
-        .repeatX(${Math.floor(Math.random()*6)+1})
-        .repeatY(${Math.floor(Math.random()*6)+1})
-        .modulate( osc(${Math.random()*3}, ${Math.random()*2-1}, ${Math.random()*300}) )
-        .scale(${Math.random()*3+1})
-        .out();
-    `;
-  }
-
-  function runRandomHydra() { eval(randomHydraSnippet()); }
-  function randomizeAll(infoGrey) { playRandomMP3(infoGrey); runRandomHydra(); }
-
-  document.addEventListener("DOMContentLoaded", ()=>{
-    const randomSpan = document.querySelector(".info-line .yellow.hover");
-    const playingLine = document.getElementById("playing-line");
-    const infoGrey = playingLine.querySelector(".grey");
-
-    if(!randomSpan) return;
-
-    randomSpan.textContent="[sound on]";
-    randomSpan.style.cursor="pointer";
-
-    randomSpan.addEventListener("click", ()=>{
-      if(randomSpan.textContent === "[sound on]") {
-        randomSpan.textContent="[random]";
-        if(playingLine) playingLine.classList.remove("hidden");
-      }
-      randomizeAll(infoGrey);
-    });
+  randomSpan.addEventListener("click",()=>{
+    if(randomSpan.textContent=="[sound on]"){
+      randomSpan.textContent="[random]";
+      if(playingLine) playingLine.classList.remove("hidden");
+    }
+    randomizeAll();
   });
+});
 </script>
 
 </body>
