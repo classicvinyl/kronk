@@ -190,10 +190,29 @@ window.addEventListener('load', () => {
 
 
 
+<!-- HTML snippet -->
+<nav id="info-panel" class="noselect">
+  <div id="playing-line" class="info-line hidden">
+    <span class="green">[playing]</span> <span class="grey">Loading...</span>
+  </div>
+  <div class="info-line"><span class="yellow hover">[sound on]</span></div>
+</nav>
+
+<audio id="audio-player"></audio>
+
+<style>
+  .hidden { display: none; }
+  .info-line { background: rgba(0,0,0,0.5); padding: 4px 8px; display: inline-block; margin-bottom: 2px; }
+  .green { color: #0f0; }
+  .grey { color: #ccc; }
+  .yellow.hover { color: #ff0; }
+  .yellow.hover:hover { opacity: 0.7; }
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
   // --- CONFIG ---
-  const mp3Folder = "mp3/"; // path to your MP3 folder
+  const mp3Folder = "mp3/";
   const mp3Files = [
     "magnetize - hardcopy.mp3",
     "nwyvre - exotnotics.mp3",
@@ -212,26 +231,22 @@ window.addEventListener('load', () => {
 
   // --- ELEMENTS ---
   const audio = document.getElementById("audio-player");
-  const infoGrey = document.querySelector("#info-panel .grey");
 
   // --- HELPERS ---
   function stripExtension(filename) {
     return filename.replace(/\.mp3$/i, "");
   }
 
-  function playRandomMP3() {
+  function playRandomMP3(infoGrey) {
     if (mp3Files.length === 0) return;
     const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
     audio.src = mp3Folder + file;
-    audio.play().catch(err => {
-      console.log("Audio playback blocked until user interacts", err);
-    });
-    infoGrey.textContent = stripExtension(file);
+    audio.play().catch(err => console.log("Audio blocked until user interacts", err));
+    if (infoGrey) infoGrey.textContent = stripExtension(file);
   }
 
   function randomHydraSnippet() {
     const freq = Math.random() * 20 + 2;
-    const speed = Math.random() * 1.2 + 0.2;
     const amp = Math.random() * 0.8 + 0.2;
     const kaleid = Math.floor(Math.random() * 12 + 2);
     const scroll = Math.floor(Math.random() * 20);
@@ -260,14 +275,17 @@ window.addEventListener('load', () => {
     eval(snippet);
   }
 
-  function randomizeAll() {
-    playRandomMP3();
+  function randomizeAll(infoGrey) {
+    playRandomMP3(infoGrey);
     runRandomHydra();
   }
 
   // --- INIT ---
   document.addEventListener("DOMContentLoaded", () => {
     const randomSpan = document.querySelector(".info-line .yellow.hover");
+    const playingLine = document.getElementById("playing-line");
+    const infoGrey = playingLine.querySelector(".grey");
+
     if (!randomSpan) return;
 
     // Initial text
@@ -278,8 +296,9 @@ window.addEventListener('load', () => {
     randomSpan.addEventListener("click", () => {
       if (randomSpan.textContent === "[sound on]") {
         randomSpan.textContent = "[random]";
+        if (playingLine) playingLine.classList.remove("hidden");
       }
-      randomizeAll();
+      randomizeAll(infoGrey);
     });
   });
 </script>
