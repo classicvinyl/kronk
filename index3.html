@@ -56,11 +56,19 @@ body { font-size:3.97vw; }
 
 #info-panel {
   position:fixed;
-  top:0; left:0;
+  top:0;
+  left:0;
   z-index:3;
-  font-size:2em;
+  font-size:1.3em; /* smaller */
   background:none;
-  padding:var(--line);
+  padding:var(--line) 0;
+  line-height:1.3em;
+}
+#info-panel .info-line {
+  display:inline-block;
+  background:rgba(26,26,26,0.75);
+  padding:0.4ch 0.8ch;
+  margin-bottom:0.6ch;
 }
 #info-panel .info-wrap {
   display:inline-block;
@@ -160,11 +168,9 @@ window.addEventListener('load', () => {
 
 <!-- ---------- INFO PANEL (BOTTOM) ---------- -->
 <nav id="info-panel" class="noselect">
-  <div class="info-wrap">
-    <span class="green">[playing]</span> <span class="grey">whatever is loaded</span><br>
-    <a href="#" target="_blank" class="purple">[info]</a><br>
-    <span class="yellow hover">[random]</span>
-  </div>
+  <div class="info-line"><span class="green">[playing]</span> <span class="grey">whatever is loaded</span></div><br>
+  <div class="info-line"><a href="#" target="_blank" class="purple">[info]</a></div><br>
+  <div class="info-line"><span class="yellow hover">[random]</span></div>
 </nav>
 
 </body>
