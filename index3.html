@@ -186,11 +186,21 @@ window.addEventListener('load', () => {
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
   // --- CONFIG ---
-  const mp3Folder = "mp3/"; // your MP3 folder
+  const mp3Folder = "mp3/"; // path to your MP3 folder
   const mp3Files = [
-    "AmbientLoop01.mp3",
-    "DroneA.mp3",
-    "Beat01.mp3"
+    "magnetize - hardcopy.mp3",
+    "nwyvre - exotnotics.mp3",
+    "nwyvre - harmonic4.mp3",
+    "nwyvre - red light.mp3",
+    "nwyvre - solar bones.mp3",
+    "soundbreaking sky - noble bull kell.mp3",
+    "soundbreaking sky - sbs 19-1.mp3",
+    "soundbreaking sky - sbs 2.3.mp3",
+    "soundbreaking sky - sbs 22.2.mp3",
+    "uous - abort.mp3",
+    "uous - still feeling it.mp3",
+    "whirling hall of knives - blown vestige.mp3",
+    "whirling hall of knives - greywash.mp3"
   ];
 
   const hydraSnippets = [
@@ -217,17 +227,24 @@ window.addEventListener('load', () => {
       .out();`
   ];
 
+  // --- ELEMENTS ---
   const audio = document.getElementById("audio-player");
   const infoGrey = document.querySelector("#info-panel .grey");
+  const randomSpan = document.querySelector(".info-line .yellow.hover");
 
+  // --- HELPERS ---
   function stripExtension(filename) {
     return filename.replace(/\.mp3$/i, "");
   }
 
   function playRandomMP3() {
+    if (mp3Files.length === 0) return;
     const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
     audio.src = mp3Folder + file;
-    audio.play();
+    audio.play().catch(err => {
+      // Autoplay may be blocked; safe to ignore
+      console.log("Audio playback blocked until user interacts", err);
+    });
     infoGrey.textContent = stripExtension(file);
   }
 
@@ -241,12 +258,17 @@ window.addEventListener('load', () => {
     runRandomHydra();
   }
 
-  // Play random MP3 on page load
-  playRandomMP3();
+  // --- INIT ---
+  document.addEventListener("DOMContentLoaded", () => {
+    // Play a random track on page load
+    playRandomMP3();
 
-  // Hook up random button
-  const randomButton = document.getElementById("random-button");
-  if (randomButton) randomButton.addEventListener("click", randomizeAll);
+    // Make [random] span clickable
+    if (randomSpan) {
+      randomSpan.style.cursor = "pointer";
+      randomSpan.addEventListener("click", randomizeAll);
+    }
+  });
 </script>
 
 
