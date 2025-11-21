@@ -183,6 +183,9 @@ window.addEventListener('load', () => {
 
 <audio id="audio-player"></audio>
 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
   // --- CONFIG ---
@@ -230,7 +233,6 @@ window.addEventListener('load', () => {
   // --- ELEMENTS ---
   const audio = document.getElementById("audio-player");
   const infoGrey = document.querySelector("#info-panel .grey");
-  const randomSpan = document.querySelector(".info-line .yellow.hover");
 
   // --- HELPERS ---
   function stripExtension(filename) {
@@ -242,7 +244,7 @@ window.addEventListener('load', () => {
     const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
     audio.src = mp3Folder + file;
     audio.play().catch(err => {
-      // Autoplay may be blocked; safe to ignore
+      // Autoplay may be blocked until user interacts
       console.log("Audio playback blocked until user interacts", err);
     });
     infoGrey.textContent = stripExtension(file);
@@ -260,16 +262,25 @@ window.addEventListener('load', () => {
 
   // --- INIT ---
   document.addEventListener("DOMContentLoaded", () => {
-    // Play a random track on page load
-    playRandomMP3();
+    const randomSpan = document.querySelector(".info-line .yellow.hover");
+    if (!randomSpan) return;
 
-    // Make [random] span clickable
-    if (randomSpan) {
-      randomSpan.style.cursor = "pointer";
-      randomSpan.addEventListener("click", randomizeAll);
-    }
+    // Initial text for first click
+    randomSpan.textContent = "[sound on]";
+    randomSpan.style.cursor = "pointer";
+
+    // Click handler
+    randomSpan.addEventListener("click", () => {
+      // On first click, switch text to [random]
+      if (randomSpan.textContent === "[sound on]") {
+        randomSpan.textContent = "[random]";
+      }
+      // Play random MP3 + Hydra
+      randomizeAll();
+    });
   });
 </script>
+
 
 
 
