@@ -40,36 +40,6 @@ body { font-size:3.97vw; }
   pointer-events:none;
 }
 
-
-
-/* ---------- MOBILE LINKS PANEL ---------- */
-@media (max-width: 768px) {
-  #links-panel {
-    position: relative;       /* instead of fixed */
-    top: auto;
-    right: auto;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto;             /* let it expand with content */
-    background: rgba(26,26,26,0.9);
-    padding: calc(var(--line)/2);
-    z-index: 1;               /* below info panel */
-    overflow: visible;        /* allow scrolling if needed */
-  }
-
-  /* ensure info panel stays on top */
-  #info-panel {
-    position: relative;
-    z-index: 2;
-    margin-bottom: 1em;
-  }
-}
-
-
-
-
-  
-
 /* ---------- OVERLAY PANELS ---------- */
 #links-panel {
   position:fixed;
@@ -125,6 +95,29 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 
 .x-multi-column { column-count:1; column-gap:0; }
 
+/* ---------- MOBILE LINKS PANEL ---------- */
+@media (max-width: 768px) {
+  #links-panel {
+    position: relative !important;       /* override fixed */
+    top: auto !important;
+    right: auto !important;
+    width: 100% !important;              /* full width */
+    max-width: 100% !important;
+    height: auto !important;             /* let it expand */
+    background: rgba(26,26,26,0.9) !important;
+    padding: calc(var(--line)/2) !important;
+    z-index: 1 !important;               /* below info panel */
+    overflow: visible !important;
+  }
+
+  #info-panel {
+    position: relative !important;       /* make it sit above links */
+    z-index: 2 !important;
+    margin-bottom: 0.5em;
+  }
+}
+
+  
 </style>
 </head>
 <body>
