@@ -40,6 +40,36 @@ body { font-size:3.97vw; }
   pointer-events:none;
 }
 
+
+
+/* ---------- MOBILE LINKS PANEL ---------- */
+@media (max-width: 768px) {
+  #links-panel {
+    position: relative;       /* instead of fixed */
+    top: auto;
+    right: auto;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;             /* let it expand with content */
+    background: rgba(26,26,26,0.9);
+    padding: calc(var(--line)/2);
+    z-index: 1;               /* below info panel */
+    overflow: visible;        /* allow scrolling if needed */
+  }
+
+  /* ensure info panel stays on top */
+  #info-panel {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 1em;
+  }
+}
+
+
+
+
+  
+
 /* ---------- OVERLAY PANELS ---------- */
 #links-panel {
   position:fixed;
