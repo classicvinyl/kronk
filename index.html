@@ -338,39 +338,39 @@ window.addEventListener('load', () => {
   // --- CONFIG ---
   const mp3Folder = "mp3/"; // path to your MP3 folder
   const mp3Files = [
-    "magnetize - hardcopy.mp3",
-    "nwyvre - exotnotics.mp3",
-    "nwyvre - harmonic4.mp3",
-    "nwyvre - red light.mp3",
-    "nwyvre - solar bones.mp3",
-    "soundbreaking sky - noble bull kell.mp3",
-    "soundbreaking sky - sbs 19-1.mp3",
-    "soundbreaking sky - sbs 2.3.mp3",
-    "soundbreaking sky - sbs 22.2.mp3",
-    "uous - abort.mp3",
-    "uous - still feeling it.mp3",
-    "whirling hall of knives - blown vestige.mp3",
-    "whirling hall of knives - greywash.mp3",
-    "magnetize - gravity lensing.mp3",
-    "magnetize - noise to signal.mp3",
-    "magnetize - overflux.mp3",
-    "nwyvre - morrigu7.mp3",
-    "nwyvre - wadjet4.mp3",
-    "valved - blood on the controls (whok mix1).mp3",
-    "whirling hall of knives - acheron.mp3",
-    "whirling hall of knives - alternate devil.mp3",
-    "whirling hall of knives - blister pack.mp3",
-    "whirling hall of knives - comminute.mp3",
-    "whirling hall of knives - druckmasch.mp3",
-    "whirling hall of knives - fyls.mp3",
-    "whirling hall of knives - myrekrig.mp3",
-    "whirling hall of knives - permafroste.mp3",
-    "whirling hall of knives - rattle & sturm.mp3",
-    "whirling hall of knives - selectiv compliance.mp3",
-    "whirling hall of knives - selectivsnapp.mp3",
-    "whirling hall of knives - sh:loads.mp3",
-    "whirling hall of knives - sol tryst.mp3",
-    "whirling hall of knives - wraith.mp3"
+  { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
+  { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
+  { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" },
+  { file: "nwyvre - red light.mp3", link: "https://fortevilfruit.bandcamp.com/album/pattern-collapse" },
+  { file: "nwyvre - solar bones.mp3", link: "https://www.thewire.co.uk/audio/btr/below-the-radar-39" },
+  { file: "nwyvre - morrigu7.mp3", link: "https://nwyvre.bandcamp.com/album/morrigu" },
+  { file: "nwyvre - wadjet4.mp3", link: "https://nwyvre.bandcamp.com/album/wadjet" },
+  { file: "soundbreaking sky - noble bull kell.mp3", link: "https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" },
+  { file: "soundbreaking sky - sbs 19-1.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-19" },
+  { file: "soundbreaking sky - sbs 2.3.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-2" },
+  { file: "soundbreaking sky - sbs 22.2.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-22" },
+  { file: "uous - abort.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+  { file: "uous - still feeling it.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+  { file: "magnetize - gravity lensing.mp3", link: "https://open.spotify.com/album/5fb0tv1RUMYGa2QIFOz4tC?si=-GdCunsmTR2rP10ZWEMFeQ&nd=1&dlsi=979f3f8a64174561" },
+  { file: "magnetize - noise to signal.mp3", link: "https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" },
+  { file: "magnetize - overflux.mp3", link: "https://open.spotify.com/album/5dVn4qsa3CfzG6oplIATLe?si=SG1P10wJRPSIEyTYluXHtA&nd=1&dlsi=9842987cc22b4b9d" },
+  { file: "valved - blood on the controls (whok mix1).mp3", link: "https://trensmat.bandcamp.com/album/and-whok-remixes" },
+  { file: "whirling hall of knives - blown vestige.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" },
+  { file: "whirling hall of knives - greywash.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" },
+  { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+  { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
+  { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" },
+  { file: "whirling hall of knives - druckmasch.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+  { file: "whirling hall of knives - fyls.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+  { file: "whirling hall of knives - myrekrig.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
+  { file: "whirling hall of knives - permafroste.mp3", link: "https://fortevilfruit.bandcamp.com/album/p-ggz" },
+  { file: "whirling hall of knives - rattle & sturm.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+  { file: "whirling hall of knives - selectiv compliance.mp3", link: "https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" },
+  { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+  { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
+  { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+  { file: "whirling hall of knives - wraith.mp3" link: "https://whirlinghallofknives.bandcamp.com/album/devisions" }
   ];
 
   const audio = new Audio();
@@ -386,7 +386,7 @@ function stripExtension(filename) {
 let shuffleBag = [];
 
 function refillShuffleBag() {
-  shuffleBag = [...mp3Files];
+  shuffleBag = mp3Files.slice();
   fisherYatesShuffle(shuffleBag);
 }
 
@@ -405,10 +405,14 @@ function getNextRandomMP3() {
 // ---------------- PLAYBACK -------------------
 
 function playRandomMP3() {
-  const file = getNextRandomMP3();
-  audio.src = mp3Folder + file;
-  audio.play().catch(err => console.log("Playback blocked:", err));
-  infoGrey.textContent = stripExtension(file);
+    const track = getNextRandomMP3();   // now returns { file, link }
+    const title = stripExtension(track.file);
+
+    audio.src = mp3Folder + track.file;
+    audio.play().catch(err => console.log("Playback blocked until interaction:", err));
+
+    // clickable link using your custom URL
+    infoGrey.innerHTML = `<a href="${track.link}" target="_blank">${title}</a>`;
 }
 
 // when a track ends → play another
