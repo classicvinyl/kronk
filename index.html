@@ -360,108 +360,111 @@ window.addEventListener('load', () => {
     "whirling hall of knives - wraith.mp3"
   ];
 
-  // --- ELEMENTS ---
-  const audio = document.getElementById("audio-player");
-  const infoGrey = document.querySelector("#info-panel .grey");
+  const audio = new Audio();
+audio.loop = false;  // we want continuous random playback
 
-  // --- HELPERS ---
-  function stripExtension(filename) {
-    return filename.replace(/\.mp3$/i, "");
+// Strip .mp3 extension  
+function stripExtension(filename) {
+  return filename.replace(/\.[^/.]+$/, "");
+}
+
+// ------------- SHUFFLE-BAG (TRUE RANDOM) -----------------
+
+let shuffleBag = [];
+
+function refillShuffleBag() {
+  shuffleBag = [...mp3Files];
+  fisherYatesShuffle(shuffleBag);
+}
+
+function fisherYatesShuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function getNextRandomMP3() {
+  if (shuffleBag.length === 0) refillShuffleBag();
+  return shuffleBag.pop();
+}
+
+// ---------------- PLAYBACK -------------------
+
+function playRandomMP3() {
+  const file = getNextRandomMP3();
+  audio.src = mp3Folder + file;
+  audio.play().catch(err => console.log("Playback blocked:", err));
+  infoGrey.textContent = stripExtension(file);
+}
+
+// when a track ends → play another
+audio.addEventListener("ended", () => {
+  playRandomMP3();
+});
+
+// --------------- UI HOOKUP --------------------
+
+const randomSpan = document.querySelector(".info-line .yellow.hover");
+randomSpan.style.cursor = "pointer";
+
+const infoLine = document.querySelector(".info-line");        // the whole [playing] line
+const infoGrey = infoLine.querySelector(".grey");             // filename span
+const infoGreen = infoLine.querySelector(".green");           // label span
+
+let soundStarted = false;
+
+// initial state — hide [playing] line
+infoLine.style.display = "none";
+
+// random button clicks
+randomSpan.addEventListener("click", () => {
+  if (!soundStarted) {
+    soundStarted = true;
+    randomSpan.textContent = "[random]";
+    infoGreen.textContent = "[playing]";
+    infoLine.style.display = "block";
   }
 
-  // ============================================================
-  //              NO-REPEAT SHUFFLE + AUTO-ADVANCE
-  // ============================================================
+  playRandomMP3();
+  randomizeHydra();
+});
 
-  let shuffleBag = [];
+// --------------- HYDRA RANDOMIZATION ---------------------
 
-  function refillShuffleBag() {
-    shuffleBag = [...mp3Files];
-    shuffleBag.sort(() => Math.random() - 0.5); // shuffle order
-  }
+function randomizeHydra() {
+  const freq1 = 5 + Math.random() * 40;
+  const freq2 = 20 + Math.random() * 80;
+  const rot = Math.random() * 3.14;
+  const pix = 5 + Math.random() * 30;
 
-  function getNextRandomMP3() {
-    if (shuffleBag.length === 0) refillShuffleBag();
-    return shuffleBag.pop();
-  }
+  osc(freq1, 0.9, 300)
+    .color(Math.random(), Math.random(), Math.random())
+    .diff(
+      osc(freq2, 0.3, 100)
+        .color(Math.random(), Math.random(), Math.random())
+        .rotate(rot)
+        .pixelate(pix)
+        .kaleid()
+    )
+    .scrollX(Math.random() * 20 - 10)
+    .colorama()
+    .luma()
+    .repeatX(2 + Math.floor(Math.random() * 4))
+    .repeatY(2 + Math.floor(Math.random() * 4))
+    .modulate(
+      osc(1, Math.random() * -2, 300)
+    )
+    .scale(1 + Math.random() * 2)
+    .out();
+}
 
-  function playRandomMP3() {
-    const file = getNextRandomMP3();
-    audio.src = mp3Folder + file;
-    audio.play().catch(err => {
-      console.log("Playback blocked until user interacts:", err);
-    });
-    infoGrey.textContent = stripExtension(file);
-  }
+// --------------- INITIAL STATE --------------------
 
-  // when a track finishes, pick a new random one
-  audio.addEventListener("ended", () => {
-    playRandomMP3();
-  });
+// Start with “sound off”
+randomSpan.textContent = "[sound on]";
+infoLine.style.display = "none";
 
-  // ============================================================
-  //                     HYDRA RANDOMISATION
-  // ============================================================
-
-  function randomHydraSnippet() {
-    const freq = Math.random() * 20 + 2;
-    const amp = Math.random() * 0.8 + 0.2;
-    const scroll = Math.floor(Math.random() * 20);
-    const kaleid = Math.floor(Math.random() * 12 + 2);
-
-    return `
-      osc(${freq}, ${amp}, ${scroll})
-        .color(${Math.random()}, ${Math.random()}, ${Math.random()})
-        .diff(
-          osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
-            .color(${Math.random()},${Math.random()},${Math.random()})
-            .rotate(${Math.random()*0.5-0.25})
-            .pixelate(${Math.floor(Math.random()*16)+2})
-            .kaleid(${kaleid})
-        )
-        .scrollX(${scroll})
-        .colorama()
-        .luma()
-        .repeatX(${Math.floor(Math.random()*6)+1})
-        .repeatY(${Math.floor(Math.random()*6)+1})
-        .modulate(
-          osc(${Math.random()*3}, ${Math.random()*2-1}, ${Math.random()*300})
-        )
-        .scale(${Math.random()*3+1})
-        .out();
-    `;
-  }
-
-  function runRandomHydra() {
-    const snippet = randomHydraSnippet();
-    eval(snippet);
-  }
-
-  function randomizeAll() {
-    playRandomMP3();
-    runRandomHydra();
-  }
-
-  // ============================================================
-  //                        INIT BUTTON
-  // ============================================================
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const randomSpan = document.querySelector(".info-line .yellow.hover");
-    if (!randomSpan) return;
-
-    // Initial label
-    randomSpan.textContent = "[sound on]";
-    randomSpan.style.cursor = "pointer";
-
-    // First click = start sound and hydra
-    randomSpan.addEventListener("click", () => {
-      if (randomSpan.textContent === "[sound on]") {
-        randomSpan.textContent = "[random]";
-      }
-      randomizeAll();
-    });
-  });
 </script>
 
 </body>
