@@ -4,7 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>kronk</title>
+
 <style>
+
+#links-panel {
+  display: none;
+}
+
 /* ---------- BASE + PALETTE ---------- */
 :root {
   --c-black:#1a1a1a; --c-white:#e1e1e1; --c-grey:#898989;
@@ -164,6 +170,9 @@ window.addEventListener('load', () => {
   <nav id="info-panel" class="noselect">
     <div class="info-line"><span class="green">[playing]</span> <span class="grey"></span></div><br>
     <div class="info-line"><span class="yellow hover">[random]</span></div>
+    <div class="info-line"><span class="purple hover" id="discog-button">[discog]</span>
+</div>
+
   </nav>
 
   <!-- LINKS PANEL BELOW -->
@@ -465,6 +474,17 @@ function randomizeHydra() {
 randomSpan.textContent = "[sound on]";
 infoLine.style.display = "none";
 
+const linksPanel = document.getElementById("links-panel");
+const discogButton = document.getElementById("discog-button");
+
+discogButton.addEventListener("click", () => {
+    if (linksPanel.style.display === "none" || linksPanel.style.display === "") {
+        linksPanel.style.display = "block";
+    } else {
+        linksPanel.style.display = "none";
+    }
+});
+  
 </script>
 
 </body>
