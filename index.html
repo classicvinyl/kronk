@@ -334,166 +334,168 @@ window.addEventListener('load', () => {
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
+
 <script>
   // --- CONFIG ---
   const mp3Folder = "mp3/"; // path to your MP3 folder
   const mp3Files = [
-  { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
-  { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
-  { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" },
-  { file: "nwyvre - red light.mp3", link: "https://fortevilfruit.bandcamp.com/album/pattern-collapse" },
-  { file: "nwyvre - solar bones.mp3", link: "https://www.thewire.co.uk/audio/btr/below-the-radar-39" },
-  { file: "nwyvre - morrigu7.mp3", link: "https://nwyvre.bandcamp.com/album/morrigu" },
-  { file: "nwyvre - wadjet4.mp3", link: "https://nwyvre.bandcamp.com/album/wadjet" },
-  { file: "soundbreaking sky - noble bull kell.mp3", link: "https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" },
-  { file: "soundbreaking sky - sbs 19-1.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-19" },
-  { file: "soundbreaking sky - sbs 2.3.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-2" },
-  { file: "soundbreaking sky - sbs 22.2.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-22" },
-  { file: "uous - abort.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
-  { file: "uous - still feeling it.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
-  { file: "magnetize - gravity lensing.mp3", link: "https://open.spotify.com/album/5fb0tv1RUMYGa2QIFOz4tC?si=-GdCunsmTR2rP10ZWEMFeQ&nd=1&dlsi=979f3f8a64174561" },
-  { file: "magnetize - noise to signal.mp3", link: "https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" },
-  { file: "magnetize - overflux.mp3", link: "https://open.spotify.com/album/5dVn4qsa3CfzG6oplIATLe?si=SG1P10wJRPSIEyTYluXHtA&nd=1&dlsi=9842987cc22b4b9d" },
-  { file: "valved - blood on the controls (whok mix1).mp3", link: "https://trensmat.bandcamp.com/album/and-whok-remixes" },
-  { file: "whirling hall of knives - blown vestige.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" },
-  { file: "whirling hall of knives - greywash.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" },
-  { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
-  { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" },
-  { file: "whirling hall of knives - druckmasch.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - fyls.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - myrekrig.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
-  { file: "whirling hall of knives - permafroste.mp3", link: "https://fortevilfruit.bandcamp.com/album/p-ggz" },
-  { file: "whirling hall of knives - rattle & sturm.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - selectiv compliance.mp3", link: "https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" },
-  { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
-  { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - wraith.mp3" link: "https://whirlinghallofknives.bandcamp.com/album/devisions" }
+    { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
+    { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
+    { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" },
+    { file: "nwyvre - red light.mp3", link: "https://fortevilfruit.bandcamp.com/album/pattern-collapse" },
+    { file: "nwyvre - solar bones.mp3", link: "https://www.thewire.co.uk/audio/btr/below-the-radar-39" },
+    { file: "nwyvre - morrigu7.mp3", link: "https://nwyvre.bandcamp.com/album/morrigu" },
+    { file: "nwyvre - wadjet4.mp3", link: "https://nwyvre.bandcamp.com/album/wadjet" },
+    { file: "soundbreaking sky - noble bull kell.mp3", link: "https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" },
+    { file: "soundbreaking sky - sbs 19-1.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-19" },
+    { file: "soundbreaking sky - sbs 2.3.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-2" },
+    { file: "soundbreaking sky - sbs 22.2.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-22" },
+    { file: "uous - abort.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+    { file: "uous - still feeling it.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+    { file: "magnetize - gravity lensing.mp3", link: "https://open.spotify.com/album/5fb0tv1RUMYGa2QIFOz4tC?si=-GdCunsmTR2rP10ZWEMFeQ&nd=1&dlsi=979f3f8a64174561" },
+    { file: "magnetize - noise to signal.mp3", link: "https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" },
+    { file: "magnetize - overflux.mp3", link: "https://open.spotify.com/album/5dVn4qsa3CfzG6oplIATLe?si=SG1P10wJRPSIEyTYluXHtA&nd=1&dlsi=9842987cc22b4b9d" },
+    { file: "valved - blood on the controls (whok mix1).mp3", link: "https://trensmat.bandcamp.com/album/and-whok-remixes" },
+    { file: "whirling hall of knives - blown vestige.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" },
+    { file: "whirling hall of knives - greywash.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" },
+    { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+    { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
+    { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+    { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" },
+    { file: "whirling hall of knives - druckmasch.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+    { file: "whirling hall of knives - fyls.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+    { file: "whirling hall of knives - myrekrig.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
+    { file: "whirling hall of knives - permafroste.mp3", link: "https://fortevilfruit.bandcamp.com/album/p-ggz" },
+    { file: "whirling hall of knives - rattle & sturm.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+    { file: "whirling hall of knives - selectiv compliance.mp3", link: "https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" },
+    { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+    { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
+    { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
+    { file: "whirling hall of knives - wraith.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" } // <-- fixed comma + proper object
   ];
 
-  const audio = new Audio();
-audio.loop = false;  // we want continuous random playback
+  // --- ELEMENTS & AUDIO ---
+  const audio = document.getElementById("audio-player");
+  const randomSpan = document.querySelector(".info-line .yellow.hover");
+  const infoLine = document.querySelector("#info-panel .info-line");        // the first info-line (playing)
+  const infoGrey = infoLine ? infoLine.querySelector(".grey") : null;
+  const infoGreen = infoLine ? infoLine.querySelector(".green") : null;
 
-// Strip .mp3 extension  
-function stripExtension(filename) {
-  return filename.replace(/\.[^/.]+$/, "");
-}
+  // safety checks
+  if (!randomSpan) console.warn("randomSpan not found");
+  if (!infoLine) console.warn("playing info-line not found");
+  if (!infoGrey) console.warn("infoGrey span not found");
 
-// ------------- SHUFFLE-BAG (TRUE RANDOM) -----------------
-
-let shuffleBag = [];
-
-function refillShuffleBag() {
-  shuffleBag = mp3Files.slice();
-  fisherYatesShuffle(shuffleBag);
-}
-
-function fisherYatesShuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+  // Strip .mp3 extension  
+  function stripExtension(filename) {
+    return filename.replace(/\.[^/.]+$/, "");
   }
-}
 
-function getNextRandomMP3() {
-  if (shuffleBag.length === 0) refillShuffleBag();
-  return shuffleBag.pop();
-}
+  // ------------- SHUFFLE-BAG (TRUE RANDOM) -----------------
+  let shuffleBag = [];
 
-// ---------------- PLAYBACK -------------------
+  function refillShuffleBag() {
+    shuffleBag = mp3Files.slice();
+    fisherYatesShuffle(shuffleBag);
+  }
 
-function playRandomMP3() {
-    const track = getNextRandomMP3();   // now returns { file, link }
+  function fisherYatesShuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  function getNextRandomMP3() {
+    if (shuffleBag.length === 0) refillShuffleBag();
+    return shuffleBag.pop();
+  }
+
+  // ---------------- PLAYBACK -------------------
+  function playRandomMP3() {
+    const track = getNextRandomMP3();   // returns { file, link }
     const title = stripExtension(track.file);
 
     audio.src = mp3Folder + track.file;
     audio.play().catch(err => console.log("Playback blocked until interaction:", err));
 
     // clickable link using your custom URL
-    infoGrey.innerHTML = `<a href="${track.link}" target="_blank">${title}</a>`;
-}
-
-// when a track ends → play another
-audio.addEventListener("ended", () => {
-  playRandomMP3();
-});
-
-// --------------- UI HOOKUP --------------------
-
-const randomSpan = document.querySelector(".info-line .yellow.hover");
-randomSpan.style.cursor = "pointer";
-
-const infoLine = document.querySelector(".info-line");        // the whole [playing] line
-const infoGrey = infoLine.querySelector(".grey");             // filename span
-const infoGreen = infoLine.querySelector(".green");           // label span
-
-let soundStarted = false;
-
-// initial state — hide [playing] line
-infoLine.style.display = "none";
-
-// random button clicks
-randomSpan.addEventListener("click", () => {
-  if (!soundStarted) {
-    soundStarted = true;
-    randomSpan.textContent = "[random]";
-    infoGreen.textContent = "[playing]";
-    infoLine.style.display = "block";
+    if (infoGrey) infoGrey.innerHTML = `<a href="${track.link}" target="_blank" rel="noopener noreferrer">${title}</a>`;
   }
 
-  playRandomMP3();
-  randomizeHydra();
-});
+  // when a track ends → play another
+  audio.addEventListener("ended", () => {
+    playRandomMP3();
+  });
 
-// --------------- HYDRA RANDOMIZATION ---------------------
+  // --------------- UI HOOKUP --------------------
+  // make sure randomSpan exists before using it
+  if (randomSpan) {
+    randomSpan.style.cursor = "pointer";
+  } else {
+    console.warn("random control not found - playback control will not be bound");
+  }
 
-function randomizeHydra() {
-  const freq1 = 5 + Math.random() * 40;
-  const freq2 = 20 + Math.random() * 80;
-  const rot = Math.random() * 3.14;
-  const pix = 5 + Math.random() * 30;
+  let soundStarted = false;
 
-  osc(freq1, 0.9, 300)
-    .color(Math.random(), Math.random(), Math.random())
-    .diff(
-      osc(freq2, 0.3, 100)
-        .color(Math.random(), Math.random(), Math.random())
-        .rotate(rot)
-        .pixelate(pix)
-        .kaleid()
-    )
-    .scrollX(Math.random() * 20 - 10)
-    .colorama()
-    .luma()
-    .repeatX(2 + Math.floor(Math.random() * 4))
-    .repeatY(2 + Math.floor(Math.random() * 4))
-    .modulate(
-      osc(1, Math.random() * -2, 300)
-    )
-    .scale(1 + Math.random() * 2)
-    .out();
-}
+  // initial state — hide [playing] line if present
+  if (infoLine) infoLine.style.display = "none";
 
-// --------------- INITIAL STATE --------------------
+  // random button clicks
+  if (randomSpan) {
+    randomSpan.addEventListener("click", () => {
+      if (!soundStarted) {
+        soundStarted = true;
+        randomSpan.textContent = "[random]";
+        if (infoGreen) infoGreen.textContent = "[playing]";
+        if (infoLine) infoLine.style.display = "inline-block";
+      }
+      playRandomMP3();
+      randomizeHydra();
+    });
+  }
 
-// Start with “sound off”
-randomSpan.textContent = "[sound on]";
-infoLine.style.display = "none";
+  // --------------- HYDRA RANDOMIZATION ---------------------
+  function randomizeHydra() {
+    const freq1 = 5 + Math.random() * 40;
+    const freq2 = 20 + Math.random() * 80;
+    const rot = Math.random() * 3.14;
+    const pix = 5 + Math.random() * 30;
 
-const linksPanel = document.getElementById("links-panel");
-const discogButton = document.getElementById("discog-button");
+    // `osc` etc. are Hydra globals (your Hydra canvas must be initialized)
+    osc(freq1, 0.9, 300)
+      .color(Math.random(), Math.random(), Math.random())
+      .diff(
+        osc(freq2, 0.3, 100)
+          .color(Math.random(), Math.random(), Math.random())
+          .rotate(rot)
+          .pixelate(pix)
+          .kaleid()
+      )
+      .scrollX(Math.random() * 20 - 10)
+      .colorama()
+      .luma()
+      .repeatX(2 + Math.floor(Math.random() * 4))
+      .repeatY(2 + Math.floor(Math.random() * 4))
+      .modulate(
+        osc(1, Math.random() * -2, 300)
+      )
+      .scale(1 + Math.random() * 2)
+      .out();
+  }
 
-discogButton.addEventListener("click", () => {
-    if (linksPanel.style.display === "none" || linksPanel.style.display === "") {
-        linksPanel.style.display = "block";
-    } else {
-        linksPanel.style.display = "none";
-    }
-});
-  
+  // --------------- DISCOG / LINKS TOGGLE -------------------
+  const linksPanel = document.getElementById("links-panel");
+  const discogButton = document.getElementById("discog-button");
+  if (discogButton && linksPanel) {
+    discogButton.addEventListener("click", () => {
+      // toggle with computed style for reliability
+      const isHidden = window.getComputedStyle(linksPanel).display === "none";
+      linksPanel.style.display = isHidden ? "block" : "none";
+    });
+  }
 </script>
+
 
 </body>
 </html>
