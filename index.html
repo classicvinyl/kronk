@@ -319,8 +319,11 @@ window.addEventListener('load', () => {
 
 <!-- ---------- SCRIPTS ---------- -->
 <script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
-  const mp3Folder = "mp3/";
+  // --- CONFIG ---
+  const mp3Folder = "mp3/"; // path to your MP3 folder
   const mp3Files = [
     "magnetize - hardcopy.mp3",
     "nwyvre - exotnotics.mp3",
@@ -357,41 +360,73 @@ window.addEventListener('load', () => {
     "whirling hall of knives - wraith.mp3"
   ];
 
+  // --- ELEMENTS ---
   const audio = document.getElementById("audio-player");
   const infoGrey = document.querySelector("#info-panel .grey");
 
+  // --- HELPERS ---
   function stripExtension(filename) {
     return filename.replace(/\.mp3$/i, "");
   }
 
+  // ============================================================
+  //              NO-REPEAT SHUFFLE + AUTO-ADVANCE
+  // ============================================================
+
+  let shuffleBag = [];
+
+  function refillShuffleBag() {
+    shuffleBag = [...mp3Files];
+    shuffleBag.sort(() => Math.random() - 0.5); // shuffle order
+  }
+
+  function getNextRandomMP3() {
+    if (shuffleBag.length === 0) refillShuffleBag();
+    return shuffleBag.pop();
+  }
+
   function playRandomMP3() {
-    if (mp3Files.length === 0) return;
-    const file = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+    const file = getNextRandomMP3();
     audio.src = mp3Folder + file;
-    audio.play().catch(err => console.log("Audio playback blocked until user interacts", err));
+    audio.play().catch(err => {
+      console.log("Playback blocked until user interacts:", err);
+    });
     infoGrey.textContent = stripExtension(file);
   }
+
+  // when a track finishes, pick a new random one
+  audio.addEventListener("ended", () => {
+    playRandomMP3();
+  });
+
+  // ============================================================
+  //                     HYDRA RANDOMISATION
+  // ============================================================
 
   function randomHydraSnippet() {
     const freq = Math.random() * 20 + 2;
     const amp = Math.random() * 0.8 + 0.2;
-    const kaleid = Math.floor(Math.random() * 12 + 2);
     const scroll = Math.floor(Math.random() * 20);
+    const kaleid = Math.floor(Math.random() * 12 + 2);
 
     return `
       osc(${freq}, ${amp}, ${scroll})
         .color(${Math.random()}, ${Math.random()}, ${Math.random()})
-        .diff( osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
-          .color(${Math.random()},${Math.random()},${Math.random()})
-          .rotate(${Math.random()*0.5-0.25})
-          .pixelate(${Math.floor(Math.random()*16)+2})
-          .kaleid(${kaleid}) )
+        .diff(
+          osc(${freq*3}, ${Math.random()*0.5+0.1}, ${scroll*2})
+            .color(${Math.random()},${Math.random()},${Math.random()})
+            .rotate(${Math.random()*0.5-0.25})
+            .pixelate(${Math.floor(Math.random()*16)+2})
+            .kaleid(${kaleid})
+        )
         .scrollX(${scroll})
         .colorama()
         .luma()
         .repeatX(${Math.floor(Math.random()*6)+1})
         .repeatY(${Math.floor(Math.random()*6)+1})
-        .modulate( osc(${Math.random()*3}, ${Math.random()*2-1}, ${Math.random()*300}) )
+        .modulate(
+          osc(${Math.random()*3}, ${Math.random()*2-1}, ${Math.random()*300})
+        )
         .scale(${Math.random()*3+1})
         .out();
     `;
@@ -407,11 +442,19 @@ window.addEventListener('load', () => {
     runRandomHydra();
   }
 
+  // ============================================================
+  //                        INIT BUTTON
+  // ============================================================
+
   document.addEventListener("DOMContentLoaded", () => {
     const randomSpan = document.querySelector(".info-line .yellow.hover");
     if (!randomSpan) return;
+
+    // Initial label
     randomSpan.textContent = "[sound on]";
     randomSpan.style.cursor = "pointer";
+
+    // First click = start sound and hydra
     randomSpan.addEventListener("click", () => {
       if (randomSpan.textContent === "[sound on]") {
         randomSpan.textContent = "[random]";
