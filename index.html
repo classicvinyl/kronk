@@ -173,7 +173,7 @@ window.addEventListener('load', () => {
   <!-- INFO PANEL FIRST -->
   <nav id="info-panel" class="noselect">
     <div class="info-line"><span class="green">[playing]</span> <span class="grey"></span></div><br>
-    <div class="info-line"><span class="yellow hover">[random]</span></div><br>
+    <div class="info-line"><span class="yellow hover">[sound on]</span></div><br>
     <div class="info-line"><span class="purple hover" id="discog-button">[discog]</span>
 </div>
 
@@ -427,6 +427,27 @@ window.addEventListener('load', () => {
   audio.addEventListener("ended", () => {
     playRandomMP3();
   });
+
+  let firstClick = true;
+
+randomBtn.addEventListener("click", () => {
+    if (firstClick) {
+        firstClick = false;
+
+        // change [sound on] → [random]
+        randomBtn.textContent = "[random]";
+
+        // show the playing row
+        if (infoLinePlaying) infoLinePlaying.style.display = "block";
+
+        // now start first random track
+        playRandomMP3();
+    } else {
+        // normal randomisation after first activation
+        playRandomMP3();
+    }
+});
+
 
   // --------------- UI HOOKUP --------------------
   // make sure randomSpan exists before using it
