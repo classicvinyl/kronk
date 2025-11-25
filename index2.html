@@ -68,11 +68,13 @@ a:hover {color:var(--c-black); background:var(--c-current);}
     width: 25vw !important;
     height: 25vw !important;
   }
+    
   #track-link {
-    font-size: 25vw;          /* match icon size */
-    line-height: 25vw;
-    display: inline-block;
+    font-size: 25vw;
+    line-height: 1em;
+    margin-left: 25vw; /* match mobile icon size */
   }
+    
 }
 
 /* ---------- ICON STYLING ---------- */
@@ -93,23 +95,29 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 }
 
 /* ---------- TRACK TITLE RELATIVE TO ICON ---------- */
+#icon-wrapper {
+  display: inline-block;
+  background: rgba(26,26,26,0.75);
+  padding: 0.4ch 0.8ch;
+  margin-bottom: 0.6ch;
+}
+
 #track-link {
-  display: block;           /* ensures it’s on its own line */
-  text-align: center;       /* center below the icon */
-  font-size: 10vw;          /* will scale with icon */
+  display: block;
+  background: rgba(26,26,26,0.75); /* same as icon */
+  padding: 0.4ch 0.8ch;
+  margin-left: 10vw; /* same width as icon, aligns end of icon */
+  font-size: 10vw;
   line-height: 1.2em;
 }
 
-#track-link .artist {
+#track-link a {
+  text-decoration: none;
   display: block;
-  color: var(--c-yellow);
 }
 
-#track-link .title {
-  display: block;
-  color: var(--c-green);
-}
-
+#track-link .artist { color: var(--c-yellow); }
+#track-link .title { color: var(--c-green); }
 @media (min-width: 768px) { #track-link { font-size: 4.5vw; } }
 @media (min-width: 1024px){ #track-link { font-size: 4.5vw; } } /* match .icon exactly */
 
@@ -155,7 +163,7 @@ window.addEventListener('load', () => {
 <div id="mobile-wrapper">
   <!-- INFO PANEL FIRST -->
 <nav id="info-panel" class="noselect">
-  <div class="info-line">
+  <div class="info-line" id="icon-wrapper">
     <!-- Muted speaker / Dice container -->
     <span class="yellow hover" id="sound-icon">
       <!-- Muted Speaker SVG -->
@@ -181,16 +189,18 @@ window.addEventListener('load', () => {
         </path>
       </svg>
     </span>
-
+  </div>
     <!-- Random MP3 info -->
     
- <div class="info-line">
+ <div id="track-link">
   <span id="playing-info" style="display:none;"></span>
   <span id="track-link"></span>
 </div>   
-    
-  </div>
+
+
 </nav>
+    
+
 
   <!-- LINKS PANEL BELOW -->
   <aside id="links-panel" style="width:25vw; max-width:25vw; font-size:1.3em; line-height:1.35em;">
@@ -270,10 +280,12 @@ function playRandomMP3() {
   audio.src = mp3Folder + track.file;
   audio.play().catch(()=>{});
   
-  trackLink.innerHTML = `
+trackLink.innerHTML = `
+  <a href="${track.link}" target="_blank">
     <span class="artist">${artist}</span>
     <span class="title">${title}</span>
-  `;
+  </a>
+`;
   
   playingInfo.style.display = "inline";
 }
