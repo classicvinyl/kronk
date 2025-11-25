@@ -6,122 +6,114 @@
 <title>kronk</title>
 
 <style>
+#links-panel { display: none; }
+.info-line span { cursor: pointer; }
+
 /* ---------- BASE + PALETTE ---------- */
-:root{
+:root {
   --c-black:#1a1a1a; --c-white:#e1e1e1; --c-grey:#898989;
-  --c-green:#1beb9e; --c-yellow:#dddd25;
+  --c-purple:#b462ff; --c-fuschia:#ff45b4; --c-blue:#18b6ff;
+  --c-green:#1beb9e; --c-orange:#ff9528; --c-yellow:#dddd25;
   --line:2.5ch; --font:'IBM', monospace;
-  --icon-width-desktop:5vw;   /* matches your desktop icon size */
-  --icon-width-default:10vw;  /* default base before desktop media */
-  --icon-width-mobile:25vw;   /* mobile icon size */
+  --icon-w: 10vw;
 }
-
-html,body{
-  margin:0;
-  background:var(--c-black);
-  color:var(--c-white);
-  height:100%;
-  font-family:var(--font);
-  line-height:var(--line);
-}
-
-/* responsive base font sizes from your file */
+html,body{ margin:0; background:var(--c-black); color:var(--c-white); height:100%; font-family:var(--font); line-height:var(--line);}
 body { font-size:3.97vw; }
 @media (min-width: 768px) { body { font-size:2vw; } }
-@media (min-width: 1024px) { body { font-size:1.11111111vw; } }
+@media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
 
-/* ---------- HYDRA ---------- */
+/* ---------- HYDRA FULLSCREEN BACKGROUND ---------- */
 #hydra-bg { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; overflow:hidden; }
 #hydra-canvas { width:100%; height:100%; display:block; background:black; pointer-events:none; }
 
-/* ---------- PANELS ---------- */
-#links-panel{ position:fixed; top:0; right:0; width:25vw; max-width:25vw; height:100vh;
+/* ---------- OVERLAY PANELS ---------- */
+#links-panel {
+  position:fixed; top:0; right:0; width:25vw !important; max-width:25vw !important; height:100vh;
   overflow-y:scroll; background:rgba(26,26,26,0.85); padding:var(--line); z-index:2;
-  scrollbar-width:none; font-size:1em; line-height:1.3em; white-space:normal; word-break:break-word;}
+  scrollbar-width:none; font-size:1em; line-height:1.3em; white-space:normal !important; word-break:break-word;
+}
 #links-panel::-webkit-scrollbar{display:none;}
 
-#info-panel{
+#info-panel {
   position:fixed; top:0; left:0; z-index:3; font-size:1.3em; background:none; padding:var(--line) 0; line-height:1.3em;
-}
-
-/* ---------- INFO LINE (icon + text) ---------- */
-.info-line {
   display: flex;
-  align-items: flex-start;
-  gap: calc(var(--line)/2);
-  margin-bottom: 0.6ch;
-  /* note: background for the whole info-line kept off so icon-wrapper & track-container control their own BGs */
+  flex-direction: column;
+  align-items: flex-start; /* icon always top-left */
 }
 
-/* ---------- ICON WRAPPER (keeps the icon background tight) ---------- */
-#icon-wrapper {
-  background: rgba(26,26,26,0.75);
-  padding: 0.4ch 0.8ch;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2px;
-  flex: 0 0 auto;
+/* Keep icon styling exactly the same */
+#info-panel .info-line {
+  display:inline-flex;           
+  align-items:center;            
+  background:rgba(26,26,26,0.75); 
+  padding:0.4ch 0.8ch;
+  margin-bottom:0.6ch;
 }
 
-/* ---------- ICON SIZES (desktop / mobile) ---------- */
+/* ---------- TYPE ---------- */
+a {color:inherit; text-decoration:none;}
+a:hover {color:var(--c-black); background:var(--c-current);} 
+.green{color:var(--c-green); --c-current:var(--c-green);} 
+.grey{color:var(--c-grey); --c-current:var(--c-grey);} 
+.purple{color:var(--c-purple); --c-current:var(--c-purple);} 
+.yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
+.x-multi-column { column-count:1; column-gap:0; }
+
+/* ---------- ICON STYLING ---------- */
 .icon {
-  width: var(--icon-width-default);
-  height: auto;
-  opacity: 0.85;
+  width: var(--icon-w);
+  height: var(--icon-w);
+  opacity: 0.85;    
   vertical-align: middle;
-  transition: all 0.12s ease;
-  display:block;
+  transition: all 0.2s ease;
 }
+@media (min-width: 768px) { :root { --icon-w: 5vw; } }
 
-/* desktop override (matches your earlier media setting) */
-@media (min-width: 768px) {
-  .icon { width: var(--icon-width-desktop); height: var(--icon-width-desktop); }
-}
-
-/* mobile override */
-@media (max-width: 768px) {
-  .icon { width: var(--icon-width-mobile); height: var(--icon-width-mobile); }
-}
-
-/* ---------- TRACK CONTAINER (hidden until a track is chosen) ---------- */
-#track-container{
-  display: none; /* hidden on load to avoid background showing */
-  background: rgba(26,26,26,0.75); /* same background as icon */
+/* ---------- TRACK TITLE BELOW ICON ---------- */
+#track-link {
+  display: inline-block;            
+  background: rgba(26,26,26,0.75); 
   padding: 0.4ch 0.8ch;
-  border-radius: 2px;
-  text-align: left;              /* left aligned text */
+  margin: 0; /* no shifting; below icon naturally */
+  font-size: 4.5vw;
   line-height: 1.2em;
-  color: var(--c-white);
-  /* margin-left will be set dynamically to align with icon end (JS) */
-  max-width: calc(100vw - 4ch);
+  word-break: break-word;           
+  white-space: normal;
 }
 
-/* link styling inside track */
-#track-container a { color: inherit; text-decoration: none; display:block; }
-#track-container .artist { display:block; color: var(--c-yellow); }
-#track-container .title  { display:block; color: var(--c-green); }
+/* Artist/Title separate lines */
+#track-link .artist, #track-link .title { display: block; }
 
-/* ---------- MOBILE LAYOUT: stack icon above track text ---------- */
-@media (max-width: 768px) {
-  .info-line { flex-direction: column; align-items: flex-start; }
-  #track-container { 
-    /* on mobile we want the track text below the icon, centered under icon */
-    margin-left: 0 !important;
-    width: auto;
-    max-width: 90vw;
-    text-align: left;
-    font-size: calc(var(--icon-width-mobile) * 0.22); /* scales sensibly with icon */
+/* preserve link structure styling */
+#track-link a { text-decoration: none; display: block; }
+#track-link .artist { color: var(--c-yellow); }
+#track-link .title { color: var(--c-green); }
+
+/* Swap artist/title colors on hover */
+#track-link a:hover .artist { color: var(--c-green); background: rgba(78,78,78,0.75);}
+#track-link a:hover .title  { color: var(--c-yellow); background: rgba(78,78,78,0.75);}
+    
+/* ---------- MOBILE ADJUSTMENTS ---------- */
+@media (max-width: 767px) {
+  /* force icon size */
+  #info-panel .icon {
+    width: 15vw !important;
+    height: 15vw !important;
   }
 
-  /* if you want the text to match icon size proportionally, JS also computes it — CSS fallback above. */
+  /* force track title font-size relative to icon */
+  #track-link {
+    font-size: 10vw !important;
+    padding: 0.4ch 0.8ch !important;
+    margin-top: 0.4ch !important;
+  }
+
+  /* keep info-line tight around icon */
+  #info-panel .info-line {
+    width: auto !important;
+  }
 }
-
-/* ---------- Preserve your link colors & hover behavior ---------- */
-a:hover { color:var(--c-black); background:var(--c-current); }
-
-/* small utility so debug is easier if needed */
-.hidden { display:none !important; }
+    
 </style>
 </head>
 <body>
@@ -160,74 +152,57 @@ window.addEventListener('load', () => {
 });
 </script>
 
-<!-- ---------- MOBILE WRAPPER FOR INFO + LINKS ---------- -->
-<div id="mobile-wrapper">
-
-  <!-- ---------- INFO PANEL ---------- -->
-  <nav id="info-panel" class="noselect">
-    <div class="info-line">
-      <!-- ICON (keeps its own background) -->
-      <div id="icon-wrapper">
-        <!-- Muted Speaker SVG (visible initially) -->
-        <svg id="muted-speaker" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor">
-          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g transform="translate(1.000000, 0.000000)" fill="currentColor">
-              <rect transform="translate(8.823150, 8.300450) rotate(-38.512169) translate(-8.823150, -8.300450)"
-                    x="-0.177126926" y="7.80043462" width="17.8925505" height="1.40204314"></rect>
-              <path d="M3.953,9.912 L3.953,5.01 L2.128,5.01 C0.845,5.01 0.013,6.094 0.013,7.47 L0.013,8.494
-                       C0.013,9.953 0.782,10.953 2.128,10.953 L2.514,10.953 L3.953,9.912 Z"></path>
-              <path d="M6.877,12.659 L11.936,15.972 C12.522,15.972 12.996,15.572 12.996,15.077
-                       L12.996,7.919 L6.877,12.659 Z"></path>
-              <path d="M12.987,0.971 C12.987,0.464 12.488,0.051 11.872,0.051 L6.114,3.73
-                       C5.499,3.73 5,4.142 5,4.65 L5,8.839 L12.987,2.596 Z"></path>
-            </g>
+<!-- ---------- INFO PANEL ---------- -->
+<nav id="info-panel" class="noselect">
+  <div class="info-line" id="icon-wrapper">
+    <span class="yellow hover" id="sound-icon">
+      <svg id="muted-speaker" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g transform="translate(1.000000, 0.000000)" fill="currentColor">
+            <rect transform="translate(8.823150, 8.300450) rotate(-38.512169) translate(-8.823150, -8.300450)" x="-0.177126926" y="7.80043462" width="17.8925505" height="1.40204314"></rect>
+            <path d="M3.953,9.912 L3.953,5.01 L2.128,5.01 C0.845,5.01 0.013,6.094 0.013,7.47 L0.013,8.494 C0.013,9.953 0.782,10.953 2.128,10.953 L2.514,10.953 L3.953,9.912 Z"></path>
+            <path d="M6.877,12.659 L11.936,15.972 C12.522,15.972 12.996,15.572 12.996,15.077 L12.996,7.919 L6.877,12.659 Z"></path>
+            <path d="M12.987,0.971 C12.987,0.464 12.488,0.051 11.872,0.051 L6.114,3.73 C5.499,3.73 5,4.142 5,4.65 L5,8.839 L12.987,2.596 L12.987,0.971 Z"></path>
           </g>
-        </svg>
+        </g>
+      </svg>
+      <svg id="dice-icon" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor" style="display:none">
+        <path d="M14.763,0 L3.178,0 C1.998,0 1.043,0.966 1.043,2.155 L1.043,13.845 C1.043,15.034 1.998,15.999 3.178,15.999 L14.763,15.999 C15.944,15.999 16.899,15.034 16.899,13.845 L16.899,2.155 C16.898,0.966 15.943,0 14.763,0 L14.763,0 Z 
+           M5.002,6.153 C3.856,6.153 2.927,5.202 2.927,4.03 C2.927,2.858 3.856,1.907 5.002,1.907 C6.148,1.907 7.078,2.858 7.078,4.03 C7.078,5.202 6.148,6.153 5.002,6.153 Z 
+           M13.002,6.153 C11.856,6.153 10.927,5.202 10.927,4.03 C10.927,2.858 11.856,1.907 13.002,1.907 C14.148,1.907 15.078,2.858 15.078,4.03 C15.078,5.202 14.148,6.153 13.002,6.153 Z 
+           M13.002,14.153 C11.856,14.153 10.927,13.202 10.927,12.03 C10.927,10.858 11.856,9.907 13.002,9.907 C14.148,9.907 15.078,10.858 15.078,12.03 C15.078,13.202 14.148,14.153 13.002,14.153 Z 
+           M9.002,10.153 C7.856,10.153 6.927,9.202 6.927,8.03 C6.927,6.858 7.856,5.907 9.002,5.907 C10.148,5.907 11.078,6.858 11.078,8.03 C11.078,9.202 10.148,10.153 9.002,10.153 Z 
+           M5.002,14.153 C3.856,14.153 2.927,13.202 2.927,12.03 C2.927,10.858 3.856,9.907 5.002,9.907 C6.148,9.907 7.078,10.858 7.078,12.03 C7.078,13.202 6.148,14.153 5.002,14.153 Z">
+        </path>
+      </svg>
+    </span>
+  </div>
 
-        <!-- Dice SVG (hidden initially) -->
-        <svg id="dice-icon" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor" style="display:none">
-          <path d="M14.763,0 L3.178,0 C1.998,0 1.043,0.966 1.043,2.155 L1.043,13.845 C1.043,15.034 1.998,15.999 3.178,15.999
-            L14.763,15.999 C15.944,15.999 16.899,15.034 16.899,13.845 L16.899,2.155 C16.898,0.966 15.943,0 14.763,0 Z
-            M5.002,6.153 C3.856,6.153 2.927,5.202 2.927,4.03 C2.927,2.858 3.856,1.907 5.002,1.907 C6.148,1.907 7.078,2.858 7.078,4.03
-            C7.078,5.202 6.148,6.153 5.002,6.153 Z M13.002,6.153 C11.856,6.153 10.927,5.202 10.927,4.03 C10.927,2.858 11.856,1.907
-            13.002,1.907 C14.148,1.907 15.078,2.858 15.078,4.03 C15.078,5.202 14.148,6.153 13.002,6.153 Z
-            M13.002,14.153 C11.856,14.153 10.927,13.202 10.927,12.03 C10.927,10.858 11.856,9.907 13.002,9.907
-            C14.148,9.907 15.078,10.858 15.078,12.03 C15.078,13.202 14.148,14.153 13.002,14.153 Z
-            M9.002,10.153 C7.856,10.153 6.927,9.202 6.927,8.03 C6.927,6.858 7.856,5.907 9.002,5.907
-            C10.148,5.907 11.078,6.858 11.078,8.03 C11.078,9.202 10.148,10.153 9.002,10.153 Z
-            M5.002,14.153 C3.856,14.153 2.927,13.202 2.927,12.03 C2.927,10.858 3.856,9.907 5.002,9.907
-            C6.148,9.907 7.078,10.858 7.078,12.03 C7.078,13.202 6.148,14.153 5.002,14.153 Z"/>
-        </svg>
-      </div>
+  <!-- Track info -->
+  <div id="track-link">
+    <span id="playing-info" style="display:none;"></span>
+  </div>   
+</nav>
 
-      <!-- TRACK TEXT (hidden initially) -->
-      <div id="track-container" role="region" aria-live="polite">
-        <a id="track-link" href="#" target="_blank" rel="noopener noreferrer">
-          <span class="artist"></span>
-          <span class="title"></span>
-        </a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ---------- LINKS PANEL BELOW ---------- -->
-  <aside id="links-panel">
-    <div class="green x-multi-column">
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
-    </div>
-  </aside>
-</div>
+<!-- ---------- LINKS PANEL ---------- -->
+<aside id="links-panel" style="width:25vw; max-width:25vw; font-size:1.3em; line-height:1.35em;">
+  <div class="green x-multi-column">
+    <a href="#" target="_blank">Ecstatic Edits #7</a><br>
+    <a href="#" target="_blank">Ecstatic Edits #6</a><br>
+    <a href="#" target="_blank">Ecstatic Edits #5</a><br>
+  </div>
+</aside>
 
 <!-- ---------- AUDIO PLAYER ---------- -->
 <audio id="audio-player"></audio>
 
 <script>
-/* === keep your mp3 array exactly as before === */
+const audio = document.getElementById("audio-player");
+const mutedSpeaker = document.getElementById("muted-speaker");
+const diceIcon = document.getElementById("dice-icon");
+const trackLink = document.getElementById("track-link");
+
+// MP3 CONFIG
 const mp3Folder = "mp3/";
 const mp3Files = [
   { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
@@ -262,113 +237,44 @@ const mp3Files = [
   { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
   { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
   { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - wraith.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" }
+  { file: "whirling hall of knives - wraith.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" } 
 ];
 
-/* === UTILS: shuffle bag === */
+// UTIL
 function stripExtension(filename) { return filename.replace(/\.[^/.]+$/, ""); }
 let shuffleBag = [];
 function refillShuffleBag() { shuffleBag = mp3Files.slice(); fisherYatesShuffle(shuffleBag); }
 function fisherYatesShuffle(array) { for (let i=array.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [array[i],array[j]]=[array[j],array[i]]; } }
 function getNextRandomMP3() { if(shuffleBag.length===0) refillShuffleBag(); return shuffleBag.pop(); }
 
-/* === DOM refs === */
-const audio = document.getElementById("audio-player");
-const mutedSpeaker = document.getElementById("muted-speaker");
-const diceIcon = document.getElementById("dice-icon");
-const trackContainer = document.getElementById("track-container");
-const trackLink = document.getElementById("track-link");
-const artistSpan = trackLink.querySelector('.artist');
-const titleSpan = trackLink.querySelector('.title');
-const iconEl = document.querySelector('#icon-wrapper .icon');
-
-/* === helper to align track-container to icon end === */
-function alignTrackContainer(){
-  // compute icon width in px (computed style)
-  const cs = window.getComputedStyle(iconEl);
-  const iconWidth = cs.width; // e.g. "200px"
-  // set margin-left so left edge of track container lines up with right edge of icon
-  // we also add the icon-wrapper padding width: get wrapper padding-right
-  const wrapperCS = window.getComputedStyle(document.getElementById('icon-wrapper'));
-  const wrapperPadRight = parseFloat(wrapperCS.paddingRight) || 0;
-  // use a small gap to avoid touch overlap (keeps visual balance)
-  const gapPx = 8;
-  // margin-left must be icon width + wrapper padding right + gap
-  trackContainer.style.marginLeft = `calc(${iconWidth} + ${wrapperPadRight}px + ${gapPx}px)`;
-  // limit max width to viewport minus that margin to prevent stretching
-  trackContainer.style.maxWidth = `calc(100vw - (${iconWidth} + ${wrapperPadRight}px + ${gapPx}px) - 3rem)`;
-}
-
-/* === set track shown === */
-function showTrack(trackObj){
-  const filename = stripExtension(trackObj.file);
-  let [artist, title] = filename.split(' - ');
-  artist = (artist || '').trim();
-  title = (title || '').trim();
-
-  // populate
-  artistSpan.textContent = artist;
-  titleSpan.textContent = title;
-
-  // link
-  trackLink.href = trackObj.link || '#';
-
-  // make visible
-  trackContainer.style.display = 'inline-block';
-  // ensure alignment
-  alignTrackContainer();
-
-  // on mobile we want the track text block width a sensible size; fallback CSS covers most cases
-}
-
-/* === playback === */
+// PLAYBACK
 function playRandomMP3() {
   const track = getNextRandomMP3();
+  const filename = stripExtension(track.file);
+  let [artist, title] = filename.split(" - ");
+  
   audio.src = mp3Folder + track.file;
-  audio.play().catch(()=>{/* ignore blocked autoplay */});
-  showTrack(track);
+  audio.play().catch(()=>{});
+
+  trackLink.innerHTML = `
+    <a href="${track.link}" target="_blank">
+      <span class="artist">${artist}</span>
+      <span class="title">${title}</span>
+    </a>
+  `;
 }
 
-/* autoplay next on ended */
-audio.addEventListener('ended', ()=>playRandomMP3());
+audio.addEventListener("ended", playRandomMP3);
 
-/* === hydra randomization (kept from you) === */
-function randomizeHydra() {
-  const freq1 = 5 + Math.random() * 40;
-  const freq2 = 20 + Math.random() * 80;
-  const rot = Math.random() * 3.14;
-  const pix = 5 + Math.random() * 30;
-  osc(freq1,0.9,300).color(Math.random(),Math.random(),Math.random())
-    .diff(osc(freq2,0.3,100).color(Math.random(),Math.random(),Math.random()).rotate(rot).pixelate(pix).kaleid())
-    .scrollX(Math.random()*20-10).colorama().luma()
-    .repeatX(2+Math.floor(Math.random()*4)).repeatY(2+Math.floor(Math.random()*4))
-    .modulate(osc(1,Math.random()*-2,300)).scale(1+Math.random()*2).out();
-}
-
-/* === icon behaviour: toggle speaker -> dice and play === */
+// ICON BEHAVIOR
 mutedSpeaker.addEventListener("click", ()=>{
   mutedSpeaker.style.display = "none";
-  diceIcon.style.display = "block";
+  diceIcon.style.display = "inline";
   playRandomMP3();
-  randomizeHydra();
 });
 
 diceIcon.addEventListener("click", ()=>{
   playRandomMP3();
-  randomizeHydra();
-});
-
-/* align on resize so margin and maxWidth update if icon changes size */
-window.addEventListener('resize', () => {
-  if(trackContainer.style.display !== 'none') alignTrackContainer();
-});
-
-/* --- initial alignment calculation, in case user has a pre-open track (none by default) --- */
-document.addEventListener('DOMContentLoaded', () => {
-  // a small timeout to let fonts & layout settle, then align
-  setTimeout(()=> {
-    alignTrackContainer();
-  }, 60);
 });
 </script>
 
