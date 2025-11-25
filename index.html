@@ -14,6 +14,7 @@
   --line:2.5ch;
   --font:'IBM', monospace;
 }
+
 html,body{
   margin:0;
   background:var(--c-black);
@@ -22,6 +23,7 @@ html,body{
   font-family:var(--font);
   line-height:var(--line);
 }
+
 body { font-size:3.97vw; }
 @media (min-width: 768px) { body { font-size:2vw; } }
 @media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
@@ -40,59 +42,81 @@ body { font-size:3.97vw; }
   pointer-events:none;
 }
 
-/* ---------- TOP-LEFT ICON + TRACK DISPLAY ---------- */
-#top-left-icon {
-  position: fixed;
-  top: 2vw;
-  left: 2vw;
-  width: 15vw;
-  height: auto;
-  z-index: 5;
-  cursor: pointer;
-  user-select: none;
-  font-size: 15vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ---------- INFO PANEL ---------- */
+#info-panel {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:3;
+  font-size:1.3em;
+  background:none;
+  padding:var(--line) 0;
+  line-height:1.3em;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
 }
-#current-track {
-  margin-top: 0.3em;
-  font-size: 1.2em;
-  color: var(--c-green);
-  text-align: center;
-  max-width: 20vw;
-  word-break: break-word;
+#track-info {
+  margin-top:0.5ch;
+  color:var(--c-green);
+  word-break:break-word;
+}
+
+/* ---------- ICON ---------- */
+#toggle-icon {
+  cursor:pointer;
+  user-select:none;
+  font-size:15vw; /* 15% of viewport width */
+  line-height:1;
+  color:var(--c-white);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 /* ---------- LINKS PANEL ---------- */
 #links-panel {
+  display:none;
   position:fixed;
   top:0;
   right:0;
-  width:25vw !important;
-  max-width:25vw !important;
+  width:25vw;
+  max-width:25vw;
   height:100vh;
   overflow-y:scroll;
   background:rgba(26,26,26,0.85);
   padding:var(--line);
   z-index:2;
   scrollbar-width:none;
-  font-size:1em;
-  line-height:1.3em;
-  white-space:normal !important;
+  font-size:1.3em;
+  line-height:1.35em;
+  white-space:normal;
   word-break:break-word;
 }
 #links-panel::-webkit-scrollbar{display:none;}
+.green.x-multi-column { column-count:1; column-gap:0; }
 
-/* ---------- MOBILE WRAPPER ---------- */
+/* ---------- MOBILE STYLING ---------- */
 @media (max-width: 768px) {
-  #mobile-wrapper { display: flex; flex-direction: column; }
+  #mobile-wrapper {
+    display:flex;
+    flex-direction:column;
+  }
+  #info-panel {
+    position:relative !important;
+    z-index:2 !important;
+    margin-bottom:0.5em;
+  }
   #links-panel {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    padding: calc(var(--line)/2) !important;
+    position:relative !important;
+    top:auto !important;
+    right:auto !important;
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
     background: rgba(26,26,26,0.9) !important;
+    padding: calc(var(--line)/2) !important;
+    z-index:1 !important;
     overflow: visible !important;
   }
 }
@@ -104,30 +128,6 @@ body { font-size:3.97vw; }
 <div id="hydra-bg">
   <canvas id="hydra-canvas"></canvas>
 </div>
-
-<!-- ---------- TOP-LEFT ICON ---------- -->
-<div id="top-left-icon">🔇
-  <div id="current-track"></div>
-</div>
-
-<!-- ---------- MOBILE WRAPPER FOR LINKS ---------- -->
-<div id="mobile-wrapper">
-  <aside id="links-panel">
-    <div class="green x-multi-column">
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
-      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
-    </div>
-  </aside>
-</div>
-
-<!-- ---------- AUDIO ---------- -->
-<audio id="audio-player"></audio>
-
-<!-- ---------- SCRIPTS ---------- -->
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
 window.addEventListener('load', () => {
@@ -140,13 +140,13 @@ window.addEventListener('load', () => {
 
   osc(10,0.9,300)
     .color(0.9,0.7,0.8)
-    .diff(osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid())
+    .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
     .scrollX(10)
     .colorama()
     .luma()
     .repeatX(4)
     .repeatY(4)
-    .modulate(osc(1,-0.9,300))
+    .modulate( osc(1,-0.9,300) )
     .scale(2)
     .out();
 
@@ -158,71 +158,69 @@ window.addEventListener('load', () => {
 });
 </script>
 
+<!-- ---------- MOBILE WRAPPER ---------- -->
+<div id="mobile-wrapper">
+
+  <nav id="info-panel" class="noselect">
+    <div id="toggle-icon">🔇</div>
+    <div id="track-info"></div>
+  </nav>
+
+  <!-- LINKS PANEL -->
+  <aside id="links-panel">
+    <div class="green x-multi-column">
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
+    </div>
+  </aside>
+
+</div>
+
+<audio id="audio-player"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
 <script>
-// ---------- CONFIG ----------
 const mp3Folder = "mp3/";
 const mp3Files = [
   { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA" },
   { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
   { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" }
-  // add other files as needed
+  // ... add all your tracks here ...
 ];
 
-// ---------- ELEMENTS ----------
 const audio = document.getElementById("audio-player");
-const iconDiv = document.getElementById("top-left-icon");
-const currentTrackDiv = document.getElementById("current-track");
+const icon = document.getElementById("toggle-icon");
+const trackInfo = document.getElementById("track-info");
 
-// Strip .mp3
-const stripExtension = filename => filename.replace(/\.[^/.]+$/, "");
-
-// ---------- SHUFFLE-BAG ----------
+function stripExt(f){return f.replace(/\.[^/.]+$/,"");}
 let shuffleBag = [];
-function refillShuffleBag() { shuffleBag = mp3Files.slice(); fisherYatesShuffle(shuffleBag); }
-function fisherYatesShuffle(array) { for (let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}}
-function getNextRandomMP3() { if(shuffleBag.length===0) refillShuffleBag(); return shuffleBag.pop(); }
-
-// ---------- PLAYBACK ----------
-function playRandomMP3() {
-  const track = getNextRandomMP3();
-  const title = stripExtension(track.file);
-  audio.src = mp3Folder + track.file;
-  audio.play().catch(e=>console.log("Playback blocked:",e));
-  currentTrackDiv.innerHTML = `<a href="${track.link}" target="_blank" style="color:var(--c-green); text-decoration:none;">${title}</a>`;
+function refillBag(){shuffleBag = mp3Files.slice(); shuffleBag.sort(()=>Math.random()-0.5);}
+function nextTrack(){if(shuffleBag.length===0) refillBag(); return shuffleBag.pop();}
+function playRandom(){
+  const t = nextTrack();
+  audio.src = mp3Folder+t.file;
+  audio.play().catch(()=>{});
+  trackInfo.innerHTML = `<a href="${t.link}" target="_blank" style="color:var(--c-green)">${stripExt(t.file)}</a>`;
 }
 
-audio.addEventListener("ended", ()=>playRandomMP3());
+audio.addEventListener("ended", playRandom);
 
-// ---------- ICON CLICK ----------
-let soundStarted = false;
-iconDiv.addEventListener("click", ()=>{
-  if(!soundStarted){
-    soundStarted = true;
-    iconDiv.firstChild.textContent = "🎲";
+// Icon toggle
+let clicked=false;
+icon.addEventListener("click",()=>{
+  if(!clicked){
+    clicked=true;
+    icon.textContent="🎲";
+    playRandom();
+  } else {
+    playRandom();
   }
-  playRandomMP3();
-  randomizeHydra();
 });
-
-// ---------- HYDRA RANDOMIZATION ----------
-function randomizeHydra(){
-  const freq1 = 5 + Math.random()*40;
-  const freq2 = 20 + Math.random()*80;
-  const rot = Math.random()*3.14;
-  const pix = 5 + Math.random()*30;
-
-  osc(freq1,0.9,300)
-    .color(Math.random(),Math.random(),Math.random())
-    .diff(osc(freq2,0.3,100).color(Math.random(),Math.random(),Math.random()).rotate(rot).pixelate(pix).kaleid())
-    .scrollX(Math.random()*20-10)
-    .colorama()
-    .luma()
-    .repeatX(2+Math.floor(Math.random()*4))
-    .repeatY(2+Math.floor(Math.random()*4))
-    .modulate(osc(1,Math.random()*-2,300))
-    .scale(1+Math.random()*2)
-    .out();
-}
 </script>
+
 </body>
 </html>
