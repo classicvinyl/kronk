@@ -94,9 +94,20 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 
 /* ---------- TRACK TITLE RELATIVE TO ICON ---------- */
 #track-link {
-  font-size: 10vw;        /* same as .icon width */
-  line-height:1;
-  margin-left:0.5ch;      /* space between icon and text */
+  display: block;           /* ensures it’s on its own line */
+  text-align: center;       /* center below the icon */
+  font-size: 10vw;          /* will scale with icon */
+  line-height: 1.2em;
+}
+
+#track-link .artist {
+  display: block;
+  color: var(--c-yellow);
+}
+
+#track-link .title {
+  display: block;
+  color: var(--c-green);
 }
 
 @media (min-width: 768px) { #track-link { font-size: 4.5vw; } }
@@ -172,8 +183,12 @@ window.addEventListener('load', () => {
     </span>
 
     <!-- Random MP3 info -->
-    <span id="playing-info" style="display:none;"></span>
-    <span id="track-link" class="grey"></span>
+    
+ <div class="info-line">
+  <span id="playing-info" style="display:none;"></span>
+  <span id="track-link"></span>
+</div>   
+    
   </div>
 </nav>
 
@@ -248,10 +263,18 @@ function getNextRandomMP3() { if(shuffleBag.length===0) refillShuffleBag(); retu
 // --- PLAYBACK ---
 function playRandomMP3() {
   const track = getNextRandomMP3();
-  const title = stripExtension(track.file);
+  const filename = stripExtension(track.file);
+  
+  let [artist, title] = filename.split(" - ");
+  
   audio.src = mp3Folder + track.file;
   audio.play().catch(()=>{});
-  trackLink.innerHTML = `<a href="${track.link}" target="_blank">${title}</a>`;
+  
+  trackLink.innerHTML = `
+    <span class="artist">${artist}</span>
+    <span class="title">${title}</span>
+  `;
+  
   playingInfo.style.display = "inline";
 }
 audio.addEventListener("ended", playRandomMP3);
