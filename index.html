@@ -6,15 +6,6 @@
 <title>kronk</title>
 
 <style>
-
-#links-panel {
-  display: none;
-}
-
-.info-line span {
-  cursor: pointer;
-}
-
 /* ---------- BASE + PALETTE ---------- */
 :root {
   --c-black:#1a1a1a; --c-white:#e1e1e1; --c-grey:#898989;
@@ -31,7 +22,6 @@ html,body{
   font-family:var(--font);
   line-height:var(--line);
 }
-
 body { font-size:3.97vw; }
 @media (min-width: 768px) { body { font-size:2vw; } }
 @media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
@@ -50,7 +40,31 @@ body { font-size:3.97vw; }
   pointer-events:none;
 }
 
-/* ---------- OVERLAY PANELS ---------- */
+/* ---------- TOP-LEFT ICON + TRACK DISPLAY ---------- */
+#top-left-icon {
+  position: fixed;
+  top: 2vw;
+  left: 2vw;
+  width: 15vw;
+  height: auto;
+  z-index: 5;
+  cursor: pointer;
+  user-select: none;
+  font-size: 15vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#current-track {
+  margin-top: 0.3em;
+  font-size: 1.2em;
+  color: var(--c-green);
+  text-align: center;
+  max-width: 20vw;
+  word-break: break-word;
+}
+
+/* ---------- LINKS PANEL ---------- */
 #links-panel {
   position:fixed;
   top:0;
@@ -70,62 +84,15 @@ body { font-size:3.97vw; }
 }
 #links-panel::-webkit-scrollbar{display:none;}
 
-#info-panel {
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:3;
-  font-size:1.3em;
-  background:none;
-  padding:var(--line) 0;
-  line-height:1.3em;
-}
-#info-panel .info-line {
-  display:inline-block;
-  background:rgba(26,26,26,0.75);
-  padding:0.4ch 0.8ch;
-  margin-bottom:0.6ch;
-}
-#info-panel .info-wrap {
-  display:inline-block;
-  background:rgba(26,26,26,0.75);
-  padding:calc(var(--line) * 0.6);
-}
-
-/* ---------- TYPE ---------- */
-a {color:inherit; text-decoration:none;}
-a:hover {color:var(--c-black); background:var(--c-current);} 
-
-.green{color:var(--c-green); --c-current:var(--c-green);} 
-.grey{color:var(--c-grey); --c-current:var(--c-grey);} 
-.purple{color:var(--c-purple); --c-current:var(--c-purple);} 
-.yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
-
-.x-multi-column { column-count:1; column-gap:0; }
-
-/* ---------- MOBILE STYLING ---------- */
+/* ---------- MOBILE WRAPPER ---------- */
 @media (max-width: 768px) {
-  #mobile-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #info-panel {
-    position: relative !important;
-    z-index: 2 !important;
-    margin-bottom: 0.5em;
-  }
-
+  #mobile-wrapper { display: flex; flex-direction: column; }
   #links-panel {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
-    background: rgba(26,26,26,0.9) !important;
     padding: calc(var(--line)/2) !important;
-    z-index: 1 !important;
+    background: rgba(26,26,26,0.9) !important;
     overflow: visible !important;
   }
 }
@@ -133,10 +100,34 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 </head>
 <body>
 
-<!-- ---------- FULLSCREEN HYDRA BACKGROUND ---------- -->
+<!-- ---------- HYDRA BACKGROUND ---------- -->
 <div id="hydra-bg">
   <canvas id="hydra-canvas"></canvas>
 </div>
+
+<!-- ---------- TOP-LEFT ICON ---------- -->
+<div id="top-left-icon">🔇
+  <div id="current-track"></div>
+</div>
+
+<!-- ---------- MOBILE WRAPPER FOR LINKS ---------- -->
+<div id="mobile-wrapper">
+  <aside id="links-panel">
+    <div class="green x-multi-column">
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
+      <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
+    </div>
+  </aside>
+</div>
+
+<!-- ---------- AUDIO ---------- -->
+<audio id="audio-player"></audio>
+
+<!-- ---------- SCRIPTS ---------- -->
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
 window.addEventListener('load', () => {
@@ -149,13 +140,13 @@ window.addEventListener('load', () => {
 
   osc(10,0.9,300)
     .color(0.9,0.7,0.8)
-    .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
+    .diff(osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid())
     .scrollX(10)
     .colorama()
     .luma()
     .repeatX(4)
     .repeatY(4)
-    .modulate( osc(1,-0.9,300) )
+    .modulate(osc(1,-0.9,300))
     .scale(2)
     .out();
 
@@ -167,151 +158,71 @@ window.addEventListener('load', () => {
 });
 </script>
 
-<!-- ---------- MOBILE WRAPPER ---------- -->
-<div id="mobile-wrapper">
-
-  <nav id="info-panel" class="noselect">
-    <div class="info-line"><span class="green">[playing]</span> <span class="grey"></span></div><br>
-    <div class="info-line"><span class="yellow hover">[sound on]</span></div><br>
-    <div class="info-line"><span class="purple hover" id="discog-button">[discog]</span></div>
-  </nav>
-
-  <aside id="links-panel" style="width:25vw; max-width:25vw; font-size:1.3em; line-height:1.35em;">
-    <div class="green x-multi-column">
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank">Ecstatic Edits #7</a><br>
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank">Ecstatic Edits #6</a><br>
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank">Ecstatic Edits #5</a><br>
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank">Ecstatic Edits #4</a><br>
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank">Ecstatic Edits #3</a><br>
-<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank">Ecstatic Edits #2</a><br>
-    </div>
-  </aside>
-
-</div>
-
-<audio id="audio-player"></audio>
-
 <script>
-// --- CONFIG ---
+// ---------- CONFIG ----------
 const mp3Folder = "mp3/";
 const mp3Files = [
-  { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
+  { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA" },
   { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
-  { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" },
-  { file: "nwyvre - red light.mp3", link: "https://fortevilfruit.bandcamp.com/album/pattern-collapse" },
-  { file: "nwyvre - solar bones.mp3", link: "https://www.thewire.co.uk/audio/btr/below-the-radar-39" },
-  { file: "nwyvre - morrigu7.mp3", link: "https://nwyvre.bandcamp.com/album/morrigu" },
-  { file: "nwyvre - wadjet4.mp3", link: "https://nwyvre.bandcamp.com/album/wadjet" },
-  { file: "soundbreaking sky - noble bull kell.mp3", link: "https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" },
-  { file: "soundbreaking sky - sbs 19-1.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-19" },
-  { file: "soundbreaking sky - sbs 2.3.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-2" },
-  { file: "soundbreaking sky - sbs 22.2.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-22" },
-  { file: "uous - abort.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
-  { file: "uous - still feeling it.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
-  { file: "magnetize - gravity lensing.mp3", link: "https://open.spotify.com/album/5fb0tv1RUMYGa2QIFOz4tC?si=-GdCunsmTR2rP10ZWEMFeQ&nd=1&dlsi=979f3f8a64174561" },
-  { file: "magnetize - noise to signal.mp3", link: "https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" },
-  { file: "magnetize - overflux.mp3", link: "https://open.spotify.com/album/5dVn4qsa3CfzG6oplIATLe?si=SG1P10wJRPSIEyTYluXHtA&nd=1&dlsi=9842987cc22b4b9d" },
-  { file: "valved - blood on the controls (whok mix1).mp3", link: "https://trensmat.bandcamp.com/album/and-whok-remixes" },
-  { file: "whirling hall of knives - blown vestige.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" },
-  { file: "whirling hall of knives - greywash.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" },
-  { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
-  { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" },
-  { file: "whirling hall of knives - druckmasch.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - fyls.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - myrekrig.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
-  { file: "whirling hall of knives - permafroste.mp3", link: "https://fortevilfruit.bandcamp.com/album/p-ggz" },
-  { file: "whirling hall of knives - rattle & sturm.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - selectiv compliance.mp3", link: "https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" },
-  { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
-  { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - wraith.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" }
+  { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" }
+  // add other files as needed
 ];
 
+// ---------- ELEMENTS ----------
 const audio = document.getElementById("audio-player");
-const randomSpan = document.querySelector(".info-line .yellow.hover");
-const infoLine = document.querySelector("#info-panel .info-line");
-const infoGrey = infoLine ? infoLine.querySelector(".grey") : null;
-const infoGreen = infoLine ? infoLine.querySelector(".green") : null;
+const iconDiv = document.getElementById("top-left-icon");
+const currentTrackDiv = document.getElementById("current-track");
 
-// Remove “.mp3”
-function stripExtension(filename) { return filename.replace(/\.[^/.]+$/, ""); }
+// Strip .mp3
+const stripExtension = filename => filename.replace(/\.[^/.]+$/, "");
 
-// Shuffle bag
+// ---------- SHUFFLE-BAG ----------
 let shuffleBag = [];
 function refillShuffleBag() { shuffleBag = mp3Files.slice(); fisherYatesShuffle(shuffleBag); }
-function fisherYatesShuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} }
-function getNextRandomMP3(){ if(shuffleBag.length===0) refillShuffleBag(); return shuffleBag.pop(); }
+function fisherYatesShuffle(array) { for (let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}}
+function getNextRandomMP3() { if(shuffleBag.length===0) refillShuffleBag(); return shuffleBag.pop(); }
 
+// ---------- PLAYBACK ----------
 function playRandomMP3() {
   const track = getNextRandomMP3();
   const title = stripExtension(track.file);
   audio.src = mp3Folder + track.file;
-  audio.play().catch(()=>{});
-  if (infoGrey) infoGrey.innerHTML = `<a href="${track.link}" target="_blank">${title}</a>`;
+  audio.play().catch(e=>console.log("Playback blocked:",e));
+  currentTrackDiv.innerHTML = `<a href="${track.link}" target="_blank" style="color:var(--c-green); text-decoration:none;">${title}</a>`;
 }
 
-audio.addEventListener("ended", playRandomMP3);
+audio.addEventListener("ended", ()=>playRandomMP3());
 
-// --- ONLY CHANGE REQUESTED ---
-// initial state shows [sound on]
-if (randomSpan) randomSpan.textContent = "[sound on]";
+// ---------- ICON CLICK ----------
 let soundStarted = false;
-// hide [playing] text initially
-if (infoLine) infoLine.style.display = "none";
+iconDiv.addEventListener("click", ()=>{
+  if(!soundStarted){
+    soundStarted = true;
+    iconDiv.firstChild.textContent = "🎲";
+  }
+  playRandomMP3();
+  randomizeHydra();
+});
 
-if (randomSpan) {
-  randomSpan.style.cursor = "pointer";
-  randomSpan.addEventListener("click", () => {
-    if (!soundStarted) {
-      soundStarted = true;
-      randomSpan.textContent = "[random]";   // revert on first click
-      if (infoGreen) infoGreen.textContent = "[playing]";
-      if (infoLine) infoLine.style.display = "inline-block";
-    }
-    playRandomMP3();
-    randomizeHydra();
-  });
-}
-
-// hydra randomise
-function randomizeHydra() {
-  const f1 = 5 + Math.random()*40;
-  const f2 = 20 + Math.random()*80;
+// ---------- HYDRA RANDOMIZATION ----------
+function randomizeHydra(){
+  const freq1 = 5 + Math.random()*40;
+  const freq2 = 20 + Math.random()*80;
   const rot = Math.random()*3.14;
   const pix = 5 + Math.random()*30;
 
-  osc(f1,0.9,300)
+  osc(freq1,0.9,300)
     .color(Math.random(),Math.random(),Math.random())
-    .diff(
-      osc(f2,0.3,100)
-        .color(Math.random(),Math.random(),Math.random())
-        .rotate(rot)
-        .pixelate(pix)
-        .kaleid()
-    )
-    .scrollX(Math.random()*20 - 10)
+    .diff(osc(freq2,0.3,100).color(Math.random(),Math.random(),Math.random()).rotate(rot).pixelate(pix).kaleid())
+    .scrollX(Math.random()*20-10)
     .colorama()
     .luma()
-    .repeatX(2 + Math.floor(Math.random()*4))
-    .repeatY(2 + Math.floor(Math.random()*4))
+    .repeatX(2+Math.floor(Math.random()*4))
+    .repeatY(2+Math.floor(Math.random()*4))
     .modulate(osc(1,Math.random()*-2,300))
-    .scale(1 + Math.random()*2)
+    .scale(1+Math.random()*2)
     .out();
 }
-
-// links toggle
-const linksPanel = document.getElementById("links-panel");
-const discogButton = document.getElementById("discog-button");
-if (discogButton && linksPanel) {
-  discogButton.addEventListener("click", () => {
-    const hidden = window.getComputedStyle(linksPanel).display === "none";
-    linksPanel.style.display = hidden ? "block" : "none";
-  });
-}
 </script>
-
 </body>
 </html>
