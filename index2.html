@@ -122,6 +122,7 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 <div id="hydra-bg">
   <canvas id="hydra-canvas"></canvas>
 </div>
+    
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
 window.addEventListener('load', () => {
@@ -132,6 +133,7 @@ window.addEventListener('load', () => {
 
   const hydra = new Hydra({ canvas, detectAudio:false, makeGlobal:true });
 
+  // Default Hydra pattern at load
   osc(10,0.9,300)
     .color(0.9,0.7,0.8)
     .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
@@ -149,6 +151,35 @@ window.addEventListener('load', () => {
     canvas.height = innerHeight * dpr;
     if(hydra.resize) hydra.resize();
   });
+
+  // ---------------- HYDRA RANDOMIZATION ---------------------
+  function randomizeHydra() {
+    const freq1 = 5 + Math.random() * 40;
+    const freq2 = 20 + Math.random() * 80;
+    const rot = Math.random() * 3.14;
+    const pix = 5 + Math.random() * 30;
+
+    osc(freq1, 0.9, 300)
+      .color(Math.random(), Math.random(), Math.random())
+      .diff(
+        osc(freq2, 0.3, 100)
+          .color(Math.random(), Math.random(), Math.random())
+          .rotate(rot)
+          .pixelate(pix)
+          .kaleid()
+      )
+      .scrollX(Math.random() * 20 - 10)
+      .colorama()
+      .luma()
+      .repeatX(2 + Math.floor(Math.random() * 4))
+      .repeatY(2 + Math.floor(Math.random() * 4))
+      .modulate(osc(1, Math.random() * -2, 300))
+      .scale(1 + Math.random() * 2)
+      .out();
+  }
+
+  // Make randomizeHydra global so we can call it in audio playback functions
+  window.randomizeHydra = randomizeHydra;
 });
 </script>
 
@@ -262,6 +293,9 @@ function playRandomMP3() {
       <span class="title">${title}</span>
     </a>
   `;
+
+  // ---------------- HYDRA UPDATE ---------------------
+  if(typeof randomizeHydra === "function") randomizeHydra();
 }
 
 audio.addEventListener("ended", playRandomMP3);
