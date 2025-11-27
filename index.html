@@ -428,49 +428,14 @@ soundIcon.addEventListener("click", () => {
 });
 
 // ---------------- PLAY RANDOM TRACK ----------------
-let playedTracks = new Set();
-let currentTrack = null;
-
-function getRandomUnplayedTrack() {
-  const unplayed = mp3Files.filter(t => !playedTracks.has(t.file));
-
-  // If all tracks played, reset
-  if (unplayed.length === 0) {
-    playedTracks.clear();
-    return getRandomUnplayedTrack();
-  }
-
-  const track = unplayed[Math.floor(Math.random() * unplayed.length)];
-  playedTracks.add(track.file);
-  return track;
-}
-
-function playTrack(track) {
-  currentTrack = track;
-  audio.src = mp3Folder + track.file;
-  audio.play().catch(() => {});
-  renderTrackInfo(track.file, track.link);
-}
-
 function playRandom() {
-  const track = getRandomUnplayedTrack();
-  playTrack(track);
-}
+  const item = mp3Files[Math.floor(Math.random() * mp3Files.length)];
 
-// Dice button click
-soundIcon.addEventListener("click", () => {
-  // Immediately stop current track if playing
-  if (!audio.paused) {
-    audio.pause();
-    audio.currentTime = 0;
-  }
-  playRandom();
-});
+  const fileURL = mp3Folder + item.file;
+  audio.src = fileURL;
+  audio.play().catch(() => {});
 
-// Auto-play next track when current ends
-audio.addEventListener("ended", () => {
-  playRandom();
-});
+  renderTrackInfo(item.file, item.link);
 
   if (window.randomizeHydra) window.randomizeHydra();
 
