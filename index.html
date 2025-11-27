@@ -6,58 +6,34 @@
 <title>kronk</title>
 
 <style>
-
-#links-panel {
-  display: none;
-}
-
-.info-line span {
-  cursor: pointer;
-}
+#links-panel { display: none; }
+.info-line span { cursor: pointer; }
 
 /* ---------- BASE + PALETTE ---------- */
 :root {
   --c-black:#1a1a1a; --c-white:#e1e1e1; --c-grey:#898989;
   --c-purple:#b462ff; --c-fuschia:#ff45b4; --c-blue:#18b6ff;
   --c-green:#1beb9e; --c-orange:#ff9528; --c-yellow:#dddd25;
-  --line:2.5ch;
-  --font:'IBM', monospace;
+  --line:2.5ch; --font:'IBM', monospace;
+  --icon-w: 10vw;
 }
-html,body{
-  margin:0;
-  background:var(--c-black);
-  color:var(--c-white);
-  height:100%;
-  font-family:var(--font);
-  line-height:var(--line);
-}
-
+html,body{ margin:0; background:var(--c-black); color:var(--c-white); height:100%; font-family:var(--font); line-height:var(--line);}
 body { font-size:3.97vw; }
 @media (min-width: 768px) { body { font-size:2vw; } }
 @media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
 
 /* ---------- HYDRA FULLSCREEN BACKGROUND ---------- */
-#hydra-bg {
-  position:fixed;
-  top:0; left:0;
-  width:100vw;
-  height:100vh;
-  z-index:0;
-  overflow:hidden;
-}
-#hydra-canvas {
-  width:100%; height:100%; display:block; background:black;
-  pointer-events:none;
-}
+#hydra-bg { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; overflow:hidden; }
+#hydra-canvas { width:100%; height:100%; display:block; background:black; pointer-events:none; }
 
 /* ---------- OVERLAY PANELS ---------- */
 #links-panel {
   position:fixed;
-  top:0;
-  right:0;
-  width:25vw !important;
-  max-width:25vw !important;
-  height:100vh;
+  top:50%;
+  /*transform:translateY(-30%);*/
+  left:0;
+  width:100vw;
+  height:50vh;
   overflow-y:scroll;
   background:rgba(26,26,26,0.85);
   padding:var(--line);
@@ -65,79 +41,103 @@ body { font-size:3.97vw; }
   scrollbar-width:none;
   font-size:1em;
   line-height:1.3em;
-  white-space:normal !important;
+  white-space:normal;
   word-break:break-word;
 }
 #links-panel::-webkit-scrollbar{display:none;}
-
-#info-panel {
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:3;
-  font-size:1.3em;
-  background:none;
-  padding:var(--line) 0;
-  line-height:1.3em;
+    
+/* ---------- LINKS ---------- */
+#release-link {
+  display: inline-block;
+  padding: 0.0ch 0.0ch;
+  font-size: 3vw;
+  line-height: 1.2em;
+  text-transform: lowercase;
+  margin:0;
+  word-break: break-word;
+  white-space: normal;
 }
+    
+#info-panel {
+  position:fixed; top:0; left:0; z-index:3; font-size:1.3em; background:none; padding:var(--line) 0; line-height:1.3em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* icon wrapper */
 #info-panel .info-line {
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
   background:rgba(26,26,26,0.75);
   padding:0.4ch 0.8ch;
   margin-bottom:0.6ch;
-}
-#info-panel .info-wrap {
-  display:inline-block;
-  background:rgba(26,26,26,0.75);
-  padding:calc(var(--line) * 0.6);
 }
 
 /* ---------- TYPE ---------- */
 a {color:inherit; text-decoration:none;}
 a:hover {color:var(--c-black); background:var(--c-current);} 
-
 .green{color:var(--c-green); --c-current:var(--c-green);} 
 .grey{color:var(--c-grey); --c-current:var(--c-grey);} 
 .purple{color:var(--c-purple); --c-current:var(--c-purple);} 
 .yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
-
 .x-multi-column { column-count:1; column-gap:0; }
 
-/* ---------- MOBILE STYLING ---------- */
-@media (max-width: 768px) {
-  /* wrap info + links in a column */
-  #mobile-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
+/* ---------- ICON STYLING ---------- */
+.icon {
+  width: var(--icon-w);
+  height: var(--icon-w);
+  opacity: 0.85;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+@media (min-width: 768px) { :root { --icon-w: 5vw; } }
 
-  #info-panel {
-    position: relative !important;
-    z-index: 2 !important;
-    margin-bottom: 0.5em;
-  }
+/* ---------- TRACK TITLE ---------- */
+#track-link {
+  display: inline-block;
+  background: rgba(26,26,26,0.75);
+  padding: 0.4ch 0.8ch;
+  font-size: 4.5vw;
+  line-height: 1.2em;
+  margin:0;
+  word-break: break-word;
+  white-space: normal;
+}
+#track-link .artist, #track-link .title { display:block; }
+#track-link a { text-decoration:none; display:block; }
+#track-link .artist { color:var(--c-yellow); }
+#track-link .title { color:var(--c-green); }
 
-  #links-panel {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    background: rgba(26,26,26,0.9) !important;
-    padding: calc(var(--line)/2) !important;
-    z-index: 1 !important;
-    overflow: visible !important;
-  }
+#track-link a:hover .artist { color:var(--c-green); background:rgba(78,78,78,0.75); }
+#track-link a:hover .title  { color:var(--c-yellow); background:rgba(78,78,78,0.75); }
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 767px) {
+  #info-panel .icon { width:15vw !important; height:15vw !important; }
+  #track-link { font-size:10vw !important; padding:0.4ch 0.8ch !important; margin-top:0.4ch !important; }
+  #release-link {font-size: 6vw !important; line-height: 1.2em !important;}
+  #info-panel .info-line { width:auto !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- ---------- FULLSCREEN HYDRA BACKGROUND ---------- -->
-<div id="hydra-bg">
-  <canvas id="hydra-canvas"></canvas>
-</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<!-- HYDRA -->
+<div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
 window.addEventListener('load', () => {
@@ -165,31 +165,77 @@ window.addEventListener('load', () => {
     canvas.height = innerHeight * dpr;
     if(hydra.resize) hydra.resize();
   });
+
+  function randomizeHydra() {
+    const freq1 = 5 + Math.random() * 40;
+    const freq2 = 20 + Math.random() * 80;
+    const rot = Math.random() * 3.14;
+    const pix = 5 + Math.random() * 30;
+
+    osc(freq1, 0.9, 300)
+      .color(Math.random(), Math.random(), Math.random())
+      .diff(
+        osc(freq2, 0.3, 100)
+          .color(Math.random(), Math.random(), Math.random())
+          .rotate(rot)
+          .pixelate(pix)
+          .kaleid()
+      )
+      .scrollX(Math.random()*20 -10)
+      .colorama()
+      .luma()
+      .repeatX(2 + Math.floor(Math.random()*4))
+      .repeatY(2 + Math.floor(Math.random()*4))
+      .modulate(osc(1, Math.random()*-2, 300))
+      .scale(1 + Math.random()*2)
+      .out();
+  }
+
+  window.randomizeHydra = randomizeHydra;
 });
 </script>
 
-<!-- ---------- MOBILE WRAPPER FOR INFO + LINKS ---------- -->
-<div id="mobile-wrapper">
-  <!-- INFO PANEL FIRST -->
-  <nav id="info-panel" class="noselect">
-    <div class="info-line"><span class="green">[playing]</span> <span class="grey"></span></div><br>
-    <div class="info-line"><span class="yellow hover">[sound on]</span></div><br>
-    <div class="info-line"><span class="purple hover" id="discog-button">[discog]</span>
-</div>
+<!-- INFO PANEL -->
+<nav id="info-panel" class="noselect">
+  <div class="info-line" id="icon-wrapper">
+    <span class="yellow hover" id="sound-icon">
+      <svg id="muted-speaker" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor">
+        <g stroke="none" fill="none" fill-rule="evenodd">
+          <g transform="translate(1,0)" fill="currentColor">
+            <rect transform="translate(8.823150, 8.300450) rotate(-38.512169) translate(-8.823150, -8.300450)" x="-0.177" y="7.800" width="17.892" height="1.402"></rect>
+            <path d="M3.953,9.912 L3.953,5.01 L2.128,5.01 C0.845,5.01 0.013,6.094 0.013,7.47 L0.013,8.494 C0.013,9.953 0.782,10.953 2.128,10.953 L2.514,10.953 L3.953,9.912 Z"></path>
+            <path d="M6.877,12.659 L11.936,15.972 C12.522,15.972 12.996,15.572 12.996,15.077 L12.996,7.919 L6.877,12.659 Z"></path>
+            <path d="M12.987,0.971 C12.987,0.464 12.488,0.051 11.872,0.051 L6.114,3.73 C5.499,3.73 5,4.142 5,4.65 L5,8.839 L12.987,2.596 L12.987,0.971 Z"></path>
+          </g>
+        </g>
+      </svg>
 
-  </nav>
+      <svg id="dice-icon" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor" style="display:none">
+        <path d="M14.763,0 L3.178,0 C1.998,0 1.043,0.966 1.043,2.155 L1.043,13.845 C1.043,15.034 1.998,15.999 3.178,15.999 L14.763,15.999 C15.944,15.999 16.899,15.034 16.899,13.845 L16.899,2.155 C16.898,0.966 15.943,0 14.763,0 Z
+         M5.002,6.153 C3.856,6.153 2.927,5.202 2.927,4.03 C2.927,2.858 3.856,1.907 5.002,1.907 C6.148,1.907 7.078,2.858 7.078,4.03 C7.078,5.202 6.148,6.153 5.002,6.153 Z
+         M13.002,6.153 C11.856,6.153 10.927,5.202 10.927,4.03 C10.927,2.858 11.856,1.907 13.002,1.907 C14.148,1.907 15.078,2.858 15.078,4.03 C15.078,5.202 14.148,6.153 13.002,6.153 Z
+         M13.002,14.153 C11.856,14.153 10.927,13.202 10.927,12.03 C10.927,10.858 11.856,9.907 13.002,9.907 C14.148,9.907 15.078,10.858 15.078,12.03 C15.078,13.202 14.148,14.153 13.002,14.153 Z
+         M9.002,10.153 C7.856,10.153 6.927,9.202 6.927,8.03 C6.927,6.858 7.856,5.907 9.002,5.907 C10.148,5.907 11.078,6.858 11.078,8.03 C11.078,9.202 10.148,10.153 9.002,10.153 Z
+         M5.002,14.153 C3.856,14.153 2.927,13.202 2.927,12.03 C2.927,10.858 3.856,9.907 5.002,9.907 C6.148,9.907 7.078,10.858 7.078,12.03 C7.078,13.202 6.148,14.153 5.002,14.153 Z">
+        </path>
+      </svg>
+    </span>
+  </div>
 
-  <!-- LINKS PANEL BELOW -->
-  <aside id="links-panel" style="width:25vw; max-width:25vw; font-size:1.3em; line-height:1.35em;">
-    <div class="green x-multi-column">
-      <!-- Full link list -->
+  <div id="track-link"><span id="playing-info" style="display:none;"></span></div>
+</nav>
+
+<!-- LINKS PANEL -->
+<aside id="links-panel">
+  <div class="green" id="release-link">
+    <span class="yellow">discog ></span><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #7">Ecstatic Edits #7</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #6">Ecstatic Edits #6</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #5">Ecstatic Edits #5</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #4">Ecstatic Edits #4</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #3">Ecstatic Edits #3</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #2">Ecstatic Edits #2</a><br>
-<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-iii" target="_blank" alt="" title="Whirling Hall of Knives - WHOK Lab Emissions Vol III">WHOK Lab Emissions Vol III</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-iii" target="_blank" alt="" title="Whirling Hall of Knives - WHOK Lab Emissions Vol3">WHOK Lab Emissions Vol3</a><br>
 <a href="https://cruelnaturerecordings.bandcamp.com/album/scrawled" target="_blank" alt="" title="UOUS - Scrawled">Scrawled</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-1-2" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #1">Ecstatic Edits #1</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/sbs-22" target="_blank" alt="" title="Sound Breaking Sky - SBS 22">SBS 22</a><br>
@@ -232,7 +278,7 @@ window.addEventListener('load', () => {
 <a href="https://thelastsound.bandcamp.com/album/beamed" target="_blank" alt="" title="Sound Breaking Sky - Beamed (Remix Of The Last Sound)">Beamed</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/sbs-15" target="_blank" alt="" title="Sound Breaking Sky - SBS 15">SBS 15</a><br>
 <a href="https://whirlinghallofknives.bandcamp.com/album/ovoidulations" target="_blank" alt="" title="Whirling Hall Of Knives - Ovoidulations">Ovoidulations</a><br>
-<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-ii" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions II">WHOK Lab Emissions II</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-ii" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions Vol2">WHOK Lab Emissions Vol2</a><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/sbs-14" target="_blank" alt="" title="Sound Breaking Sky - SBS 14">SBS 14</a><br>
 <a href="https://whirlinghallofknives.bandcamp.com/track/olde-slice" target="_blank" alt="" title="Whirling Hall Of Knives - Olde Slice (2019)">Olde Slice</a><br>
 <a href="https://boomkat.com/products/sbs-edits" target="_blank" alt="" title="Sound Breaking Sky - SBS Edits">SBS Edits</a><br>
@@ -278,7 +324,7 @@ window.addEventListener('load', () => {
 <a href="https://nuterecords.bandcamp.com/album/cadavre-exquis-nute017" target="_blank" alt="" title="Whirling Hall Of Knives - Cadavre Exquis (Split with ZPG) (2014)">Cadavre Exquis</a><br>
 <a href="https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" target="_blank" alt="" title="Whirling Hall Of Knives - Comminute">Comminute</a><br>
 <a href="https://trensmat.bandcamp.com/album/and-whok-remixes" target="_blank" alt="" title="Whirling Hall Of Knives - Blood On The Controls (Remix of Valved)">Blood On The Controls</a><br>
-<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-i" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions Vol. I (2013)">WHOK Lab Emissions Vol. I</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-i" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions Vol1 (2013)">WHOK Lab Emissions Vol1</a><br>
 <a href="https://whirlinghallofknives.bandcamp.com/album/devisions" target="_blank" alt="" title="Whirling Hall Of Knives - Devisions">Devisions</a><br>
 <a href="https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" target="_blank" alt="" title="Whirling Hall Of Knives - Selectiv Compliance">Selectiv Compliance</a><br>
 <a href="https://www.discogs.com/Whirling-Hall-Of-Knives-Alternate-Devil/release/3694692" target="_blank" alt="" title="Whirling Hall Of Knives - Alternate Devil (2012)">Alternate Devil</a><br>
@@ -321,23 +367,23 @@ window.addEventListener('load', () => {
 <a href="https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg" target="_blank" alt="" title="Magnetize - Anti-Chord">Anti-Chord</a><br>
 <a href="https://open.spotify.com/album/0wVPuT3vNvYWhz60EEdVWs?si=MlfLMomKQj6L9PZePTVOlg" target="_blank" alt="" title="Magnetize - Biome (2004)">Biome</a><br>
 <a href="https://www.discogs.com/Various-DEAF-2-2003-Compilation/release/267515" target="_blank" alt="" title="Magnetize - My Friend The Atom (2003)">My Friend The Atom</a><br>
-<a href="https://www.discogs.com/Various-NMK-0001/release/128890" target="_blank" alt="" title="Magnetize - Straight Edge (2002)">Straight Edge</a><br><br>
-<br>
+<a href="https://www.discogs.com/Various-NMK-0001/release/128890" target="_blank" alt="" title="Magnetize - Straight Edge (2002)">Straight Edge</a><br><br><br><br>
+  </div>
+</aside>
 
-  </aside>
-</div>
-
-<!-- ---------- AUDIO PLAYER ---------- -->
+<!-- AUDIO -->
 <audio id="audio-player"></audio>
 
-<!-- ---------- SCRIPTS ---------- -->
-<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
+<script>
+const audio = document.getElementById("audio-player");
+const soundIcon = document.getElementById("sound-icon");
+const mutedSpeaker = document.getElementById("muted-speaker");
+const diceIcon = document.getElementById("dice-icon");
+const linksPanel = document.getElementById("links-panel");
+const playingInfo = document.getElementById("playing-info");
+const trackLink = document.getElementById("track-link");
 
-<script src="https://cdn.jsdelivr.net/npm/hydra-synth@2.0.0"></script>
-
-<script> 
-// --- CONFIG ---
-const mp3Folder = "mp3/"; // path to your MP3 folder
+const mp3Folder = "mp3/";
 const mp3Files = [
   { file: "magnetize - hardcopy.mp3", link: "https://open.spotify.com/album/57ZDxDAMO5jVi7f0OTLYxA?si=34vX_5cHRhSMBjUQEsXGvg&nd=1&dlsi=50a70d96477247d0" },
   { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
@@ -361,111 +407,67 @@ const mp3Files = [
   { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
   { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
   { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" },
-  { file: "whirling hall of knives - druckmasch.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - fyls.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - myrekrig.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
-  { file: "whirling hall of knives - permafroste.mp3", link: "https://fortevilfruit.bandcamp.com/album/p-ggz" },
-  { file: "whirling hall of knives - rattle & sturm.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - selectiv compliance.mp3", link: "https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" },
-  { file: "whirling hall of knives - selectivsnapp.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - sh:loads.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/seacht" },
-  { file: "whirling hall of knives - sol tryst.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/voix" },
-  { file: "whirling hall of knives - wraith.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" } 
+  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-h..." }
 ];
 
-// --- ELEMENTS & AUDIO ---
-const audio = document.getElementById("audio-player");
-const randomSpan = document.querySelector(".info-line .yellow.hover");
-const infoLine = document.querySelector("#info-panel .info-line"); 
-const infoGrey = infoLine ? infoLine.querySelector(".grey") : null;
-const infoGreen = infoLine ? infoLine.querySelector(".green") : null;
+// ---------------- ICON BEHAVIOUR ----------------
+let showingDice = false;
+let showingLinks = false;
 
-if (!randomSpan) console.warn("randomSpan not found");
-if (!infoLine) console.warn("playing info-line not found");
-if (!infoGrey) console.warn("infoGrey span not found");
+soundIcon.addEventListener("click", () => {
+  showingDice = !showingDice;
 
-// Strip .mp3 extension
-function stripExtension(filename) { return filename.replace(/\.[^/.]+$/, ""); }
+  mutedSpeaker.style.display = showingDice ? "none" : "block";
+  diceIcon.style.display = showingDice ? "block" : "none";
 
-// ------------- SHUFFLE-BAG (TRUE RANDOM) -----------------
-let shuffleBag = [];
-function refillShuffleBag() { shuffleBag = mp3Files.slice(); fisherYatesShuffle(shuffleBag); }
-function fisherYatesShuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
-function getNextRandomMP3() { if (shuffleBag.length === 0) refillShuffleBag(); return shuffleBag.pop(); }
+  showingLinks = !showingLinks;
+  linksPanel.style.display = showingLinks ? "block" : "none";
 
-// ---------------- PLAYBACK -------------------
-function playRandomMP3() {
-  const track = getNextRandomMP3();
-  const title = stripExtension(track.file);
-  audio.src = mp3Folder + track.file;
-  audio.play().catch(err => console.log("Playback blocked until interaction:", err));
-  if (infoGrey) infoGrey.innerHTML = `<a href="${track.link}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+  // Also play a random track and show info when first toggled
+  playRandom();
+});
+
+// ---------------- PLAY RANDOM TRACK ----------------
+function playRandom() {
+  const item = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+
+  const fileURL = mp3Folder + item.file;
+  audio.src = fileURL;
+  audio.play().catch(() => {});
+
+  renderTrackInfo(item.file, item.link);
+
+  if (window.randomizeHydra) window.randomizeHydra();
+
+  // Ensure dice icon & links panel remain visible when this is triggered via dice/audio end
+  showingDice = true;
+  showingLinks = true;
+  mutedSpeaker.style.display = "none";
+  diceIcon.style.display = "block";
+  linksPanel.style.display = "block";
 }
 
-audio.addEventListener("ended", () => { playRandomMP3(); });
+// ---------------- RENDER TRACK INFO ----------------
+function renderTrackInfo(filename, url) {
+  const clean = filename.replace(".mp3", "");
+  const dash = clean.indexOf(" - ");
 
-// --------------- UI HOOKUP --------------------
-if (randomSpan) { randomSpan.style.cursor = "pointer"; } 
-else { console.warn("random control not found - playback control will not be bound"); }
+  const artist = dash > -1 ? clean.slice(0, dash) : "";
+  const title = dash > -1 ? clean.slice(dash + 3) : clean;
 
-let soundStarted = false;
-
-// initial load: show [sound on] instead of [random]
-if (randomSpan) randomSpan.textContent = "[sound on]";
-
-// hide [playing] line if present
-if (infoLine) infoLine.style.display = "none";
-
-// random button clicks
-if (randomSpan) {
-  randomSpan.addEventListener("click", () => {
-    if (!soundStarted) {
-      soundStarted = true;
-      randomSpan.textContent = "[random]"; // revert back after first click
-      if (infoGreen) infoGreen.textContent = "[playing]";
-      if (infoLine) infoLine.style.display = "inline-block";
-    }
-    playRandomMP3();
-    randomizeHydra();
-  });
+  playingInfo.innerHTML = `
+    <a href="${url}" target="_blank">
+      <span class="artist">${artist}</span>
+      <span class="title">${title}</span>
+    </a>
+  `;
+  playingInfo.style.display = "inline-block";
 }
 
-// --------------- HYDRA RANDOMIZATION ---------------------
-function randomizeHydra() {
-  const freq1 = 5 + Math.random() * 40;
-  const freq2 = 20 + Math.random() * 80;
-  const rot = Math.random() * 3.14;
-  const pix = 5 + Math.random() * 30;
-
-  osc(freq1, 0.9, 300)
-    .color(Math.random(), Math.random(), Math.random())
-    .diff(
-      osc(freq2, 0.3, 100)
-        .color(Math.random(), Math.random(), Math.random())
-        .rotate(rot)
-        .pixelate(pix)
-        .kaleid()
-    )
-    .scrollX(Math.random() * 20 - 10)
-    .colorama()
-    .luma()
-    .repeatX(2 + Math.floor(Math.random() * 4))
-    .repeatY(2 + Math.floor(Math.random() * 4))
-    .modulate(osc(1, Math.random() * -2, 300))
-    .scale(1 + Math.random() * 2)
-    .out();
-}
-
-// --------------- DISCOG / LINKS TOGGLE -------------------
-const linksPanel = document.getElementById("links-panel");
-const discogButton = document.getElementById("discog-button");
-if (discogButton && linksPanel) {
-  discogButton.addEventListener("click", () => {
-    const isHidden = window.getComputedStyle(linksPanel).display === "none";
-    linksPanel.style.display = isHidden ? "block" : "none";
-  });
-}
+// ---------------- EVENT LISTENERS ----------------
+diceIcon.addEventListener("click", playRandom);
+mutedSpeaker.addEventListener("click", playRandom);
+audio.addEventListener("ended", playRandom);
 </script>
 
 </body>
