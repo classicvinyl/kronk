@@ -139,7 +139,7 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 }
 
 
-#links-panel {
+#links-panel2 {
   position: fixed;
   top: calc(var(--line) + 5vw); /* just below menu icon */
   right: var(--line);
@@ -155,13 +155,13 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   border-radius: 0.5ch;
 }
 
-#links-panel.show {
+#links-panel2.show {
   display: block;
   opacity: 1;
   transform: translateY(0);
 }
 
-#links-panel a.release-link {
+#links-panel2 a.release-link {
   display: block;
   padding: 0.4ch 0.8ch;
   margin-bottom: 0.4ch;
@@ -302,7 +302,7 @@ menuIcon.addEventListener('click', () => {
 </nav>
 
 <!-- LINKS PANEL -->
-<div id="links-panel">
+<div id="links-panel2">
   <a href="#home-news" class="release-link">home/news</a>
   <a href="#listen-discog" class="release-link">listen/discog</a>
   <a href="#about-contact" class="release-link">about/contact</a>
