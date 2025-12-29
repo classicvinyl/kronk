@@ -165,10 +165,19 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   display: block;
   padding: 0.4ch 0.8ch;
   margin-bottom: 0.4ch;
-  font-size: 3vw;
   color: var(--c-white);
   text-decoration: none;
+  font-size: 3vw;
+  line-height: 1.2em;
 }
+
+@media (max-width: 767px) {
+  #links-panel2 a.release-link {
+    font-size: 6vw;
+    line-height: 1.2em;
+  }
+}
+  
 #links-panel2 a.release-link:hover {
   color: var(--c-yellow);
 }
@@ -299,6 +308,8 @@ const linksPanel = document.getElementById('links-panel2');
 
 menuIcon.addEventListener('click', () => {
   linksPanel.classList.toggle('show');
+  // hide menu icon while links panel is visible
+  menuIcon.style.display = linksPanel.classList.contains('show') ? 'none' : 'inline-block';
 });
 </script>
 
