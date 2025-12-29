@@ -237,23 +237,7 @@ window.addEventListener('load', () => {
   }
 
   window.randomizeHydra = randomizeHydra;
-});
-
-
-
-
-
-  
-const menuIcon = document.getElementById('menu');
-const linksPanel = document.getElementById('links-panel2');
-
-menuIcon.addEventListener('click', () => {
-  linksPanel.classList.toggle('show');
-});
-
-
-
-  
+});  
 </script>
 
 <!-- INFO PANEL -->
@@ -308,6 +292,15 @@ menuIcon.addEventListener('click', () => {
   <a href="#about-contact" class="release-link">about/contact</a>
 </div>
 
+
+<script>
+const menuIcon = document.getElementById('menu');
+const linksPanel = document.getElementById('links-panel2');
+
+menuIcon.addEventListener('click', () => {
+  linksPanel.classList.toggle('show');
+});
+</script>
 
 
 <!-- LINKS PANEL -->
