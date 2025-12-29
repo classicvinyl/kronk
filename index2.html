@@ -137,6 +137,46 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   #release-link {font-size: 6vw !important; line-height: 1.2em !important;}
   #info-panel #info-panel2 .info-line { width:auto !important; }
 }
+
+
+#links-panel {
+  position: fixed;
+  top: calc(var(--line) + 5vw); /* just below menu icon */
+  right: var(--line);
+  width: auto;
+  min-width: 200px;
+  background: rgba(26,26,26,0.85);
+  padding: var(--line);
+  display: none;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 5;
+  border-radius: 0.5ch;
+}
+
+#links-panel.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#links-panel a.release-link {
+  display: block;
+  padding: 0.4ch 0.8ch;
+  margin-bottom: 0.4ch;
+  font-size: 3vw;
+  color: var(--c-white);
+  text-decoration: none;
+}
+#links-panel a.release-link:hover {
+  color: var(--c-yellow);
+}
+
+
+
+
+  
 </style>
 </head>
 <body>
@@ -198,6 +238,22 @@ window.addEventListener('load', () => {
 
   window.randomizeHydra = randomizeHydra;
 });
+
+
+
+
+
+  
+const menuIcon = document.getElementById('menu');
+const linksPanel = document.getElementById('links-panel');
+
+menuIcon.addEventListener('click', () => {
+  linksPanel.classList.toggle('show');
+});
+
+
+
+  
 </script>
 
 <!-- INFO PANEL -->
@@ -237,17 +293,24 @@ window.addEventListener('load', () => {
   <div class="info-line" id="icon-wrapper">
     <span class="yellow hover" id="sound-icon">
 
-<a href="#" target="_blank" alt="" title="menu">
-  <svg id="menu" class="icon" viewBox="0 0 17 17" fill="currentColor">
+<span id="menu" class="icon yellow hover" title="menu">
+  <svg viewBox="0 0 17 17" fill="currentColor">
     <rect x="2" y="3" width="13" height="2"/>
     <rect x="2" y="7.5" width="13" height="2"/>
     <rect x="2" y="12" width="13" height="2"/>
   </svg>
-</a>
-
+</span>
+      
     </span>
   </div>
 </nav>
+
+<div id="links-panel">
+  <a href="#home-news" class="release-link">home/news</a>
+  <a href="#listen-discog" class="release-link">listen/discog</a>
+  <a href="#about-contact" class="release-link">about/contact</a>
+</div>
+
 
 <!-- LINKS PANEL -->
 <aside id="links-panel">
