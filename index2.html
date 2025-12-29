@@ -171,7 +171,14 @@ a:hover {color:var(--c-black); background:var(--c-current);}
     transform: translateY(0);
   }
 
-.menu-wrapper {
+
+
+
+  .menu-wrapper {
+  position: fixed;
+  top: var(--line);
+  right: var(--line);
+  z-index: 5; /* above everything else */
   opacity: 1 !important;
   pointer-events: auto !important;
 }
@@ -180,6 +187,7 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
 
 
   
