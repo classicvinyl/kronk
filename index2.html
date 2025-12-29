@@ -169,7 +169,7 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   color: var(--c-white);
   text-decoration: none;
 }
-#links-panel a.release-link:hover {
+#links-panel2 a.release-link:hover {
   color: var(--c-yellow);
 }
 
@@ -245,10 +245,10 @@ window.addEventListener('load', () => {
 
   
 const menuIcon = document.getElementById('menu');
-const linksPanel = document.getElementById('links-panel');
+const linksPanel = document.getElementById('links-panel2');
 
 menuIcon.addEventListener('click', () => {
-  linksPanel.classList.toggle('show');
+  linksPanel2.classList.toggle('show');
 });
 
 
@@ -301,7 +301,7 @@ menuIcon.addEventListener('click', () => {
   </div>
 </nav>
 
-<!-- LINKS PANEL -->
+<!-- LINKS PANEL2 -->
 <div id="links-panel2">
   <a href="#home-news" class="release-link">home/news</a>
   <a href="#listen-discog" class="release-link">listen/discog</a>
