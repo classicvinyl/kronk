@@ -43,6 +43,9 @@ body { font-size:3.97vw; }
   line-height:1.3em;
   white-space:normal;
   word-break:break-word;
+  display: block !important;
+  opacity: 1;
+  transform: none;
 }
 #links-panel::-webkit-scrollbar{display:none;}
     
@@ -417,9 +420,6 @@ soundIcon.addEventListener("click", () => {
 
   mutedSpeaker.style.display = showingDice ? "none" : "block";
   diceIcon.style.display = showingDice ? "block" : "none";
-
-  showingLinks = !showingLinks;
-  linksPanel.style.display = showingLinks ? "block" : "none";
 
   // Also play a random track and show info when first toggled
   playRandom();
