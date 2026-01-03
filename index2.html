@@ -26,6 +26,71 @@ body { font-size:3.97vw; }
 #hydra-bg { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; overflow:hidden; }
 #hydra-canvas { width:100%; height:100%; display:block; background:black; pointer-events:none; }
 
+/* ---------- OVERLAY PANELS ---------- */
+#links-panel {
+  position:fixed;
+  top:40%;
+  /*transform:translateY(-30%);*/
+  left:0;
+  width:100vw;
+  height:60vh;
+  overflow-y:scroll;
+  background:rgba(26,26,26,0.85);
+  padding:var(--line);
+  z-index:2;
+  scrollbar-width:none;
+  font-size:1em;
+  line-height:1.3em;
+  white-space:normal;
+  word-break:break-word;
+}
+#links-panel::-webkit-scrollbar{display:none;}
+    
+/* ---------- LINKS ---------- */
+#release-link {
+  display: inline-block;
+  padding: 0.0ch 0.0ch;
+  font-size: 3vw;
+  line-height: 1.2em;
+  text-transform: lowercase;
+  margin:0;
+  word-break: break-word;
+  white-space: normal;
+}
+    
+#icon-wrapper a:hover {
+  background: none !important;
+  color: inherit;
+}
+    
+#info-panel {
+  position:fixed; top:0; left:0; z-index:3; font-size:1.3em; background:none; padding:var(--line) 0; line-height:1.3em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#info-panel2 {
+  position:fixed; top:0; right:0; z-index:3; font-size:1.3em; background:none; padding:var(--line) 0; line-height:1.3em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#info-panel2 .info-line {
+  background: rgba(26,26,26,0.75);
+  padding: 0.4ch 0.8ch;      
+}
+    
+/* icon wrapper */
+#info-panel .info-line {
+  display:inline-flex;
+  align-items:center;
+  background:rgba(26,26,26,0.75);
+  padding:0.4ch 0.8ch;
+  margin-bottom:0.6ch;
+}
+
 /* ---------- TYPE ---------- */
 a {color:inherit; text-decoration:none;}
 a:hover {color:var(--c-black); background:var(--c-current);} 
@@ -35,6 +100,35 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 .yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
 .x-multi-column { column-count:1; column-gap:0; }
 
+/* ---------- ICON STYLING ---------- */
+.icon {
+  width: var(--icon-w);
+  height: var(--icon-w);
+  opacity: 0.85;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+@media (min-width: 768px) { :root { --icon-w: 5vw; } }
+
+/* ---------- TRACK TITLE ---------- */
+#track-link {
+  display: inline-block;
+  background: rgba(26,26,26,0.75);
+  padding: 0.4ch 0.8ch;
+  font-size: 4.5vw;
+  line-height: 1.2em;
+  margin:0;
+  word-break: break-word;
+  white-space: normal;
+}
+#track-link .artist, #track-link .title { display:block; }
+#track-link a { text-decoration:none; display:block; }
+#track-link .artist { color:var(--c-yellow); }
+#track-link .title { color:var(--c-green); }
+
+#track-link a:hover .artist { color:var(--c-green); background:rgba(78,78,78,0.75); }
+#track-link a:hover .title  { color:var(--c-yellow); background:rgba(78,78,78,0.75); }
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 767px) {
   #info-panel .icon { width:15vw !important; height:15vw !important; }
@@ -43,43 +137,6 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   #release-link {font-size: 6vw !important; line-height: 1.2em !important;}
   #info-panel #info-panel2 .info-line { width:auto !important; }
 }
-  
-#links-panel3 {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: auto;
-  background: rgba(26,26,26,0.85);
-  padding: var(--line);
-  display: block;    
-  opacity: 1;          
-  transform: none;     
-  z-index: 5;
-  border-radius: 0.1ch;
-}
-
-#links-panel3 a.release-link {
-  display: block;
-  padding: 0.1ch 0.1ch;
-  margin-bottom: 0.1ch;
-  color: var(--c-white);
-  text-decoration: none;
-  font-size: 3vw;
-  line-height: 1.2em;
-  align: right;
-}
-
-@media (max-width: 767px) {
-  #links-panel3 a.release-link {
-    font-size: 9vw;
-    line-height: 1.2em;
-  }
-}
-  
-#links-panel3 a.release-link:hover {
-  color: var(--c-yellow);
-}
-  
 </style>
 </head>
 <body>
@@ -140,15 +197,313 @@ window.addEventListener('load', () => {
   }
 
   window.randomizeHydra = randomizeHydra;
-});  
+});
 </script>
-  
-<!-- LINKS PANEL3 -->
-<div id="links-panel3">
-  <a href="#news" class="release-link">news</a>
-  <a href="#about" class="release-link">about</a>
-  <a href="#contact" class="release-link">contact</a>
-</div>
-  
+
+<!-- INFO PANEL -->
+<nav id="info-panel" class="noselect"> 
+  <div class="info-line" id="icon-wrapper">
+    <span class="yellow hover" id="sound-icon">
+     
+      <svg id="muted-speaker" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor">
+        <g stroke="none" fill="none" fill-rule="evenodd">
+          <g transform="translate(1,0)" fill="currentColor">
+            <rect transform="translate(8.823150, 8.300450) rotate(-38.512169) translate(-8.823150, -8.300450)" x="-0.177" y="7.800" width="17.892" height="1.402"></rect>
+            <path d="M3.953,9.912 L3.953,5.01 L2.128,5.01 C0.845,5.01 0.013,6.094 0.013,7.47 L0.013,8.494 C0.013,9.953 0.782,10.953 2.128,10.953 L2.514,10.953 L3.953,9.912 Z"></path>
+            <path d="M6.877,12.659 L11.936,15.972 C12.522,15.972 12.996,15.572 12.996,15.077 L12.996,7.919 L6.877,12.659 Z"></path>
+            <path d="M12.987,0.971 C12.987,0.464 12.488,0.051 11.872,0.051 L6.114,3.73 C5.499,3.73 5,4.142 5,4.65 L5,8.839 L12.987,2.596 L12.987,0.971 Z"></path>
+          </g>
+        </g>
+      </svg>
+       
+      <svg id="dice-icon" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 17 17" fill="currentColor" style="display:none">
+        <path d="M14.763,0 L3.178,0 C1.998,0 1.043,0.966 1.043,2.155 L1.043,13.845 C1.043,15.034 1.998,15.999 3.178,15.999 L14.763,15.999 C15.944,15.999 16.899,15.034 16.899,13.845 L16.899,2.155 C16.898,0.966 15.943,0 14.763,0 Z
+         M5.002,6.153 C3.856,6.153 2.927,5.202 2.927,4.03 C2.927,2.858 3.856,1.907 5.002,1.907 C6.148,1.907 7.078,2.858 7.078,4.03 C7.078,5.202 6.148,6.153 5.002,6.153 Z
+         M13.002,6.153 C11.856,6.153 10.927,5.202 10.927,4.03 C10.927,2.858 11.856,1.907 13.002,1.907 C14.148,1.907 15.078,2.858 15.078,4.03 C15.078,5.202 14.148,6.153 13.002,6.153 Z
+         M13.002,14.153 C11.856,14.153 10.927,13.202 10.927,12.03 C10.927,10.858 11.856,9.907 13.002,9.907 C14.148,9.907 15.078,10.858 15.078,12.03 C15.078,13.202 14.148,14.153 13.002,14.153 Z
+         M9.002,10.153 C7.856,10.153 6.927,9.202 6.927,8.03 C6.927,6.858 7.856,5.907 9.002,5.907 C10.148,5.907 11.078,6.858 11.078,8.03 C11.078,9.202 10.148,10.153 9.002,10.153 Z
+         M5.002,14.153 C3.856,14.153 2.927,13.202 2.927,12.03 C2.927,10.858 3.856,9.907 5.002,9.907 C6.148,9.907 7.078,10.858 7.078,12.03 C7.078,13.202 6.148,14.153 5.002,14.153 Z">
+        </path>
+      </svg>
+    
+    </span>
+  </div>
+
+  <div id="track-link"><span id="playing-info" style="display:none;"></span></div>
+</nav>
+    
+<!-- INFO PANEL2 -->
+<nav id="info-panel2" class="noselect">
+  <div class="info-line" id="icon-wrapper">
+    <span class="yellow hover" id="sound-icon">
+
+<a href="https://bsky.app/profile/whok.bsky.social" target="_blank" alt="" title="bluesky">
+<svg id="bluesky" class="icon" viewBox="0 -0.5 17 17" fill="currentColor">
+  <path d="M3.468 1.948C5.303 3.325 7.276 6.118 8 7.616c.725-1.498 2.698-4.29 4.532-5.668C13.855.955 16 .186 16 2.632c0 .489-.28 4.105-.444 4.692-.572 2.04-2.653 2.561-4.504 2.246 3.236.551 4.06 2.375 2.281 4.2-3.376 3.464-4.852-.87-5.23-1.98-.07-.204-.103-.3-.103-.218 0-.081-.033.014-.102.218-.379 1.11-1.855 5.444-5.231 1.98-1.778-1.825-.955-3.65 2.28-4.2-1.85.315-3.932-.205-4.503-2.246C.28 6.737 0 3.12 0 2.632 0 .186 2.145.955 3.468 1.948"/>
+    </svg></a>
+
+<a href="https://www.instagram.com/kronk.link" target="_blank" alt="" title="instagram">
+<svg id="instagram" class="icon" viewBox="0 -0.5 17 17" fill="currentColor">
+  <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+    </svg></a>
+
+<a href="https://www.youtube.com/@kronk1" target="_blank" alt="" title="youtube">
+     <svg id="youtube" class="icon" viewBox="0 -0.5 17 17" fill="currentColor">
+  <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/>
+    </svg></a>
+              
+    </span>
+  </div>
+</nav>
+
+<!-- LINKS PANEL -->
+<aside id="links-panel">
+  <div class="green" id="release-link">    
+<span class="yellow">discog ></span><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/dauer-stage" target="_blank" alt="" title="Whirling Hall of Knives - Dauer Stage">Dauer Stage</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-9" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #9">Ecstatic Edits #9</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/nwyvre-masks-veils-sprit" target="_blank" alt="" title="Nwyvre - Masks & Veils / Sprit">Masks & Veils / Sprit</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/magnetize-live" target="_blank" alt="" title="Magnetize Live">Magnetize Live</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-8" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #8">Ecstatic Edits #8</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-7" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #7">Ecstatic Edits #7</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-6" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #6">Ecstatic Edits #6</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-5" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #5">Ecstatic Edits #5</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-4" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #4">Ecstatic Edits #4</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-3" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #3">Ecstatic Edits #3</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #2">Ecstatic Edits #2</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-iii" target="_blank" alt="" title="Whirling Hall of Knives - WHOK Lab Emissions Vol3">WHOK Lab Emissions Vol3</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/scrawled" target="_blank" alt="" title="UOUS - Scrawled">Scrawled</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-1-2" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #1">Ecstatic Edits #1</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-22" target="_blank" alt="" title="Sound Breaking Sky - SBS 22">SBS 22</a><br>
+<a href="https://www.junodownload.com/products/kronk-i-preferred-when-things-sounded-a-bit/7241433-02/" target="_blank" alt="" title="Kronk - I Preferred When Things Sounded A Bit Shit">I Preferred When Things Sounded A Bit Shit</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/pattern-collapse" target="_blank" alt="" title="Nwyvre - Pattern Collapse">Pattern Collapse</a><br>
+<a href="https://www.junodownload.com/products/kronk-why-should-i/7093781-02/" target="_blank" alt="" title="Kronk - Why Should I">Why Should I</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/glossolle-quarter" target="_blank" alt="" title="Whirling Hall of Knives - Glossolle Quarter">Glossolle Quarter</a><br>
+<a href="https://www.junodownload.com/products/kronk-dubliss/6790101-02/" target="_blank" alt="" title="Kronk - Dubliss">Dubliss</a><br>
+<a href="https://www.junodownload.com/products/kronk-reductive/6768817-02/" target="_blank" alt="" title="Kronk - Reductive">Reductive</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-21" target="_blank" alt="" title="Sound Breaking Sky - SBS 21">SBS 21</a><br>
+<a href="https://www.junodownload.com/products/kronk-k-422/6742348-02/" target="_blank" alt="" title="Kronk - k.422">k.422</a><br>
+<a href="https://www.junodownload.com/products/kronk-walk-the-plank/6673407-02/" target="_blank" alt="" title="Kronk - Walk The Plank">Walk The Plank</a><br>
+<a href="https://www.junodownload.com/products/kronk-badgers-arse-vol-2-acid-jams-2001/6670718-02/" target="_blank" alt="" title="Kronk - Badgers Arse Vol.2 (Acid Jams 2001 - 2009)">Badgers Arse Vol.2</a><br>
+<a href="https://www.junodownload.com/products/kronk-badgers-arse-vol-1-acid-jams-2001/6672261-02/" target="_blank" alt="" title="Kronk - Badgers Arse Vol.1 (Acid Jams 2001 - 2009)">Badgers Arse Vol.1</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-20" target="_blank" alt="" title="Sound Breaking Sky - SBS 20">SBS 20</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-19" target="_blank" alt="" title="Sound Breaking Sky - SBS 19">SBS 19</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/blevvac" target="_blank" alt="" title="whirling hall of knives - blevvac (2023)">Blevvac</a><br>
+<a href="https://darkfloor.bandcamp.com/album/winter-solstice-2023" target="_blank" alt="" title="Whirling Hall of Knives - Skwirmische">Skwirmische</a><br>
+<a href="https://earwiggle.bandcamp.com/album/dreams-of-electric-bleep-a-collection-of-irish-electro-1999-2005" target="_blank" alt="" title="Magnetize - Hardcopy">Hardcopy</a><br>
+<a href="https://www.junodownload.com/products/kronk-mission-creep/6215124-02/" target="_blank" alt="" title="Kronk - Mission Creep">Mission Creep</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/gloaming-primitive-technology" target="_blank" alt="" title="Nwyvre - Gloaming / Primitive Technology">Gloaming / Primitive Technology</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/spectrum?s=03" target="_blank" alt="" title="Whirling Hall Of Knives - Nu-shunting">Nu-shunting</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" target="_blank" alt="" title="Whirling Hall Of Knives - Greywash (2023)">Greywash</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/phihha-tree" target="_blank" alt="" title="Whirling Hall Of Knives - Phihha Tree (2022)">Phihha Tree</a><br>
+<a href="https://thelastsound.bandcamp.com/album/lgb-tls-split" target="_blank" alt="" title="Sound Breaking Sky -  Hidden Script (Remix Of The Last Sound/Le Gateaux Bateaux)">Hidden Script</a><br>
+<a href="https://www.thewire.co.uk/audio/btr/below-the-radar-39" target="_blank" alt="" title="Nwyvre - Solar Bones">Solar Bones</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" target="_blank" alt="" title="Whirling Hall Of Knives - Blown Vestige">Blown Vestige</a><br>
+<a href="https://riotseasonrecords.bandcamp.com/album/gnod-whok" target="_blank" alt="" title="Whirling Hall Of Knives - GNOD/WHOK">GNOD/WHOK</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/grianan" target="_blank" alt="" title="Nwyvre - Grianan">Grianan</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-18" target="_blank" alt="" title="Sound Breaking Sky - SBS 18">SBS 18</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/xyllindric" target="_blank" alt="" title="whirling hall of knives - xyllindric (2021)">Xyllindric</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/manifes" target="_blank" alt="" title="Nwyvre - Manifes">Manifes</a><br>
+<a href="https://www.discogs.com/release/16947786-Sound-Breaking-Sky-SBS-Gold-Edits-80-87" target="_blank" alt="" title="Sound Breaking Sky - SBS Gold Edits 80-87">SBS Gold Edits 80-87</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/stitched-up" target="_blank" alt="" title="whirling hall of knives - stitched up (2020)">Stitched Up</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/whokk-ln" target="_blank" alt="" title="Whirling Hall Of Knives - WHOKköln">WHOKköln</a><br>
+<a href="https://stillheatrecordings.bandcamp.com/album/oo" target="_blank" alt="" title="Whirling Hall Of Knives - Oo ">Oo</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/sabre" target="_blank" alt="" title="Whirling Hall Of Knives - Sabre">Sabre</a><br>
+<a href="https://frontendsynthetics.bandcamp.com/album/acuminate" target="_blank" alt="" title="Whirling Hall Of Knives - Acuminate">Acuminate</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-16" target="_blank" alt="" title="Sound Breaking Sky - SBS 16">SBS 16</a><br>
+<a href="https://thelastsound.bandcamp.com/album/beamed" target="_blank" alt="" title="Sound Breaking Sky - Beamed (Remix Of The Last Sound)">Beamed</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-15" target="_blank" alt="" title="Sound Breaking Sky - SBS 15">SBS 15</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/ovoidulations" target="_blank" alt="" title="Whirling Hall Of Knives - Ovoidulations">Ovoidulations</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-ii" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions Vol2">WHOK Lab Emissions Vol2</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-14" target="_blank" alt="" title="Sound Breaking Sky - SBS 14">SBS 14</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/olde-slice" target="_blank" alt="" title="Whirling Hall Of Knives - Olde Slice (2019)">Olde Slice</a><br>
+<a href="https://boomkat.com/products/sbs-edits" target="_blank" alt="" title="Sound Breaking Sky - SBS Edits">SBS Edits</a><br>
+<a href="https://www.discogs.com/release/14491110-Sound-Breaking-Sky-SBS-Gold-Edits-78-85-" target="_blank" alt="" title="Sound Breaking Sky - SBS Gold Edits 78-84">SBS Gold Edits 78-85</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-13" target="_blank" alt="" title="Sound Breaking Sky - SBS 13">SBS 13</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-12" target="_blank" alt="" title="Sound Breaking Sky - SBS 12">SBS 12</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-11" target="_blank" alt="" title="Sound Breaking Sky - SBS 11">SBS 11</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-10" target="_blank" alt="" title="Sound Breaking Sky - SBS 10">SBS 10</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/knukke" target="_blank" alt="" title="Whirling Hall Of Knives - Knukke">Knukke</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-9" target="_blank" alt="" title="Sound Breaking Sky - SBS 9">SBS 9</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/non-throt" target="_blank" alt="" title="Whirling Hall Of Knives - Non Throt (2018)">Non Throt</a><br>
+<a href="https://countersunk.bandcamp.com/album/101-beats-per-minute" target="_blank" alt="" title="Whirling Hall Of Knives - Deckers Island">Deckers Island</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-8" target="_blank" alt="" title="Sound Breaking Sky - SBS 8">SBS 8</a><br>
+<a href="https://www.discogs.com/release/11854346-Sound-Breaking-Sky-SBS-Gold-Edits-79-83" target="_blank" alt="" title="Sound Breaking Sky - SBS Gold Edits 79-83">SBS Gold Edits 79-83</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-6" target="_blank" alt="" title="Sound Breaking Sky - SBS 6">SBS 6</a><br>
+<a href="https://nwyvre.bandcamp.com/album/icovellavna" target="_blank" alt="" title="Nwyvre - Icovellavna">Icovellavna</a><br>
+<a href="https://www.discogs.com/release/11738020-Sound-Breaking-Sky-Repercussions" target="_blank" alt="" title="Sound Breaking Sky - Repercussions">Repercussions</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-4" target="_blank" alt="" title="Sound Breaking Sky - SBS 4">SBS 4</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-3" target="_blank" alt="" title="Sound Breaking Sky - SBS 3">SBS 3</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-2" target="_blank" alt="" title="Sound Breaking Sky - SBS 2">SBS 2</a><br>
+<a href="https://soundbreakingsky.bandcamp.com/album/sbs-1" target="_blank" alt="" title="Sound Breaking Sky - SBS 1 (2017)">SBS 1</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/8ark" target="_blank" alt="" title="Whirling Hall Of Knives - 8ark-">8ark-</a><br>
+<a href="https://cruelnaturerecordings.bandcamp.com/album/another-shudder" target="_blank" alt="" title="Whirling Hall Of Knives - Another Shudder">Another Shudder</a><br>
+<a href="https://www.discogs.com/nwyvre-FNORD/release/10895180" target="_blank" alt="" title="Nwyvre - Fnord">Fnord</a><br>
+<a href="https://nwyvre.bandcamp.com/album/wadjet" target="_blank" alt="" title="Nwyvre - Wadjet">Wadjet</a><br>
+<a href="https://nwyvre.bandcamp.com/album/tetractys" target="_blank" alt="" title="Nwyvre - Tetractys">Tetractys</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/8ark" target="_blank" alt="" title="Whirling Hall Of Knives - 8ark-">8ark-</a><br>
+<a href="https://candelarising.bandcamp.com/album/elephant-road" target="_blank" alt="" title="Whirling Hall Of Knives - Vooidtexx">Vooidtexx</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/voix" target="_blank" alt="" title="Whirling Hall Of Knives - Voix">Voix</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/track/MMXVIRIP" target="_blank" alt="" title="Whirling Hall Of Knives - MMXVIRIP (2016)">MMXVIRIP</a><br>
+<a href="https://nwyvre.bandcamp.com/album/torran" target="_blank" alt="" title="Nwyvre - Torran">Torran</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/decate" target="_blank" alt="" title="Whirling Hall Of Knives - Decate">Decate</a><br>
+<a href="https://nwyvre.bandcamp.com/album/morrigu" target="_blank" alt="" title="Nwyvre - Morrigu">Morrigu</a><br>
+<a href="https://nwyvre.bandcamp.com/album/geis" target="_blank" alt="" title="Nwyvre - Geis">Geis</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/germanium" target="_blank" alt="" title="Whirling Hall Of Knives - Germanium">Germanium</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/seacht" target="_blank" alt="" title="Whirling Hall Of Knives - Seacht">Seacht</a><br>
+<a href="https://candelarising.bandcamp.com/album/arc-molt" target="_blank" alt="" title="Whirling Hall Of Knives - Arc Molt">Arc Molt</a><br>
+<a href="https://nwyvre.bandcamp.com/album/harmonic" target="_blank" alt="" title="Nwyvre - Harmonic">Harmonic</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/p-ggz" target="_blank" alt="" title="Whirling Hall Of Knives - P!!gz (2015)">P!!gz</a><br>
+<a href="https://nuterecords.bandcamp.com/album/constellation-botsu-nute023" target="_blank" alt="" title="Whirling Hall Of Knives - Botsu267 (Remix of Botsu)">Botsu267</a><br>
+<a href="https://earwiggle.bandcamp.com/album/larynx-tompkins-hoof002-on-the-hoof" target="_blank" alt="" title="Larynx Tompkins - HOOF002">HOOF002</a><br>
+<a href="https://nuterecords.bandcamp.com/album/trensmat-06-14-nute022" target="_blank" alt="" title="Whirling Hall Of Knives - Trensmat 06-14">Trensmat 06-14</a><br>
+<a href="https://nuterecords.bandcamp.com/album/cadavre-exquis-nute017" target="_blank" alt="" title="Whirling Hall Of Knives - Cadavre Exquis (Split with ZPG) (2014)">Cadavre Exquis</a><br>
+<a href="https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" target="_blank" alt="" title="Whirling Hall Of Knives - Comminute">Comminute</a><br>
+<a href="https://trensmat.bandcamp.com/album/and-whok-remixes" target="_blank" alt="" title="Whirling Hall Of Knives - Blood On The Controls (Remix of Valved)">Blood On The Controls</a><br>
+<a href="https://fortevilfruit.bandcamp.com/album/whok-lab-emissions-vol-i" target="_blank" alt="" title="Whirling Hall Of Knives - WHOK Lab Emissions Vol1 (2013)">WHOK Lab Emissions Vol1</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/devisions" target="_blank" alt="" title="Whirling Hall Of Knives - Devisions">Devisions</a><br>
+<a href="https://nuterecords.bandcamp.com/album/selectiv-compliance-nute012" target="_blank" alt="" title="Whirling Hall Of Knives - Selectiv Compliance">Selectiv Compliance</a><br>
+<a href="https://www.discogs.com/Whirling-Hall-Of-Knives-Alternate-Devil/release/3694692" target="_blank" alt="" title="Whirling Hall Of Knives - Alternate Devil (2012)">Alternate Devil</a><br>
+<a href="https://www.discogs.com/Tlaotlon-Whirling-Hall-Of-Knives-Attitudes-Blankets-To-Nada-Synapse-Snaps/release/3205146" target="_blank" alt="" title="Whirling Hall Of Knives - Synapse Snaps (Split with Tlaotlon)">Synapse Snaps</a><br>
+<a href="https://nuterecords.bandcamp.com/album/mineral-lamp-nute009" target="_blank" alt="" title="Whirling Hall Of Knives - Mineral Lamp (Remix Of Herv)">Mineral Lamp</a><br>
+<a href="https://nuterecords.bandcamp.com/album/tarsier-nute011" target="_blank" alt="" title="Whirling Hall Of Knives - Tarsier (Remix Of German Army)">Tarsier</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/green-glow-bridge-red-glow-bridge-nute008" target="_blank" alt="" title="Whirling Hall Of Knives - GGB/RGB (2011)">GGB/RGB</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/saw-the-recurrent-future" target="_blank" alt="" title="Whirling Hall Of Knives - Saw The Recurrent Future">Saw The Recurrent Future</a><br>
+<a href="https://www.discogs.com/Whirling-Hall-Of-Knives-Red-Glow-Bridge/release/3089278" target="_blank" alt="" title="Whirling Hall Of Knives - Red Glow Bridge">Red Glow Bridge</a><br>
+<a href="https://www.discogs.com/Whirling-Hall-OF-Knives-Green-Glow-Bridge/release/3089253" target="_blank" alt="" title="Whirling Hall Of Knives - Green Glow Bridge">Green Glow Bridge</a><br>
+<a href="https://www.discogs.com/Magnetize-Manuports/release/2721891" target="_blank" alt="" title="Magnetize - Manuports">Manuports</a><br>
+<a href="https://www.discogs.com/release/3231811-Magnetize-MagnetizeProdukt" target="_blank" alt="" title="Magnetize - Magnetizeprodukt">Magnetizeprodukt</a><br>
+<a href="https://www.discogs.com/release/3245476-Magnetize-Live-On-White-Noise-922008" target="_blank" alt="" title="Magnetize - Live On White Noise (9/2/2008)">Live On White Noise</a><br>
+<a href="https://www.discogs.com/Magnetize-MagnetizeProdukt-12/release/3201427" target="_blank" alt="" title="Magnetize - Magnetizeprodukt 1/2">Magnetizeprodukt 1/2</a><br>
+<a href="https://www.discogs.com/Magnetize-MagnetizeProdukt-22/release/3201438" target="_blank" alt="" title="Magnetize - Magnetizeprodukt 2/2">Magnetizeprodukt 2/2</a><br>
+<a href="https://www.discogs.com/The-Last-Sound-Only-The-Lonely-Know-The-Glow-Is-Failing-Turbochant/release/6314888" target="_blank" alt="" title="Magnetize - Turbochant (Remix Of The Last Sound)">Turbochant</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/celestrian-ferroxxide" target="_blank" alt="" title="Whirling Hall Of Knives - Celestrian Ferroxxide (2010)">Celestrian Ferroxxide</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/giger-level-mecha-entomology-7" target="_blank" alt="" title="Whirling Hall Of Knives - Giger Level / Mecha-Entomology">Giger Level / Mecha-Entomology</a><br>
+<a href="https://nuterecords.bandcamp.com/album/fina-cold-fire-nute005" target="_blank" alt="" title="Whirling Hall Of Knives - F/C/F (Remix Of The Last Sound)">F/C/F</a><br>
+<a href="https://www.discogs.com/Magnetize-Mytalio/release/2170056" target="_blank" alt="" title="Magnetize - Mytalio">Mytalio</a><br>
+<a href="https://whirlinghallofknives.bandcamp.com/album/electric-lava-nute003" target="_blank" alt="" title="Whirling Hall Of Knives - Electric Lava (2009)">Electric Lava</a><br>
+<a href="https://www.discogs.com/Various-The-Wire-Tapper-21/release/1686159" target="_blank" alt="" title="Whirling Hall Of Knives - 2 Bar Heater & Smoke">2 Bar Heater & Smoke</a><br>
+<a href="https://www.discogs.com/release/1798121-Magnetize-Sweex" target="_blank" alt="" title="Magnetize - Sweex">Sweex</a><br>
+<a href="https://www.discogs.com/Magnetize-Live-At-Second-Square-To-None/release/1893663" target="_blank" alt="" title="Magnetize - Live At Second Square To None">Live At Second Square To None</a><br>
+<a href="https://www.discogs.com/Various-Trapdoor-Material-Part-One/release/1835132" target="_blank" alt="" title="Magnetize - Distant Observer">Distant Observer</a><br>
+<a href="https://www.discogs.com/Various-Trensmat-Records-Every-Noise-Has-A-Note/release/2001127" target="_blank" alt="" title="Magnetize - Noise To Signal">Noise To Signal</a><br>
+<a href="https://d1recordings.bandcamp.com/album/fazzip-done043" target="_blank" alt="" title="Whirling Hall Of Knives - Fazzip (Remix Of Ikeaboy) (2008)">Fazzip</a><br>
+<a href="https://www.discogs.com/release/1397883-Magnetize-Frame-Dragging" target="_blank" alt="" title="Magnetize - Frame Dragging">Frame Dragging</a><br>
+<a href="https://www.discogs.com/Magnetize-Precession-EP/release/1438113" target="_blank" alt="" title="Magnetize - Precession<">Precession</a><br>
+<a href="https://www.discogs.com/Magnetize-In-Meroman/release/1272478" target="_blank" alt="" title="Magnetize - In Meroman">In Meroman</a><br>
+<a href="https://www.discogs.com/Astral-Social-Club-Skelp-bw-Ginnel/release/1314201" target="_blank" alt="" title="Magnetize - Ginnel (Remix Of Astral Social Club)">Ginnel</a><br>
+<a href="https://www.discogs.com/Various-DEAF-7-2008-Compilation/release/1486801" target="_blank" alt="" title="Magnetize - Hodge Conjecture">Hodge Conjecture</a><br>
+<a href="https://www.discogs.com/release/1029471-Magnetize-Ear-Blink" target="_blank" alt="" title="Magnetize - Ear Blink (2007)">Ear Blink</a><br>
+<a href="https://www.discogs.com/master/25447-Magnetize-Forced-Vortex-EP" target="_blank" alt="" title="Magnetize - Forced Vortex">Forced Vortex</a><br>
+<a href="https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" target="_blank" alt="" title="Magnetize - Noise To Signal">Noise To Signal</a><br>
+<a href="https://www.discogs.com/Decal-Little-Remixes-Part-1/release/1173667" target="_blank" alt="" title="Magnetize - Forgetting Forever (Remix Of Decal)">Forgetting Forever</a><br>
+<a href="https://www.discogs.com/Whirling-Hall-Of-Knives-Live-At-Deaf-5-2006/release/1997247" target="_blank" alt="" title="Whirling Hall Of Knives - Live At DEAF 5 (2006)">Live At DEAF 5</a><br>
+<a href="https://www.discogs.com/release/412799-Magnetize-Live-Lazybird-200205" target="_blank" alt="" title="Magnetize - Live At Lazybird (2005)">Live At Lazybird</a><br>
+<a href="https://www.discogs.com/master/184429-Magnetize-Anti-Chord-EP" target="_blank" alt="" title="Magnetize - Anti-Chord">Anti-Chord</a><br>
+<a href="https://www.discogs.com/release/326478-Magnetize-Biome" target="_blank" alt="" title="Magnetize - Biome (2004)">Biome</a><br>
+<a href="https://www.discogs.com/Various-DEAF-2-2003-Compilation/release/267515" target="_blank" alt="" title="Magnetize - My Friend The Atom (2003)">My Friend The Atom</a><br>
+<a href="https://www.discogs.com/Various-NMK-0001/release/128890" target="_blank" alt="" title="Magnetize - Straight Edge (2002)">Straight Edge</a><br><br><br><br>
+  </div>
+</aside>
+
+<!-- AUDIO -->
+<audio id="audio-player"></audio>
+
+<script>
+const audio = document.getElementById("audio-player");
+const soundIcon = document.getElementById("sound-icon");
+const mutedSpeaker = document.getElementById("muted-speaker");
+const diceIcon = document.getElementById("dice-icon");
+const linksPanel = document.getElementById("links-panel");
+const playingInfo = document.getElementById("playing-info");
+const trackLink = document.getElementById("track-link");
+
+const mp3Folder = "mp3/";
+const mp3Files = [
+  { file: "magnetize - hardcopy.mp3", link: "https://earwiggle.bandcamp.com/album/dreams-of-electric-bleep-a-collection-of-irish-electro-1999-2005" },
+  { file: "nwyvre - exotnotics.mp3", link: "https://fortevilfruit.bandcamp.com/album/manifes" },
+  { file: "nwyvre - harmonic4.mp3", link: "https://nwyvre.bandcamp.com/album/harmonic" },
+  { file: "nwyvre - red light.mp3", link: "https://fortevilfruit.bandcamp.com/album/pattern-collapse" },
+  { file: "nwyvre - solar bones.mp3", link: "https://www.thewire.co.uk/audio/btr/below-the-radar-39" },
+  { file: "nwyvre - morrigu7.mp3", link: "https://nwyvre.bandcamp.com/album/morrigu" },
+  { file: "nwyvre - wadjet4.mp3", link: "https://nwyvre.bandcamp.com/album/wadjet" },
+  { file: "soundbreaking sky - noble bull kell.mp3", link: "https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-2" },
+  { file: "soundbreaking sky - sbs 19-1.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-19" },
+  { file: "soundbreaking sky - sbs 2.3.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-2" },
+  { file: "soundbreaking sky - sbs 22.2.mp3", link: "https://soundbreakingsky.bandcamp.com/album/sbs-22" },
+  { file: "uous - abort.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+  { file: "uous - still feeling it.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/scrawled" },
+  { file: "magnetize - gravity lensing.mp3", link: "https://www.discogs.com/release/1397883-Magnetize-Frame-Dragging" },
+  { file: "magnetize - noise to signal.mp3", link: "https://www.discogs.com/Magnetize-Noise-To-Signal/release/1029458" },
+  { file: "magnetize - overflux.mp3", link: "https://www.discogs.com/master/25447-Magnetize-Forced-Vortex-EP" },
+  { file: "valved - blood on the controls (whok mix1).mp3", link: "https://trensmat.bandcamp.com/album/and-whok-remixes" },
+  { file: "whirling hall of knives - blown vestige.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/blown-vestige" },
+  { file: "whirling hall of knives - greywash.mp3", link: "https://cruelnaturerecordings.bandcamp.com/album/recoil-greywash" },
+  { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+  { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
+  { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
+  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-h..." }
+];
+
+// ---------------- ICON BEHAVIOUR ----------------
+let showingDice = false;
+let showingLinks = false;
+
+soundIcon.addEventListener("click", () => {
+  showingDice = !showingDice;
+
+  mutedSpeaker.style.display = showingDice ? "none" : "block";
+  diceIcon.style.display = showingDice ? "block" : "none";
+
+  showingLinks = !showingLinks;
+  linksPanel.style.display = showingLinks ? "block" : "none";
+
+  // Also play a random track and show info when first toggled
+  playRandom();
+});
+
+// ---------------- PLAY RANDOM TRACK ----------------
+function playRandom() {
+  const item = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+
+  const fileURL = mp3Folder + item.file;
+  audio.src = fileURL;
+  audio.play().catch(() => {});
+
+  renderTrackInfo(item.file, item.link);
+
+  if (window.randomizeHydra) window.randomizeHydra();
+
+  // Ensure dice icon & links panel remain visible when this is triggered via dice/audio end
+  showingDice = true;
+  showingLinks = true;
+  mutedSpeaker.style.display = "none";
+  diceIcon.style.display = "block";
+  linksPanel.style.display = "block";
+}
+
+// ---------------- RENDER TRACK INFO ----------------
+function renderTrackInfo(filename, url) {
+  const clean = filename.replace(".mp3", "");
+  const dash = clean.indexOf(" - ");
+
+  const artist = dash > -1 ? clean.slice(0, dash) : "";
+  const title = dash > -1 ? clean.slice(dash + 3) : clean;
+
+  playingInfo.innerHTML = `
+    <a href="${url}" target="_blank">
+      <span class="artist">${artist}</span>
+      <span class="title">${title}</span>
+    </a>
+  `;
+  playingInfo.style.display = "inline-block";
+}
+
+// ---------------- EVENT LISTENERS ----------------
+diceIcon.addEventListener("click", playRandom);
+mutedSpeaker.addEventListener("click", playRandom);
+audio.addEventListener("ended", playRandom);
+</script>
+
 </body>
 </html>
