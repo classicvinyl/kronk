@@ -43,18 +43,18 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   #release-link {font-size: 6vw !important; line-height: 1.2em !important;}
   #info-panel #info-panel2 .info-line { width:auto !important; }
 }
-
+  
 #links-panel3 {
   position: fixed;
-  top: 0%;
+  top: 0;
   right: 0;
   width: auto;
   min-width: 200px;
   background: rgba(26,26,26,0.85);
   padding: var(--line);
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: block;      /* ← show it */
+  opacity: 1;          /* ← visible */
+  transform: none;     /* ← no offset */
   z-index: 5;
   border-radius: 0.5ch;
 }
