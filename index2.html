@@ -45,25 +45,6 @@ body { font-size:3.97vw; }
   word-break:break-word;
 }
 #links-panel::-webkit-scrollbar{display:none;}
-
-#links-panel2 {
-  position:fixed;
-  top:40%;
-  /*transform:translateY(-30%);*/
-  left:0;
-  width:100vw;
-  height:60vh;
-  overflow-y:scroll;
-  background:rgba(26,26,26,0.85);
-  padding:var(--line);
-  z-index:2;
-  scrollbar-width:none;
-  font-size:1em;
-  line-height:1.3em;
-  white-space:normal;
-  word-break:break-word;
-}
-#links-panel2::-webkit-scrollbar{display:none;}
     
 /* ---------- LINKS ---------- */
 #release-link {
@@ -145,8 +126,8 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 }
 </style>
 </head>
+  
 <body>
-
 <!-- HYDRA -->
 <div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
 <script src="https://unpkg.com/hydra-synth"></script>
@@ -239,7 +220,7 @@ window.addEventListener('load', () => {
 </nav>
 
 <!-- LINKS PANEL -->
-<aside id="links-panel2">
+<aside id="links-panel">
   <div class="green" id="release-link">    
 <span class="yellow">discog ></span><br>
 <a href="https://whirlinghallofknives.bandcamp.com/track/dauer-stage" target="_blank" alt="" title="Whirling Hall of Knives - Dauer Stage">Dauer Stage</a><br>
@@ -424,7 +405,7 @@ const mp3Files = [
   { file: "whirling hall of knives - acheron.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
   { file: "whirling hall of knives - alternate devil.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/devisions" },
   { file: "whirling hall of knives - blister pack.mp3", link: "https://whirlinghallofknives.bandcamp.com/album/decate" },
-  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-h..." }
+  { file: "whirling hall of knives - comminute.mp3", link: "https://earwiggle.bandcamp.com/album/whirling-hall-of-knives-comminute-ep" }
 ];
 
 // ---------------- ICON BEHAVIOUR ----------------
