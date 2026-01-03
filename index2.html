@@ -526,7 +526,7 @@ audio.addEventListener("ended", playRandom);
 
 
 <script>
-const menuIcon = document.getElementById('menu');
+const menuIcon = document.querySelector('#info-panel2 .info-line');
 const linksPanel = document.getElementById('links-panel2');
 
 menuIcon.addEventListener('click', () => {
@@ -536,7 +536,18 @@ menuIcon.addEventListener('click', () => {
 });
 </script>
 
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const menuIcon = document.querySelector('#info-panel2 .info-line');
+  const linksPanel = document.getElementById('links-panel2');
 
+  menuIcon.addEventListener('click', () => {
+    linksPanel.classList.toggle('show');
+    menuIcon.style.display =
+      linksPanel.classList.contains('show') ? 'none' : 'inline-block';
+  });
+});
+</script>
   
 </body>
 </html>
