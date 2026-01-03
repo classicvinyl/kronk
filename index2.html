@@ -138,7 +138,6 @@ a:hover {color:var(--c-black); background:var(--c-current);}
   #info-panel #info-panel2 .info-line { width:auto !important; }
 }
 
-
 #links-panel2 {
   position: fixed;
   top: calc(var(--line) + 5vw); /* just below menu icon */
@@ -181,10 +180,6 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 #links-panel2 a.release-link:hover {
   color: var(--c-yellow);
 }
-
-
-
-
   
 </style>
 </head>
@@ -248,30 +243,7 @@ window.addEventListener('load', () => {
   window.randomizeHydra = randomizeHydra;
 });  
 </script>
-
-
   
-<!-- INFO PANEL2 -->
-<nav id="info-panel2" class="noselect">
-  <div class="info-line" id="icon-wrapper">
-    <span id="menu" class="icon yellow hover" title="menu">
-      <svg viewBox="0 0 17 17" fill="currentColor" class="icon">
-        <rect x="2" y="3" width="13" height="2"/>
-        <rect x="2" y="7.5" width="13" height="2"/>
-        <rect x="2" y="12" width="13" height="2"/>
-      </svg>
-    </span>
-  </div>
-</nav>
-
-<!-- LINKS PANEL2 -->
-<div id="links-panel2">
-  <a href="#home-news" class="release-link">home/news</a>
-  <a href="#listen-discog" class="release-link">listen/discog</a>
-  <a href="#about-contact" class="release-link">about/contact</a>
-</div>
-
-
 <script>
 const menuIcon = document.getElementById('menu');
 const linksPanel = document.getElementById('links-panel2');
@@ -282,7 +254,6 @@ menuIcon.addEventListener('click', () => {
   menuIcon.style.display = linksPanel.classList.contains('show') ? 'none' : 'inline-block';
 });
 </script>
-
 
 <!-- LINKS PANEL -->
 <aside id="links-panel">
