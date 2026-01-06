@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <meta name="robots" content="noindex">
+  <script>
+    const redirects = {
+      "pc": "https://fortevilfruit.bandcamp.com/album/pattern-collapse",
+      "sbs": "https://soundbreakingsky.bandcamp.com",
+      "whok": "https://whirlinghallofknives.bandcamp.com",
+    };
+
+    const slug = window.location.pathname
+      .replace(/^\/+|\/+$/g, "")
+      .toLowerCase();
+
+    if (redirects[slug]) {
+      window.location.replace(redirects[slug]);
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting…</p>
+</body>
+</html>
