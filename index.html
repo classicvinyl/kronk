@@ -71,18 +71,6 @@ body { font-size:3.97vw; }
   word-break: break-word;
   white-space: normal;
 }
-
-#release-link2 a {
-  background: #00ff88;
-  color: #000;
-  text-decoration: none;
-}
-
-#release-link2 a:hover {
-  background: #000;
-  color: #00ff88;
-  text-decoration: none;
-}  
     
 #icon-wrapper a:hover {
   background: none !important;
@@ -113,14 +101,6 @@ a:hover {color:var(--c-black); background:var(--c-current);}
 .purple{color:var(--c-purple); --c-current:var(--c-purple);} 
 .yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
 .x-multi-column { column-count:1; column-gap:0; }
-
-#release-link a { {color:inherit; text-decoration:none;}
-#release-link a {a:hover {color:var(--c-black); background:var(--c-current);} 
-.green{color:var(--c-green); --c-current:var(--c-green);} 
-.grey{color:var(--c-grey); --c-current:var(--c-grey);} 
-.purple{color:var(--c-purple); --c-current:var(--c-purple);} 
-.yellow{color:var(--c-yellow); --c-current:var(--c-yellow);} 
-.x-multi-column { column-count:1; column-gap:0; }  
 
 /* ---------- ICON STYLING ---{color:var(--c-black); background:var(--c-current);} ------- */
 .icon {
@@ -260,11 +240,17 @@ window.addEventListener('load', () => {
 <span class="yellow">about ></span><br>
 <div class="green" id="release-link2">  
 kronk aka magnetize//nwyvre//soundbreaking sky [+in] uous//whirling hall of knives//larynx tompkins.
-full discog below with direct links. please click speaker/dice above for random samples. all solo stuff is now <a href="https://soundbreakingsky.bandcamp.com/" target="_blank" alt="" title="sbs bandcamp">bandcamp</a> sub only.
-you can also check out visuals and videos of my 'jamming process' on <a href="https://www.youtube.com/@kronk1" target="_blank" alt="" title="youtube">youtube</a> / <a href="https://www.instagram.com/kronk.link" target="_blank" alt="" title="instagram">instagram</a> channels and words on <a href="https://whokronk.substack.com" target="_blank" alt="" title="mail-list">substack</a>.<br>
-</div>  
+full discog below with direct links. click speaker/dice above for random samples. all solo material is bandcamp subscriber only.
+coded visuals and videos of my 'jamming process' can be seen on the youtube/instagram channels and general blah on the substack.<br>
+<div>  
 <div class="green" id="release-link">  
 <br>
+<span class="yellow">links ></span><br>
+<a href="https://soundbreakingsky.bandcamp.com/" target="_blank" alt="" title="sbs bandcamp">bandcamp</a><br>
+<a href="https://whokronk.substack.com" target="_blank" alt="" title="mail-list">substack</a><br>  
+<a href="https://www.youtube.com/@kronk1" target="_blank" alt="" title="youtube">youtube</a><br>
+<a href="https://www.instagram.com/kronk.link" target="_blank" alt="" title="instagram">instagram</a><br>
+<br>    
 <span class="yellow">discog ></span><br>
 <a href="https://soundbreakingsky.bandcamp.com/album/ecstatic-edits-10" target="_blank" alt="" title="Sound Breaking Sky - Ecstatic Edits #10">Ecstatic Edits #10</a><br>
 <a href="https://whirlinghallofknives.bandcamp.com/track/dauer-stage" target="_blank" alt="" title="Whirling Hall of Knives - Dauer Stage">Dauer Stage</a><br>
@@ -410,6 +396,7 @@ you can also check out visuals and videos of my 'jamming process' on <a href="ht
 <a href="https://www.discogs.com/release/326478-Magnetize-Biome" target="_blank" alt="" title="Magnetize - Biome (2004)">Biome</a><br>
 <a href="https://www.discogs.com/Various-DEAF-2-2003-Compilation/release/267515" target="_blank" alt="" title="Magnetize - My Friend The Atom (2003)">My Friend The Atom</a><br>
 <a href="https://www.discogs.com/Various-NMK-0001/release/128890" target="_blank" alt="" title="Magnetize - Straight Edge (2002)">Straight Edge</a><br><br><br><br>
+  </div>
 </aside>
 
 <!-- AUDIO -->
@@ -507,6 +494,6 @@ diceIcon.addEventListener("click", playRandom);
 mutedSpeaker.addEventListener("click", playRandom);
 audio.addEventListener("ended", playRandom);
 </script>
-  </div>
+
 </body>
 </html>
