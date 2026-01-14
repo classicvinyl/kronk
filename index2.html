@@ -23,9 +23,8 @@ html, body {
   margin: 0; 
   background: var(--c-black); 
   color: var(--c-white); 
-  height: 100vh;
+  min-height: 100vh;
   font-family: var(--font); 
-  overflow: hidden;
 }
 
 body { 
@@ -56,24 +55,14 @@ body {
   position: relative;
   z-index: 2;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 2vh 4vw;
-  overflow-y: auto;
 }
 
 #main-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-#main-container::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.2);
-}
-
-#main-container::-webkit-scrollbar-thumb {
-  background: var(--c-green);
-  border-radius: 3px;
+  display: none;
 }
 
 /* ---------- HEADER ---------- */
@@ -230,7 +219,19 @@ h1 {
 <div id="main-container">
   <h1>kronk</h1>
   
+  <p class="intro-text">
+    i make music, lots of types, alone & collaboratively // <a href="http://kronk.link/discog" target="_blank">discography</a> // latest :
+  </p>
+  
+  <!-- BANDCAMP RELEASES -->
+  <div class="bandcamp-grid">
+    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=1660340473/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
+    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2708260863/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
+    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2162926795/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
+  </div>
+  
   <!-- VIDEO SECTION -->
+  <p class="section-label">video :</p>
   <div class="youtube-grid">
     <div class="youtube-wrapper">
       <iframe src="https://www.youtube.com/embed/3uQ_dv2Vl2c" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
