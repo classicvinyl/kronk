@@ -26,6 +26,14 @@ html, body {
   min-height: 100vh;
   font-family: var(--font); 
 }
+    
+.content-block {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 1rem;
+  background: rgba(26,26,26,0.85);
+  padding: 1rem 1rem;
+}
 
 body { 
   font-size: 16px;
@@ -59,7 +67,8 @@ body {
   display: flex;
   flex-direction: column;
   padding: 2vh 4vw;
-}
+  align-items: flex-start;    
+ }
 
 #main-container::-webkit-scrollbar {
   display: none;
@@ -95,55 +104,29 @@ h1 {
 .intro-text a:hover {
   background: var(--c-yellow);
 }
+    
+.intro-text2 { display: inline-flex; gap: 1rem; }
+     
+.intro-text2 a {
+  background: var(--c-green);
+  color: var(--c-black);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font);
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  cursor: pointer;
+  border-radius: 2px;
+  font-weight: bold;
+  transition: background 0.2s;
+  text-decoration: none; 
+  display: inline-flex;   
+}
 
 /* ---------- SECTION LABELS ---------- */
 .section-label {
   color: var(--c-green);
   font-size: clamp(0.75rem, 1.3vw, 0.9rem);
   margin: 1rem 0 0.5rem 0;
-}
-
-/* ---------- BANDCAMP GRID ---------- */
-.bandcamp-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.5rem, 2vw, 1rem);
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.bandcamp-grid iframe {
-  width: 100%;
-  aspect-ratio: 1;
-  border: 0;
-  display: block;
-}
-
-/* ---------- YOUTUBE GRID ---------- */
-.youtube-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(0.5rem, 2vw, 1rem);
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.youtube-wrapper {
-  position: relative;
-  padding-bottom: 177.78%; /* 9:16 aspect ratio for shorts */
-  height: 0;
-  overflow: hidden;
-  border-radius: 3px;
-  background: #000;
-}
-
-.youtube-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 /* ---------- EMAIL FORM ---------- */
@@ -193,21 +176,8 @@ h1 {
   #main-container {
     padding: 2vh 3vw;
   }
-  
-  .youtube-wrapper {
-    padding-bottom: 177.78%;
-  }
 }
 
-@media (max-width: 480px) {
-  .bandcamp-grid {
-    gap: 0.5rem;
-  }
-  
-  .youtube-grid {
-    gap: 0.5rem;
-  }
-}
 </style>
 </head>
   
@@ -217,37 +187,26 @@ h1 {
 
 <!-- MAIN CONTAINER -->
 <div id="main-container">
+<div class="content-block">
   <h1>kronk</h1>
-  
-  <p class="intro-text">
-    i make music, lots of types, alone & collaboratively // <a href="http://kronk.link/discog" target="_blank">discography</a> // latest :
-  </p>
-  
-  <!-- BANDCAMP RELEASES -->
-  <div class="bandcamp-grid">
-    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=1660340473/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
-    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2708260863/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
-    <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2162926795/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/" seamless></iframe>
-  </div>
-  
-  <!-- VIDEO SECTION -->
-  <p class="section-label">video :</p>
-  <div class="youtube-grid">
-    <div class="youtube-wrapper">
-      <iframe src="https://www.youtube.com/embed/3uQ_dv2Vl2c" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <div class="youtube-wrapper">
-      <iframe src="https://www.youtube.com/embed/XLK7Uu3gVU4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-  </div>
-  
-  <!-- EMAIL SECTION -->
-  <p class="section-label">mail-list :</p>
+  <br><br>
+  <div class="content-block">
+<!-- EMAIL SECTION -->
   <form class="email-form" action="https://whokronk.substack.com/subscribe" method="post" target="_blank">
     <input type="email" name="email" placeholder="your email" required>
-    <button type="submit">subscribe</button>
+    <button type="submit">join mail-list</button>
   </form>
+  <p class="intro-text2">
+    <a href="https://soundbreakingsky.bandcamp.com" target="_blank">bandcamp</a>
+    <a href="http://kronk.link/discog.html">discography</a>
+  </p>  
 </div>
+
+    <iframe width="634" height="1127" src="https://www.youtube.com/embed/XLK7Uu3gVU4" title="Torso S4 Techno" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    
+    </div>
+
 
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
@@ -288,8 +247,8 @@ window.addEventListener('load', () => {
   // Initial hydra
   randomizeHydra();
 
-  // Auto-randomize every 45 seconds
-  setInterval(randomizeHydra, 45000);
+  // Auto-randomize every 10 seconds
+  setInterval(randomizeHydra, 10000);
 
   // Randomize on occasional clicks
   document.body.addEventListener('click', () => {
