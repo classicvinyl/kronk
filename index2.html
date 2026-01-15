@@ -90,6 +90,32 @@ h1 {
   height: 2.8rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  h1 {
+    width: auto;
+  }
+  
+  h1 .intro-text2 {
+    display: none;
+  }
+  
+  .controls-row .intro-text2 {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .controls-row .intro-text2 {
+    display: none;
+  }
+  
+  h1 .intro-text2 {
+    display: flex;
+  }
 }
 
 /* ---------- CONTROLS ROW ---------- */
@@ -224,23 +250,35 @@ h1 {
 
 /* ---------- MOBILE ADJUSTMENTS ---------- */
 @media (max-width: 768px) {
-  .controls-row {
-    flex-direction: column;
+  .content-block {
     gap: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 0.9rem;
+    align-self: flex-start;
+    width: auto;
+  }
+  
+  .content-block > h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .intro-text2 {
+    order: -1;
+    margin-left: auto;
+  }
+  
+  .controls-row {
+    width: 100%;
   }
   
   .email-form {
     max-width: 100%;
     width: 100%;
-  }
-  
-  .intro-text2 {
-    width: 100%;
-    justify-content: flex-end;
-  }
-  
-  h1 {
-    font-size: 0.9rem;
   }
   
   .youtube-container {
@@ -262,7 +300,20 @@ h1 {
 <!-- MAIN CONTAINER -->
 <div id="main-container">
 <div class="content-block">
-  <h1>kronk</h1>
+  <h1>kronk<div class="intro-text2">
+      <a href="https://soundbreakingsky.bandcamp.com" target="_blank">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.75 97.75">
+          <path d="M48.875,0C21.882,0,0,21.882,0,48.875S21.882,97.75,48.875,97.75S97.75,75.868,97.75,48.875S75.868,0,48.875,0z M64.835,70.857H12.593l20.32-43.965h52.244L64.835,70.857z"/>
+        </svg>
+      </a>
+      
+      <a href="http://kronk.link/discog.html" target="_blank">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="32"/>
+          <path d="M256,0C114.617,0,0,114.615,0,256s114.617,256,256,256s256-114.615,256-256S397.383,0,256,0z M167.281,443.851 c-43.422-20.596-78.539-55.708-99.133-99.134l59.492-23.797c13.867,27.305,36.133,49.572,63.438,63.44L167.281,443.851z M325.07,298.277c-5.969,11.35-15.449,20.826-26.797,26.797c-75.438,39.682-151.031-35.92-111.344-111.353 c5.969-11.35,15.449-20.826,26.797-26.796C289.164,147.243,364.758,222.846,325.07,298.277z M384.359,191.079 c-13.867-27.305-36.133-49.571-63.438-63.439l23.797-59.491c43.422,20.595,78.535,55.709,99.133,99.134L384.359,191.079z"/>
+        </svg>
+      </a>
+    </div></h1>
   
   <div class="controls-row">
     <!-- EMAIL SECTION -->
