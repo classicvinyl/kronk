@@ -178,6 +178,68 @@ h1 {
   }
 }
 
+/* ---------- VIEWPORT CONTAINER ---------- */
+.viewport-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- VIDEO AS SIZE AUTHORITY ---------- */
+.video-wrap {
+  height: 100vh;
+  aspect-ratio: 9 / 16;
+  max-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.video-wrap iframe {
+  height: 100%;
+  width: 100%;
+}
+
+/* ---------- CONTROLS ROW ---------- */
+.controls-row {
+  width: 100%;
+  max-width: calc(100vh * 9 / 16);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+/* ---------- EMAIL FORM AS TWO CELLS ---------- */
+.email-form.single-row {
+  display: contents;
+}
+
+.email-form.single-row input,
+.email-form.single-row button {
+  width: 100%;
+}
+
+/* ---------- LINKS AS CELLS ---------- */
+.control-link {
+  background: var(--c-green);
+  color: var(--c-black);
+  text-decoration: none;
+  font-family: var(--font);
+  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+
+/* ---------- HEADER ALIGNMENT ---------- */
+.viewport-container h1 {
+  width: 100%;
+  max-width: calc(100vh * 9 / 16);
+}
+
 </style>
 </head>
   
@@ -185,26 +247,37 @@ h1 {
 <!-- HYDRA BACKGROUND -->
 <div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
 
-<!-- MAIN CONTAINER -->
-<div id="main-container">
-<div class="content-block">
-  <h1>kronk</h1>
+<!-- MAIN container --!>
+  
+  <div id="main-container">
+  <div class="viewport-container">
+
+    <h1>kronk</h1>
+
+    <div class="content-block controls-row">
+      <form class="email-form single-row" action="https://whokronk.substack.com/subscribe" method="post" target="_blank">
+        <input type="email" name="email" placeholder="your email" required>
+        <button type="submit">join mail-list</button>
+      </form>
+
+      <a class="control-link" href="https://soundbreakingsky.bandcamp.com" target="_blank">bandcamp</a>
+      <a class="control-link" href="http://kronk.link/discog.html">discography</a>
     </div>
-  <div class="content-block">
-<!-- EMAIL SECTION -->
-  <form class="email-form" action="https://whokronk.substack.com/subscribe" method="post" target="_blank">
-    <input type="email" name="email" placeholder="your email" required>
-    <button type="submit">join mail-list</button>
-  </form>
-  <p class="intro-text2">
-    <a href="https://soundbreakingsky.bandcamp.com" target="_blank">bandcamp</a>
-    <a href="http://kronk.link/discog.html">discography</a>
-  </p>  
+
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/XLK7Uu3gVU4"
+        title="Torso S4 Techno"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+  </div>
 </div>
 
-    <iframe width="634" height="1127" src="https://www.youtube.com/embed/XLK7Uu3gVU4" title="Torso S4 Techno" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    
-    </div>
 
 
 <script src="https://unpkg.com/hydra-synth"></script>
