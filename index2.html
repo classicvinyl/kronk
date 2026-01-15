@@ -178,66 +178,47 @@ h1 {
   }
 }
 
-/* ---------- VIEWPORT CONTAINER ---------- */
-.viewport-container {
+/* ---------- STAGE ---------- */
+.stage {
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
-/* ---------- VIDEO AS SIZE AUTHORITY ---------- */
-.video-wrap {
+/* ---------- VIDEO ---------- */
+.stage iframe {
   height: 100vh;
+  width: auto;
   aspect-ratio: 9 / 16;
-  max-height: 100vh;
+}
+
+/* ---------- CONTROLS ---------- */
+.controls {
+  width: calc(100vh * 9 / 16);
   display: flex;
-  align-items: center;
-}
-
-.video-wrap iframe {
-  height: 100%;
-  width: 100%;
-}
-
-/* ---------- CONTROLS ROW ---------- */
-.controls-row {
-  width: 100%;
-  max-width: calc(100vh * 9 / 16);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-/* ---------- EMAIL FORM AS TWO CELLS ---------- */
-.email-form.single-row {
-  display: contents;
+.controls > * {
+  flex: 1;
 }
 
-.email-form.single-row input,
-.email-form.single-row button {
-  width: 100%;
-}
-
-/* ---------- LINKS AS CELLS ---------- */
+/* ---------- LINKS ---------- */
 .control-link {
   background: var(--c-green);
   color: var(--c-black);
-  text-decoration: none;
-  font-family: var(--font);
-  font-size: clamp(0.8rem, 1.3vw, 0.9rem);
   font-weight: bold;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 2px;
 }
 
-/* ---------- HEADER ALIGNMENT ---------- */
-.viewport-container h1 {
-  width: 100%;
-  max-width: calc(100vh * 9 / 16);
+/* ---------- HEADER ---------- */
+.stage h1 {
+  width: calc(100vh * 9 / 16);
 }
 
 </style>
@@ -249,13 +230,13 @@ h1 {
 
 <!-- MAIN container --!>
   
-  <div id="main-container">
-  <div class="viewport-container">
+<div id="main-container">
+  <div class="stage">
 
     <h1>kronk</h1>
 
-    <div class="content-block controls-row">
-      <form class="email-form single-row" action="https://whokronk.substack.com/subscribe" method="post" target="_blank">
+    <div class="content-block controls">
+      <form class="email-form">
         <input type="email" name="email" placeholder="your email" required>
         <button type="submit">join mail-list</button>
       </form>
@@ -264,21 +245,15 @@ h1 {
       <a class="control-link" href="http://kronk.link/discog.html">discography</a>
     </div>
 
-    <div class="video-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/XLK7Uu3gVU4"
-        title="Torso S4 Techno"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
-    </div>
+    <iframe
+      src="https://www.youtube.com/embed/XLK7Uu3gVU4"
+      title="Torso S4 Techno"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
 
   </div>
 </div>
-
-
 
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
