@@ -242,16 +242,14 @@ h1 {
   width: 100%;
   max-width: 600px;
   flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 
 .youtube-container iframe {
   width: 100%;
-  height: 100%;
-  max-height: calc(100vh - 200px);
-  aspect-ratio: 9/16;
+  aspect-ratio: 9 / 16;
   border: 0;
 }
 
@@ -292,6 +290,59 @@ h1 {
 </style>
 </head>
   
+    
+<script>
+const API_KEY = "AIzaSyDbpxeRAiclIfQ0lqJre67HdbiCSuVkvXQ";
+const CHANNEL_ID = "UCQsP6aT-G9WYwGH1XEzgUDQ";
+const MAX_SHORTS = 4;
+
+async function loadShorts() {
+  try {
+    const searchRes = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?` +
+      `key=${API_KEY}` +
+      `&channelId=${CHANNEL_ID}` +
+      `&part=snippet` +
+      `&order=date` +
+      `&maxResults=10` +
+      `&type=video`
+    );
+    
+    const searchData = await searchRes.json();
+    const videoIds = searchData.items.map(v => v.id.videoId).join(",");
+
+    const videosRes = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?` +
+      `key=${API_KEY}` +
+      `&id=${videoIds}` +
+      `&part=contentDetails`
+    );
+
+    const videosData = await videosRes.json();
+
+    const shorts = videosData.items
+      .filter(v => {
+        const d = v.contentDetails.duration;
+        const match = d.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+        const seconds = (parseInt(match?.[1] || 0) * 60) + parseInt(match?.[2] || 0);
+        return seconds > 0 && seconds <= 120;
+      })
+      .slice(0, MAX_SHORTS);
+
+    const container = document.getElementById("youtube-shorts");
+    container.innerHTML = shorts.map(v =>
+      `<iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>`
+    ).join("");
+
+  } catch (e) {
+    console.warn("YouTube Shorts failed to load", e);
+  }
+}
+
+loadShorts();
+</script>
+    
+    
 <body>
 <!-- HYDRA BACKGROUND -->
 <div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
@@ -337,9 +388,9 @@ h1 {
     </div>
   </div>
 <br>
-  <div class="youtube-container">
-    <iframe src="https://www.youtube.com/embed/XLK7Uu3gVU4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  </div>
+  
+<div class="youtube-container" id="youtube-shorts"></div>
+    
 </div>
 </div>
 
