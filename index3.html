@@ -237,22 +237,6 @@ h1 {
   background: var(--c-yellow);
 }
 
-/* ---------- YOUTUBE ---------- */
-.youtube-container {
-  width: 100%;
-  max-width: 600px;
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-}
-
-.youtube-container iframe {
-  width: 100%;
-  aspect-ratio: 9 / 16;
-  border: 0;
-}
-
 /* ---------- MOBILE ADJUSTMENTS ---------- */
 @media (max-width: 768px) {
   .content-block {
@@ -278,124 +262,35 @@ h1 {
     width: 100%;
   }
   
-  .youtube-container {
-    max-width: 90vw;
-  }
-  
-  .youtube-container iframe {
-    max-height: calc(100vh - 250px);
-  }
 }
 
 </style>
-</head>
-  
-    
-<script>
-const API_KEY = "AIzaSyDbpxeRAiclIfQ0lqJre67HdbiCSuVkvXQ";
-const CHANNEL_ID = "UCQsP6aT-G9WYwGH1XEzgUDQ";
-const MAX_SHORTS = 4;
-
-async function loadShorts() {
-  try {
-    const searchRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?` +
-      `key=${API_KEY}` +
-      `&channelId=${CHANNEL_ID}` +
-      `&part=snippet` +
-      `&order=date` +
-      `&maxResults=10` +
-      `&type=video`
-    );
-    
-    const searchData = await searchRes.json();
-    const videoIds = searchData.items.map(v => v.id.videoId).join(",");
-
-    const videosRes = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?` +
-      `key=${API_KEY}` +
-      `&id=${videoIds}` +
-      `&part=contentDetails`
-    );
-
-    const videosData = await videosRes.json();
-
-    const shorts = videosData.items
-      .filter(v => {
-        const d = v.contentDetails.duration;
-        const match = d.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
-        const seconds = (parseInt(match?.[1] || 0) * 60) + parseInt(match?.[2] || 0);
-        return seconds > 0 && seconds <= 120;
-      })
-      .slice(0, MAX_SHORTS);
-
-    const container = document.getElementById("youtube-shorts");
-    container.innerHTML = shorts.map(v =>
-      `<iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>`
-    ).join("");
-
-  } catch (e) {
-    console.warn("YouTube Shorts failed to load", e);
-  }
-}
-
-loadShorts();
-</script>
-    
-    
+</head>    
 <body>
+
 <!-- HYDRA BACKGROUND -->
 <div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
 
 <!-- MAIN CONTAINER -->
 <div id="main-container">
 <div class="content-block">
-  <h1>kronk<div class="intro-text2">
-      <a href="https://soundbreakingsky.bandcamp.com" target="_blank">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.75 97.75">
-          <path d="M48.875,0C21.882,0,0,21.882,0,48.875S21.882,97.75,48.875,97.75S97.75,75.868,97.75,48.875S75.868,0,48.875,0z M64.835,70.857H12.593l20.32-43.965h52.244L64.835,70.857z"/>
-        </svg>
-      </a>
-      
-      <a href="http://kronk.link/discog.html">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <circle cx="256" cy="256" r="32"/>
-          <path d="M256,0C114.617,0,0,114.615,0,256s114.617,256,256,256s256-114.615,256-256S397.383,0,256,0z M167.281,443.851 c-43.422-20.596-78.539-55.708-99.133-99.134l59.492-23.797c13.867,27.305,36.133,49.572,63.438,63.44L167.281,443.851z M325.07,298.277c-5.969,11.35-15.449,20.826-26.797,26.797c-75.438,39.682-151.031-35.92-111.344-111.353 c5.969-11.35,15.449-20.826,26.797-26.796C289.164,147.243,364.758,222.846,325.07,298.277z M384.359,191.079 c-13.867-27.305-36.133-49.571-63.438-63.439l23.797-59.491c43.422,20.595,78.535,55.709,99.133,99.134L384.359,191.079z"/>
-        </svg>
-      </a>
-    </div></h1>
+  <h1>kronk<div class="intro-text2"></div></h1>
   
   <div class="controls-row">
     <!-- EMAIL SECTION -->
     <form class="email-form" action="https://whokronk.substack.com/subscribe" method="get" target="_blank">
   <input type="email" name="email" placeholder="your email" required>
   <button type="submit">join mail-list</button>
-</form>
-    
-    <div class="intro-text2">
-      <a href="https://soundbreakingsky.bandcamp.com" target="_blank">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.75 97.75">
-          <path d="M48.875,0C21.882,0,0,21.882,0,48.875S21.882,97.75,48.875,97.75S97.75,75.868,97.75,48.875S75.868,0,48.875,0z M64.835,70.857H12.593l20.32-43.965h52.244L64.835,70.857z"/>
-        </svg>
-      </a>
-      
-      <a href="http://kronk.link/discog.html">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <circle cx="256" cy="256" r="32"/>
-          <path d="M256,0C114.617,0,0,114.615,0,256s114.617,256,256,256s256-114.615,256-256S397.383,0,256,0z M167.281,443.851 c-43.422-20.596-78.539-55.708-99.133-99.134l59.492-23.797c13.867,27.305,36.133,49.572,63.438,63.44L167.281,443.851z M325.07,298.277c-5.969,11.35-15.449,20.826-26.797,26.797c-75.438,39.682-151.031-35.92-111.344-111.353 c5.969-11.35,15.449-20.826,26.797-26.796C289.164,147.243,364.758,222.846,325.07,298.277z M384.359,191.079 c-13.867-27.305-36.133-49.571-63.438-63.439l23.797-59.491c43.422,20.595,78.535,55.709,99.133,99.134L384.359,191.079z"/>
-        </svg>
-      </a>
-    </div>
+</form>    
+
   </div>
-  
-<div class="youtube-container" id="youtube-shorts"></div>
-    
 </div>
 </div>
 
 <script src="https://unpkg.com/hydra-synth"></script>
 <script>
-// ============ HYDRA SETUP ============
+
+  // ============ HYDRA SETUP ============
 window.addEventListener('load', () => {
   const canvas = document.getElementById("hydra-canvas");
   const dpr = window.devicePixelRatio || 1;
