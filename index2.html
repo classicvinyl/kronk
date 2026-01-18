@@ -6,39 +6,25 @@
 <title>kronk</title>
 
 <style>
+#links-panel { display: none; }
+.info-line span { cursor: pointer; }
+
+/* ---------- BASE + PALETTE ---------- */
 :root {
-  --c-black:#1a1a1a;
-  --c-white:#e1e1e1;
-  --c-grey:#898989;
-  --c-green:#1beb9e;
-  --c-yellow:#dddd25;
-  --font:'IBM', monospace;
+  --c-black:#1a1a1a; --c-white:#e1e1e1; --c-grey:#898989;
+  --c-purple:#b462ff; --c-fuschia:#ff45b4; --c-blue:#18b6ff;
+  --c-green:#1beb9e; --c-orange:#ff9528; --c-yellow:#dddd25;
+  --line:2.5ch; --font:'IBM', monospace;
+  --icon-w: 10vw;
 }
+html,body{ margin:0; background:var(--c-black); color:var(--c-white); height:100%; font-family:var(--font); line-height:var(--line);}
+body { font-size:3.97vw; }
+@media (min-width: 768px) { body { font-size:2vw; } }
+@media (min-width: 1024px) { body { font-size:1.11111111vw; } } 
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  background: var(--c-black);
-  color: var(--c-white);
-  min-height: 100vh;
-  font-family: var(--font);
-}
-
-/* ---------- HYDRA BACKGROUND ---------- */
-#hydra-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-}
-#hydra-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+/* ---------- HYDRA FULLSCREEN BACKGROUND ---------- */
+#hydra-bg { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; overflow:hidden; }
+#hydra-canvas { width:100%; height:100%; display:block; background:black; pointer-events:none; }
 
 /* ---------- MAIN CONTAINER ---------- */
 #main-container {
@@ -49,13 +35,17 @@ html, body {
   justify-content: center;
 }
 
-.content-block {
+  .content-block {
   width: 100%;
   max-width: 900px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  background: rgba(26, 26, 26, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 2px;
 }
 
 /* ---------- HEADER ---------- */
@@ -145,10 +135,69 @@ h1 {
 
 <body>
 
-<div id="hydra-bg">
-  <canvas id="hydra-canvas"></canvas>
-</div>
+<!-- HYDRA -->
+<div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
+<script src="https://unpkg.com/hydra-synth"></script>
+<script>
+window.addEventListener('load', () => {
+  const canvas = document.getElementById("hydra-canvas");
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
 
+  const hydra = new Hydra({ canvas, detectAudio:false, makeGlobal:true });
+
+  osc(10,0.9,300)
+    .color(0.9,0.7,0.8)
+    .diff( osc(45,0.3,100).color(0.9,0.9,0.9).rotate(0.18).pixelate(12).kaleid() )
+    .scrollX(10)
+    .colorama()
+    .luma()
+    .repeatX(4)
+    .repeatY(4)
+    .modulate( osc(1,-0.9,300) )
+    .scale(2)
+    .out();
+
+  addEventListener('resize',()=>{
+    canvas.width = innerWidth * dpr;
+    canvas.height = innerHeight * dpr;
+    if(hydra.resize) hydra.resize();
+  });
+
+  function randomizeHydra() {
+    const freq1 = 5 + Math.random() * 40;
+    const freq2 = 20 + Math.random() * 80;
+    const rot = Math.random() * 3.14;
+    const pix = 5 + Math.random() * 30;
+
+    osc(freq1, 0.9, 300)
+      .color(Math.random(), Math.random(), Math.random())
+      .diff(
+        osc(freq2, 0.3, 100)
+          .color(Math.random(), Math.random(), Math.random())
+          .rotate(rot)
+          .pixelate(pix)
+          .kaleid()
+      )
+      .scrollX(Math.random()*20 -10)
+      .colorama()
+      .luma()
+      .repeatX(2 + Math.floor(Math.random()*4))
+      .repeatY(2 + Math.floor(Math.random()*4))
+      .modulate(osc(1, Math.random()*-2, 300))
+      .scale(1 + Math.random()*2)
+      .out();
+  }
+
+  window.randomizeHydra = randomizeHydra;
+});
+</script>
+
+
+
+
+  
 <div id="main-container">
   <div class="content-block">
 
@@ -174,39 +223,10 @@ h1 {
       <button type="submit">join mail-list</button>
     </form>
 
-    <!-- (4) YOUTUBE SHORT -->
-    <div class="youtube-container">
-      <iframe
-        src="https://www.youtube.com/embed/XLK7Uu3gVU4"
-        allowfullscreen>
-      </iframe>
-    </div>
 
   </div>
 </div>
 
-<script src="https://unpkg.com/hydra-synth"></script>
-<script>
-window.addEventListener('load', () => {
-  const canvas = document.getElementById("hydra-canvas");
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = innerWidth * dpr;
-  canvas.height = innerHeight * dpr;
-
-  const hydra = new Hydra({ canvas, detectAudio:false, makeGlobal:true });
-
-  function randomizeHydra() {
-    osc(10 + Math.random()*30, 0.9, 300)
-      .color(Math.random(),Math.random(),Math.random())
-      .kaleid(3 + Math.floor(Math.random()*4))
-      .pixelate(10 + Math.random()*20)
-      .out();
-  }
-
-  randomizeHydra();
-  setInterval(randomizeHydra, 5000);
-});
-</script>
 
 </body>
 </html>
