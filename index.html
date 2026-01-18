@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -75,6 +76,87 @@ body {
 
 #main-container::-webkit-scrollbar {
   display: none;
+}
+
+/* ---------- BURGER MENU ---------- */
+.burger-menu {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  cursor: pointer;
+  background: rgba(26,26,26,0.8);
+  padding: 0.5rem;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+
+.burger-menu:hover {
+  background: rgba(27,235,158,0.2);
+}
+
+.burger-icon {
+  width: 24px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.burger-icon span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--c-green);
+  transition: all 0.3s;
+}
+
+.burger-menu.active .burger-icon span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-menu.active .burger-icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu.active .burger-icon span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.menu-dropdown {
+  position: fixed;
+  top: 4.5rem;
+  right: 1rem;
+  z-index: 999;
+  background: rgba(26,26,26,0.95);
+  border: 1px solid var(--c-grey);
+  border-radius: 2px;
+  padding: 0.5rem 0;
+  min-width: 150px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+}
+
+.menu-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.menu-dropdown a {
+  display: block;
+  color: var(--c-white);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  transition: background 0.2s, color 0.2s;
+  font-size: 0.9rem;
+}
+
+.menu-dropdown a:hover {
+  background: var(--c-green);
+  color: var(--c-black);
 }
 
 /* ---------- HEADER ---------- */
@@ -294,13 +376,33 @@ h1 {
 }
 
 </style>
+
 </head>    
 <body>
 
+<!-- BURGER MENU -->
+
+<div class="burger-menu" id="burgerMenu">
+  <div class="burger-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<!-- MENU DROPDOWN -->
+
+<div class="menu-dropdown" id="menuDropdown">
+  <a href="#">discog</a>
+  <a href="#">contact</a>
+</div>
+
 <!-- HYDRA BACKGROUND -->
+
 <div id="hydra-bg"><canvas id="hydra-canvas"></canvas></div>
 
 <!-- MAIN CONTAINER -->
+
 <div id="main-container">
 <div class="content-block">
   <h1>kronk<div class="intro-text2"></div></h1>
@@ -311,7 +413,7 @@ h1 {
       public visual fragments appear as <a href="https://www.youtube.com/@kronk1/shorts" target="_blank">short transmissions</a><br><br>
       extended unlisted video, audio &amp; words via the free mail-list<br>
     </div>
-  
+
   <div class="controls-row">
     <!-- EMAIL SECTION -->
     <form class="email-form" action="https://whokronk.substack.com/subscribe" method="get" target="_blank">
@@ -324,7 +426,26 @@ h1 {
 </div>
 
 <script src="https://unpkg.com/hydra-synth"></script>
+
 <script>
+
+  // ============ BURGER MENU FUNCTIONALITY ============
+  const burgerMenu = document.getElementById('burgerMenu');
+  const menuDropdown = document.getElementById('menuDropdown');
+
+  burgerMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    burgerMenu.classList.toggle('active');
+    menuDropdown.classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!burgerMenu.contains(e.target) && !menuDropdown.contains(e.target)) {
+      burgerMenu.classList.remove('active');
+      menuDropdown.classList.remove('active');
+    }
+  });
 
   // ============ HYDRA SETUP ============
 window.addEventListener('load', () => {
