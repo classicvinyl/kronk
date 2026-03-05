@@ -33,5 +33,12 @@
 </head>
 <body>
   <p>Redirecting…</p>
+
+    <p id="debug"></p>
+  <script>
+    document.getElementById('debug').textContent = 
+      'slug: "' + window.location.pathname.replace(/^\/+|\/+$/g, "").toLowerCase() + '"';
+  </script>
+  
 </body>
 </html>
